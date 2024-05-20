@@ -16,11 +16,17 @@ struct BasicSearchView: View {
     
     @Query private var mealsdata: [FoodData] // 검색어 메뉴 목록 ( SwiftData에 저장되어있는 메뉴들 )
     
+    // MARK: 검색 필터
     var searchResults: [FoodData] {
         if searchText.isEmpty {
             return mealsdata
         } else {
-            return mealsdata.filter { $0.menu1.contains(searchText) || $0.menu2.contains(searchText) || $0.menu3.contains(searchText) || $0.menu4.contains(searchText) }
+            return mealsdata.filter {
+                $0.menu1.contains(searchText) ||
+                $0.menu2.contains(searchText) ||
+                $0.menu3.contains(searchText) ||
+                $0.menu4.contains(searchText)
+            }
         }
     }
     
@@ -57,19 +63,29 @@ struct BasicSearchView: View {
                                         .foregroundColor(.black)
                                         .padding()
                                 }
-                            }
-                        )
+                            })
                         .onTapGesture {
                             self.editText = true
                         }
                         .padding(.top, 10)
-                    
                     
                     if !searchText.isEmpty{
                         List {
                             ForEach(searchResults, id: \.id) { meal in
                                 NavigationLink(destination: SearchResultsView(searchMenu: meal.menu1, mealsdata: mealsdata)) {
                                     HighlightedText(text: meal.menu1, highlight: searchText)
+                                }
+
+                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu2, mealsdata: mealsdata)) {
+                                    HighlightedText(text: meal.menu2, highlight: searchText)
+                                }
+
+                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu3, mealsdata: mealsdata)) {
+                                    HighlightedText(text: meal.menu3, highlight: searchText)
+                                }
+
+                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu4, mealsdata: mealsdata)) {
+                                    HighlightedText(text: meal.menu4, highlight: searchText)
                                 }
                             }
                         }
@@ -90,7 +106,6 @@ struct BasicSearchView: View {
                             Spacer()
                         }
                     }
-                    
                 }
                 .navigationTitle("검색하기")
                 .toolbarRole(.editor)
@@ -99,7 +114,9 @@ struct BasicSearchView: View {
     }
 }
 
+// MARK: 하이라이트 텍스트
 struct HighlightedText: View {
+    
     let text: String
     let highlight: String
     
@@ -110,8 +127,7 @@ struct HighlightedText: View {
             attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: range)
         }
         
-        return Text(AttributedString(attributedString)).foregroundColor(.gray)
-        //전체 글씨는 회색. 하이라이트는 검정색
+        return Text(AttributedString(attributedString)).foregroundColor(.gray) //전체 글씨는 회색. 하이라이트는 검정색
     }
 }
 
