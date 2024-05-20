@@ -24,8 +24,9 @@ struct BasicSearchView: View {
             var uniqueResults: [FoodData] = []
             var addedMenus: Set<String> = Set() // 중복되는 메뉴 제거
             
+            // Set에 없으면 Array에 넣고 Array Return
             for meal in mealsdata {
-                if meal.menu1.contains(searchText) && !addedMenus.contains(meal.menu1) { // 배열에 없는 메뉴는 배열에 넣고
+                if meal.menu1.contains(searchText) && !addedMenus.contains(meal.menu1) {
                     uniqueResults.append(meal)
                     addedMenus.insert(meal.menu1)
                 } else if meal.menu2.contains(searchText) && !addedMenus.contains(meal.menu2) {
@@ -87,7 +88,7 @@ struct BasicSearchView: View {
                     if !searchText.isEmpty{
                         List {
                             // 검색어와 일치하는 항목을 위로 오게
-                            ForEach(searchResults, id: \.id) { meal in
+                            ForEach(searchResults, id: \.id) { meal in // Set은 순서가 없기 때문에 못넣고 배열을 넣어야 함
                                 Group { // NavigationLink 4개인 이유 : menu1 ~ menu4를 각각 searchMenu 변수로 넣기 위함
                                     if meal.menu1.starts(with: searchText) {
                                         NavigationLink(destination: SearchResultsView(searchMenu: meal.menu1, mealsdata: mealsdata)) {
