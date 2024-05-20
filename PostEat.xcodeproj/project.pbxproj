@@ -22,6 +22,7 @@
 		1FCE9CC12BFAE20D00001E2A /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE9CC02BFAE20D00001E2A /* SearchResultView.swift */; };
 		1FCE9CC52BFAE22100001E2A /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE9CC42BFAE22100001E2A /* AlertView.swift */; };
 		1FCE9CC82BFAE69800001E2A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE9CC72BFAE69800001E2A /* Constants.swift */; };
+		90B977432BFB6D2900D5521A /* MenuAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B977422BFB6D2900D5521A /* MenuAPIModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		1FCE9CC02BFAE20D00001E2A /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
 		1FCE9CC42BFAE22100001E2A /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		1FCE9CC72BFAE69800001E2A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		90B977422BFB6D2900D5521A /* MenuAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAPIModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				1FCE9CA52BFAE14700001E2A /* FoodData.swift */,
+				90B977422BFB6D2900D5521A /* MenuAPIModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FCE9CA62BFAE14700001E2A /* FoodData.swift in Sources */,
+				90B977432BFB6D2900D5521A /* MenuAPIModel.swift in Sources */,
 				1FCE9CC12BFAE20D00001E2A /* SearchResultView.swift in Sources */,
 				1FCE9CB52BFAE1CE00001E2A /* RecordView.swift in Sources */,
 				1FCE9CB92BFAE1E500001E2A /* CalendarView.swift in Sources */,

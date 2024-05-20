@@ -16,6 +16,8 @@ struct DateView: View {
     @State private var triangleLocate: CGPoint = .zero
     @State private var circleLocations: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
     
+    @Query() private var mealsdata: [FoodData]
+    
     var body: some View {
         NavigationStack{
             VStack(spacing: 0) {
@@ -47,7 +49,7 @@ struct DateView: View {
                 .padding(.vertical, 20)
                 
                 VStack{
-                    CellView()
+                    CellView(selectedDate: $selectedDate)
                         .padding(.bottom, 75)
                 }
             }
