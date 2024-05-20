@@ -51,8 +51,7 @@ struct BasicSearchView: View {
             Color.white
                 .frame(height: 1)
             ZStack{
-                Color("SystemGray")
-                
+                // Color("SystemGray")
                 VStack{
                     TextField("메뉴를 검색하세요.", text: $searchText)
                         .padding(8)
