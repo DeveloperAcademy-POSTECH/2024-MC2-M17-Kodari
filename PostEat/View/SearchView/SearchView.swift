@@ -21,14 +21,29 @@ struct BasicSearchView: View {
         if searchText.isEmpty {
             return mealsdata
         } else {
-            return mealsdata.filter {
-                $0.menu1.contains(searchText) ||
-                $0.menu2.contains(searchText) ||
-                $0.menu3.contains(searchText) ||
-                $0.menu4.contains(searchText)
+            var uniqueResults: [FoodData] = []
+            var addedMenus: Set<String> = Set() // 중복되는 메뉴 제거
+            
+            for meal in mealsdata {
+                if meal.menu1.contains(searchText) && !addedMenus.contains(meal.menu1) { // 배열에 없는 메뉴는 배열에 넣고
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu1)
+                } else if meal.menu2.contains(searchText) && !addedMenus.contains(meal.menu2) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu2)
+                } else if meal.menu3.contains(searchText) && !addedMenus.contains(meal.menu3) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu3)
+                } else if meal.menu4.contains(searchText) && !addedMenus.contains(meal.menu4) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu4)
+                }
             }
+            
+            return uniqueResults
         }
     }
+
     
     var body: some View {
         NavigationStack {
@@ -71,27 +86,34 @@ struct BasicSearchView: View {
                     
                     if !searchText.isEmpty{
                         List {
+                            // 검색어와 일치하는 항목을 위로 오게
                             ForEach(searchResults, id: \.id) { meal in
-                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu1, mealsdata: mealsdata)) {
-                                    HighlightedText(text: meal.menu1, highlight: searchText)
-                                }
-
-                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu2, mealsdata: mealsdata)) {
-                                    HighlightedText(text: meal.menu2, highlight: searchText)
-                                }
-
-                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu3, mealsdata: mealsdata)) {
-                                    HighlightedText(text: meal.menu3, highlight: searchText)
-                                }
-
-                                NavigationLink(destination: SearchResultsView(searchMenu: meal.menu4, mealsdata: mealsdata)) {
-                                    HighlightedText(text: meal.menu4, highlight: searchText)
+                                Group { // NavigationLink 4개인 이유 : menu1 ~ menu4를 각각 searchMenu 변수로 넣기 위함
+                                    if meal.menu1.starts(with: searchText) {
+                                        NavigationLink(destination: SearchResultsView(searchMenu: meal.menu1, mealsdata: mealsdata)) {
+                                            HighlightedText(text: meal.menu1, highlight: searchText)
+                                        }
+                                    }
+                                    if meal.menu2.starts(with: searchText) {
+                                        NavigationLink(destination: SearchResultsView(searchMenu: meal.menu2, mealsdata: mealsdata)) {
+                                            HighlightedText(text: meal.menu2, highlight: searchText)
+                                        }
+                                    }
+                                    if meal.menu3.starts(with: searchText) {
+                                        NavigationLink(destination: SearchResultsView(searchMenu: meal.menu3, mealsdata: mealsdata)) {
+                                            HighlightedText(text: meal.menu3, highlight: searchText)
+                                        }
+                                    }
+                                    if meal.menu4.starts(with: searchText) {
+                                        NavigationLink(destination: SearchResultsView(searchMenu: meal.menu4, mealsdata: mealsdata)) {
+                                            HighlightedText(text: meal.menu4, highlight: searchText)
+                                        }
+                                    }
                                 }
                             }
                         }
                         Spacer()
-                    }
-                    else {
+                    } else {
                         VStack{
                             Image("ponix")
                                 .resizable()
