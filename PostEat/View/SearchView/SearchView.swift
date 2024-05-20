@@ -1,50 +1,11 @@
-
 import SwiftUI
 import SwiftData
 
 struct SearchView: View {
-    var body: some View {
-        BasicSearchView(searchMenu: .constant(""))
-    }
-}
-
-struct BasicSearchView: View {
     
     @State private var searchText: String = ""
-    @Binding var searchMenu: String
     @State var editText: Bool = false //검색창 지우기 할때 쓰는 변수
-    
     @Query private var mealsdata: [FoodData] // 검색어 메뉴 목록 ( SwiftData에 저장되어있는 메뉴들 )
-    
-    // MARK: 검색 필터
-    var searchResults: [FoodData] {
-        if searchText.isEmpty {
-            return mealsdata
-        } else {
-            var uniqueResults: [FoodData] = []
-            var addedMenus: Set<String> = Set() // 중복되는 메뉴 제거
-            
-            // Set에 없으면 Array에 넣고 Array Return
-            for meal in mealsdata {
-                if meal.menu1.contains(searchText) && !addedMenus.contains(meal.menu1) {
-                    uniqueResults.append(meal)
-                    addedMenus.insert(meal.menu1)
-                } else if meal.menu2.contains(searchText) && !addedMenus.contains(meal.menu2) {
-                    uniqueResults.append(meal)
-                    addedMenus.insert(meal.menu2)
-                } else if meal.menu3.contains(searchText) && !addedMenus.contains(meal.menu3) {
-                    uniqueResults.append(meal)
-                    addedMenus.insert(meal.menu3)
-                } else if meal.menu4.contains(searchText) && !addedMenus.contains(meal.menu4) {
-                    uniqueResults.append(meal)
-                    addedMenus.insert(meal.menu4)
-                }
-            }
-            
-            return uniqueResults
-        }
-    }
-
     
     var body: some View {
         NavigationStack {
@@ -132,6 +93,37 @@ struct BasicSearchView: View {
                 .navigationTitle("검색하기")
                 .toolbarRole(.editor)
             }
+        }
+    }
+    
+  
+
+    // MARK: 검색 필터
+    var searchResults: [FoodData] {
+        if searchText.isEmpty {
+            return mealsdata
+        } else {
+            var uniqueResults: [FoodData] = []
+            var addedMenus: Set<String> = Set() // 중복되는 메뉴 제거
+            
+            // Set에 없으면 Array에 넣고 Array Return
+            for meal in mealsdata {
+                if meal.menu1.contains(searchText) && !addedMenus.contains(meal.menu1) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu1)
+                } else if meal.menu2.contains(searchText) && !addedMenus.contains(meal.menu2) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu2)
+                } else if meal.menu3.contains(searchText) && !addedMenus.contains(meal.menu3) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu3)
+                } else if meal.menu4.contains(searchText) && !addedMenus.contains(meal.menu4) {
+                    uniqueResults.append(meal)
+                    addedMenus.insert(meal.menu4)
+                }
+            }
+            
+            return uniqueResults
         }
     }
 }
