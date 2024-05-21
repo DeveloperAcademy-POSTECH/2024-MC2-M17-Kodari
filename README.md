@@ -40,7 +40,7 @@ ex) , SwiftUI
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/5dffc651-46ff-45a1-87eb-c29aa61feec4" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/e3f6c592-6443-43d4-9e57-b55aa48ed070" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/736e43cc-38d5-4c24-8f23-67408d5e6800" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
-       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/bb27f816-6787-4bb6-9040-0f5e09cc57fd" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/0ff72136-9902-4d10-9db4-3f8acc96b783" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/80ebff67-a9bb-4493-b544-c312aea2f376" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
     </tr>
     <tr>
