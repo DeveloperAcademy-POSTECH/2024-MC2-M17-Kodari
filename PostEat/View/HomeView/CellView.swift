@@ -33,95 +33,100 @@ struct CellView: View {
                                 recordModalShowing.toggle()
                             }
                         }){
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 12)
-                                    .frame(width: 360, height: selectedMealsData[index].num != 0 ? 163 : 206)
-                                    .foregroundStyle(Color.white)
-                                
-                                VStack{
-                                    HStack{
-                                        VStack{
-                                            HStack{
-                                                // 조식 / 중식 / 석식
-                                                Text("\(eatingTime[index][0])")
-                                                    .font(.system(size: 15))
-                                                    .bold()
-                                                    .foregroundStyle(Color.black)
-                                                    .frame(width:30)
-                                                ZStack{
-                                                    RoundedRectangle(cornerRadius: 9)
-                                                        .frame(width:86, height:20)
-                                                        .foregroundStyle(Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255))
-                                                    // 식사 가능 시간
-                                                    Text("\(eatingTime[index][1])")
-                                                        .font(.system(size:11))
-                                                        .foregroundStyle(Color.black)
-                                                }
-                                                Spacer()
-                                            }
-                                            ForEach([selectedMealsData[index].menu1,
-                                                     selectedMealsData[index].menu2,
-                                                     selectedMealsData[index].menu3,
-                                                     selectedMealsData[index].menu4
-                                                    ], id: \.self) { menu in
+                            HStack{
+                                ZStack{
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .frame(height: selectedMealsData[index].num != 0 ? 163 : 206)
+                                        .foregroundStyle(Color.white)
+                                    
+                                    VStack{
+                                        HStack{
+                                            VStack{
                                                 HStack{
-                                                    Text("\(menu)")
-                                                        .font(.system(size:15))
-                                                        .padding(0.5)
+                                                    // 조식 / 중식 / 석식
+                                                    Text("\(eatingTime[index][0])")
+                                                        .font(.system(size: 15))
+                                                        .bold()
                                                         .foregroundStyle(Color.black)
-                                                    Spacer()
-                                                }
-                                            }
-                                        }
-                                        .padding(.leading, 22)
-                                        
-                                        VStack{
-                                            HStack{
-                                                Spacer()
-                                                if selectedMealsData[index].num != 0 {
-                                                    Image(systemName:"checkmark.circle.fill")
-                                                        .foregroundStyle(Color(Constants.KODARIBlue))
-                                                        .padding(.top, 15)
-                                                } else{
-                                                    Image(systemName:"clock.badge.fill")
-                                                        .foregroundStyle(Color(Constants.KODARIRed))
-                                                        .padding(.top, 15)
-                                                }
-                                            }
-                                            Spacer()
-                                            HStack{
-                                                Spacer()
-                                                if selectedMealsData[index].num != 0{
+                                                        .frame(width:30)
                                                     ZStack{
                                                         RoundedRectangle(cornerRadius: 9)
-                                                            .frame(width:65, height:20)
-                                                            .foregroundStyle(Color(Constants.KODARIBlue))
-                                                        Text("\(selectedMealsData[index].num)명 방문")
+                                                            .frame(width:86, height:20)
+                                                            .foregroundStyle(Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255))
+                                                        // 식사 가능 시간
+                                                        Text("\(eatingTime[index][1])")
                                                             .font(.system(size:11))
-                                                            .bold()
-                                                            .foregroundStyle(Color.white)
+                                                            .foregroundStyle(Color.black)
                                                     }
-                                                    .padding(.bottom, 15)
+                                                    Spacer()
+                                                }
+                                                ForEach([selectedMealsData[index].menu1,
+                                                         selectedMealsData[index].menu2,
+                                                         selectedMealsData[index].menu3,
+                                                         selectedMealsData[index].menu4
+                                                        ], id: \.self) { menu in
+                                                    HStack{
+                                                        Text("\(menu)")
+                                                            .font(.system(size:15))
+                                                            .padding(0.5)
+                                                            .foregroundStyle(Color.black)
+                                                        Spacer()
+                                                    }
                                                 }
                                             }
+                                            .padding(.leading, 22)
+                                            
+                                            VStack{
+                                                HStack{
+                                                    Spacer()
+                                                    if selectedMealsData[index].num != 0 {
+                                                        Image(systemName:"checkmark.circle.fill")
+                                                            .foregroundStyle(Color(Constants.KODARIBlue))
+                                                            .padding(.top, 15)
+                                                    } else{
+                                                        Image(systemName:"clock.badge.fill")
+                                                            .foregroundStyle(Color(Constants.KODARIRed))
+                                                            .padding(.top, 15)
+                                                    }
+                                                }
+                                                Spacer()
+                                                HStack{
+                                                    Spacer()
+                                                    if selectedMealsData[index].num != 0{
+                                                        ZStack{
+                                                            RoundedRectangle(cornerRadius: 9)
+                                                                .frame(width:65, height:20)
+                                                                .foregroundStyle(Color(Constants.KODARIBlue))
+                                                            Text("\(selectedMealsData[index].num)명 방문")
+                                                                .font(.system(size:11))
+                                                                .bold()
+                                                                .foregroundStyle(Color.white)
+                                                        }
+                                                        .padding(.bottom, 15)
+                                                    }
+                                                }
+                                            }
+                                            .padding(.trailing, 22)
                                         }
-                                        .padding(.trailing, 22)
-                                    }
-                                    
-                                    if selectedMealsData[index].num == 0 {
-                                        ZStack{
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .frame(width:319, height:35.5)
-                                                .foregroundStyle(Color(Constants.KODARIRed))
-                                            Text("기록하기")
-                                                .font(.system(size:18))
-                                                .bold()
-                                                .foregroundStyle(Color.white)
-                                        }.padding(.bottom, 15)
+                                        
+                                        if selectedMealsData[index].num == 0 {
+                                            ZStack{
+                                                RoundedRectangle(cornerRadius: 12)
+                                                    .frame(height:35.5)
+                                                    .foregroundStyle(Color(Constants.KODARIRed))
+                                                Text("기록하기")
+                                                    .font(.system(size:18))
+                                                    .bold()
+                                                    .foregroundStyle(Color.white)
+                                            }.padding(.bottom, 15)
+                                                .padding(.horizontal, 20.5)
+                                        }
                                     }
                                 }
+                                .frame(height: selectedMealsData[index].num != 0 ? 163 : 206)
+                                .padding(.horizontal, 16.5)
                             }
-                            .frame(width: 360, height: selectedMealsData[index].num != 0 ? 163 : 206)
+                            
                         }
                         .sheet(isPresented: $recordModalShowing) {
                             if let selectedIndex = selectedIndex {

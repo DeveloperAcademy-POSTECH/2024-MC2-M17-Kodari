@@ -47,7 +47,6 @@ class MenuAPIModel: ObservableObject {
         let calendar = Calendar.current
         let latestMeal = findLatestMeal(from: foodDatas)
         var requireDay = dateFormatter.date(from: latestMeal!.date)!
-        
         // 첫번째 날을 requireDay로 설정하고 다음 날로 설정
         requireDay = calendar.date(byAdding: .day, value: 1, to: requireDay)!
         
