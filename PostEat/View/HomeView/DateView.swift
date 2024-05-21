@@ -5,7 +5,7 @@ import SwiftData
 struct DateView: View {
     
     // SwiftData
-    // @Query private var meals: [FoodData] // 선언 / //
+    // @Query private var meals: [FoodData] // 선언 / ///
     @Environment(\.modelContext) var modelContext
     @State private var mealdata: [FoodData] = []
     @State private var mealdataLoaded = false // 한번만 로드
@@ -15,6 +15,8 @@ struct DateView: View {
     
     @State private var triangleLocate: CGPoint = .zero
     @State private var circleLocations: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
+    
+    @Query() private var mealsdata: [FoodData]
     
     var body: some View {
         NavigationStack{
@@ -47,7 +49,7 @@ struct DateView: View {
                 .padding(.vertical, 20)
                 
                 VStack{
-                    CellView()
+                    CellView(selectedDate: $selectedDate)
                         .padding(.bottom, 75)
                 }
             }
