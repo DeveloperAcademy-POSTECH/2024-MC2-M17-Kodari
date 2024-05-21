@@ -50,22 +50,22 @@ struct SearchView: View {
                             // 검색어와 일치하는 항목을 위로 오게
                             ForEach(searchResults, id: \.id) { meal in // Set은 순서가 없기 때문에 못넣고 배열을 넣어야 함
                                 Group { // NavigationLink 4개인 이유 : menu1 ~ menu4를 각각 searchMenu 변수로 넣기 위함
-                                    if meal.menu1.starts(with: searchText) {
+                                    if meal.menu1.contains(searchText) {
                                         NavigationLink(destination: SearchResultsView(searchMenu: meal.menu1, mealsdata: mealsdata)) {
                                             HighlightedText(text: meal.menu1, highlight: searchText)
                                         }
                                     }
-                                    if meal.menu2.starts(with: searchText) {
+                                    if meal.menu2.contains(searchText) {
                                         NavigationLink(destination: SearchResultsView(searchMenu: meal.menu2, mealsdata: mealsdata)) {
                                             HighlightedText(text: meal.menu2, highlight: searchText)
                                         }
                                     }
-                                    if meal.menu3.starts(with: searchText) {
+                                    if meal.menu3.contains(searchText) {
                                         NavigationLink(destination: SearchResultsView(searchMenu: meal.menu3, mealsdata: mealsdata)) {
                                             HighlightedText(text: meal.menu3, highlight: searchText)
                                         }
                                     }
-                                    if meal.menu4.starts(with: searchText) {
+                                    if meal.menu4.contains(searchText) {
                                         NavigationLink(destination: SearchResultsView(searchMenu: meal.menu4, mealsdata: mealsdata)) {
                                             HighlightedText(text: meal.menu4, highlight: searchText)
                                         }

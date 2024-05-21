@@ -21,7 +21,9 @@ struct CellView: View {
             Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
             
             let selectedMealsData = mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))}
+            //print(selectedMealsData.count)
             if selectedMealsData.count != 0{
+                //            if selectedMealsData {
                 //                LazyVGrid(columns: columns) {
                 ScrollView{
                     ForEach(eatingTime.indices, id: \.self) { index in
@@ -33,7 +35,7 @@ struct CellView: View {
                         }){
                             ZStack{
                                 RoundedRectangle(cornerRadius: 12)
-                                    .frame(width: 360, height: selectedMealsData[index].num.count != 1 ? 163 : 206)
+                                    .frame(width: 360, height: selectedMealsData[index].num != 0 ? 163 : 206)
                                     .foregroundStyle(Color.white)
                                 
                                 VStack{
@@ -76,7 +78,7 @@ struct CellView: View {
                                         VStack{
                                             HStack{
                                                 Spacer()
-                                                if selectedMealsData[index].num.count != 1 {
+                                                if selectedMealsData[index].num != 0 {
                                                     Image(systemName:"checkmark.circle.fill")
                                                         .foregroundStyle(Color(Constants.KODARIBlue))
                                                         .padding(.top, 15)
@@ -89,12 +91,12 @@ struct CellView: View {
                                             Spacer()
                                             HStack{
                                                 Spacer()
-                                                if selectedMealsData[index].num.count != 1{
+                                                if selectedMealsData[index].num != 0{
                                                     ZStack{
                                                         RoundedRectangle(cornerRadius: 9)
                                                             .frame(width:65, height:20)
                                                             .foregroundStyle(Color(Constants.KODARIBlue))
-                                                        Text("\(String(selectedMealsData[index].num.dropLast()))명 방문")
+                                                        Text("\(selectedMealsData[index].num)명 방문")
                                                             .font(.system(size:11))
                                                             .bold()
                                                             .foregroundStyle(Color.white)
@@ -106,7 +108,7 @@ struct CellView: View {
                                         .padding(.trailing, 22)
                                     }
                                     
-                                    if selectedMealsData[index].num.count == 1{
+                                    if selectedMealsData[index].num == 0 {
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 12)
                                                 .frame(width:319, height:35.5)
@@ -119,7 +121,7 @@ struct CellView: View {
                                     }
                                 }
                             }
-                            .frame(width: 360, height: selectedMealsData[index].num.count != 1 ? 163 : 206)
+                            .frame(width: 360, height: selectedMealsData[index].num != 0 ? 163 : 206)
                         }
                         .sheet(isPresented: $recordModalShowing) {
                             if let selectedIndex = selectedIndex {
