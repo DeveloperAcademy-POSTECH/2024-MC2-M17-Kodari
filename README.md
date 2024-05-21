@@ -37,11 +37,11 @@ ex) , SwiftUI
       <td colspan="1" align="center"><b>iOS Developer</b></td>
     </tr>
     <tr>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/72a96ce7-eea1-4565-97e5-b42abf6bfd33" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/826afa29-3b3e-4ecb-889a-4ff4417d52d6" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/a3d9575f-54f9-4ce1-b3e3-6b1ea0b94abf" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
-       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/65102cc3-086e-439d-b63c-2828657f56f1" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/67f59221-3705-4440-bd62-62dd1230c95d" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/5dffc651-46ff-45a1-87eb-c29aa61feec4" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/e3f6c592-6443-43d4-9e57-b55aa48ed070" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/736e43cc-38d5-4c24-8f23-67408d5e6800" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/bb27f816-6787-4bb6-9040-0f5e09cc57fd" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/80ebff67-a9bb-4493-b544-c312aea2f376" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
     </tr>
     <tr>
       <td colspan="1" align="center"><b>🚀</b></td>
