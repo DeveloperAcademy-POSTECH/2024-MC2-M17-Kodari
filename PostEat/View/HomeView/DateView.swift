@@ -3,12 +3,16 @@ import SwiftUI
 import SwiftData
 
 struct DateView: View {
-    
+    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
+    @StateObject private var menuAPIModel = MenuAPIModel()
+    @State private var apiRequestTrue = true
+
+
     // SwiftData
     // @Query private var meals: [FoodData] // 선언 / ///
     @Environment(\.modelContext) var modelContext
     @State private var mealdata: [FoodData] = []
-    @State private var mealdataLoaded = false // 한번만 로드
+//    @State private var mealdataLoaded = false // 한번만 로드
     
     @State private var selectedDate = Date() //현재 날짜와 시간 가져오기
     private let calendar = Calendar.current //현재를 달력에 저장 /
@@ -50,7 +54,7 @@ struct DateView: View {
                 
                 VStack{
                     CellView(selectedDate: $selectedDate)
-                        .padding(.bottom, 75)
+//                        .padding(.bottom, 75)
                 }
             }
             
@@ -65,11 +69,22 @@ struct DateView: View {
             
         }
         .onAppear {
-            if !mealdataLoaded {
+            if isFirstLaunch {
+                isFirstLaunch = false
                 saveCSVData()
-                mealdataLoaded = true
             }
+            
+            if apiRequestTrue{
+                menuAPIModel.getMenus(foodDatas:mealsdata, modelContext: modelContext)
+            }
+            apiRequestTrue = false
         }
+//        .onAppear {
+//            if !mealdataLoaded {
+//                saveCSVData()
+//                mealdataLoaded = true
+//            }
+//        }
     }
     
     private func saveCSVData() {

@@ -50,10 +50,12 @@ struct RecordView: View {
                         .frame(width:361, height:132)
                     VStack{
                         Spacer()
+                        // 
                         recordTextField(
                             recordPlaceholder: "2024년 5월 12일",
                             bindingText: $mealData.date,
                             recordName: "날짜")
+//                        Text("\(mealData.date)")
                         Spacer()
                         recordTextField(
                             recordPlaceholder: "000",
