@@ -57,7 +57,10 @@ struct RecordView: View {
                         Spacer()
                         recordTextField(
                             recordPlaceholder: "000",
-                            bindingText: $mealData.num,
+                            bindingText: Binding(
+                                get: { String(mealData.num) },
+                                set: { mealData.num = Int($0) ?? 0 }
+                            ),
                             recordName: "식사 인원")
                         Spacer()
                         recordTextField(

@@ -16,7 +16,7 @@ struct DateView: View {
     @State private var triangleLocate: CGPoint = .zero
     @State private var circleLocations: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
     
-    @Query() private var mealsdata: [FoodData]
+    @Query private var mealsdata: [FoodData]
     
     var body: some View {
         NavigationStack{
@@ -83,9 +83,15 @@ struct DateView: View {
             let rows = data.components(separatedBy: "\n").dropFirst() // 첫 번째 줄은 헤더이므로 제외합니다.
             mealdata = rows.compactMap { row -> FoodData? in
                 let components = row.components(separatedBy: ",")
-                guard components.count >= 6 else { return nil }
+                guard components.count >= 7 else { return nil }
                 
-                let newData = FoodData(uniqueid: components[0], date: components[1], menu1: components[2], menu2: components[3], menu3: components[4], menu4: components[5], num: components[6], memo:"")
+                // 공백 제거 및 숫자로 변환 시도
+                let trimmedNum = components[6].trimmingCharacters(in: .whitespacesAndNewlines)
+
+                // 만약 공백이거나 값이 없으면 0으로 설정
+                let convertnum = Int(trimmedNum) ?? 0
+                
+                let newData = FoodData(uniqueid: components[0], date: components[1], menu1: components[2], menu2: components[3], menu3: components[4], menu4: components[5], num: convertnum, memo:"")
                 
                 
                 

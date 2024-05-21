@@ -110,7 +110,7 @@ struct CustomCellView: View {
     }
 
     // MARK: 식수
-    func counterBadge(count: String) -> some View {
+    func counterBadge(count: Int) -> some View {
         ZStack{
             Rectangle()
                 .foregroundColor(.clear)
@@ -118,7 +118,7 @@ struct CustomCellView: View {
                 .background(Constants.KODARIBlue)
                 .cornerRadius(9)
             
-            Text("\(String(count.dropLast()).count != 0 ? String(count.dropLast()) + "명 방문" : "미입력")")
+            Text("\(count)명 방문" )
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 14)
                         .weight(.bold)
