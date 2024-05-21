@@ -240,9 +240,9 @@ struct CustomCellView: View {
 }
 
 
-#Preview {
-    SearchResultsView(searchMenu: "서치메뉴", mealsdata: [
-        FoodData(uniqueid: "1", date: "2024-05-20", menu1: "Menu 1", menu2: "Menu 2", menu3: "Menu 3", menu4: "Menu 4", num: "123"),
-        FoodData(uniqueid: "2", date: "2024-05-21", menu1: "Menu A", menu2: "Menu B", menu3: "Menu C", menu4: "Menu D", num: "123")
-    ])
-}
+//#Preview {
+//    SearchResultsView(searchMenu: "서치메뉴", mealsdata: [
+//        FoodData(uniqueid: "1", date: "2024-05-20", menu1: "Menu 1", menu2: "Menu 2", menu3: "Menu 3", menu4: "Menu 4", num: "123", memo:""),
+//        FoodData(uniqueid: "2", date: "2024-05-21", menu1: "Menu A", menu2: "Menu B", menu3: "Menu C", menu4: "Menu D", num: "123", memo:"")
+//    ])
+//}

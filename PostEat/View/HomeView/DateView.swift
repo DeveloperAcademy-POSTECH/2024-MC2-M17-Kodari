@@ -85,7 +85,7 @@ struct DateView: View {
                 let components = row.components(separatedBy: ",")
                 guard components.count >= 6 else { return nil }
                 
-                let newData = FoodData(uniqueid: components[0], date: components[1], menu1: components[2], menu2: components[3], menu3: components[4], menu4: components[5], num: components[6])
+                let newData = FoodData(uniqueid: components[0], date: components[1], menu1: components[2], menu2: components[3], menu3: components[4], menu4: components[5], num: components[6], memo:"")
                 
                 
                 

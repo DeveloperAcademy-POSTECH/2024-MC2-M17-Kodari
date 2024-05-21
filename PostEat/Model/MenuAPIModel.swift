@@ -93,7 +93,9 @@ class MenuAPIModel: ObservableObject {
                                                                   menu2: self.breakfastMenus.indices.contains(1) ? self.breakfastMenus[1] : "-",
                                                                   menu3: self.breakfastMenus.indices.contains(2) ? self.breakfastMenus[2] : "-",
                                                                   menu4: self.breakfastMenus.indices.contains(3) ? self.breakfastMenus[3] : "-",
-                                                             num: "0"))
+                                                             num: "0",
+                                                             memo: self.breakfastMenus.indices.contains(4) ? self.breakfastMenus[4] : ""
+                                                            ))
                                 self.lunchMenus = meals.filter { $0.type == "LUNCH" }.flatMap { $0.foods.map { $0.name_kor } }
                                 modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_M",
                                                                   date: dateFormatter.string(from:date),
@@ -101,7 +103,9 @@ class MenuAPIModel: ObservableObject {
                                                                   menu2: self.lunchMenus.indices.contains(1) ? self.lunchMenus[1] : "-",
                                                                   menu3: self.lunchMenus.indices.contains(2) ? self.lunchMenus[2] : "-",
                                                                   menu4: self.lunchMenus.indices.contains(3) ? self.lunchMenus[3] : "-",
-                                                             num: "0"))
+                                                             num: "0",
+                                                             memo: self.lunchMenus.indices.contains(4) ? self.lunchMenus[4] : ""
+                                                            ))
                                 self.dinnerMenus = meals.filter { $0.type == "DINNER" }.flatMap { $0.foods.map { $0.name_kor } }
                                 modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_M",
                                                                   date: dateFormatter.string(from:date),
@@ -109,7 +113,9 @@ class MenuAPIModel: ObservableObject {
                                                                   menu2: self.dinnerMenus.indices.contains(1) ? self.dinnerMenus[1] : "-",
                                                                   menu3: self.dinnerMenus.indices.contains(2) ? self.dinnerMenus[2] : "-",
                                                                   menu4: self.dinnerMenus.indices.contains(3) ? self.dinnerMenus[3] : "-",
-                                                             num: "0"))
+                                                             num: "0",
+                                                             memo: self.dinnerMenus.indices.contains(4) ? self.dinnerMenus[4] : ""
+                                                            ))
                             }
                         } catch {
                             print("Decoding error: ", error)
