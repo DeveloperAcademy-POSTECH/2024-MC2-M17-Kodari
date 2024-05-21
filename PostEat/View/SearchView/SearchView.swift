@@ -9,10 +9,7 @@ struct SearchView: View {
     
     var body: some View {
         NavigationStack {
-            Color.white
-                .frame(height: 1)
             ZStack{
-                // Color("SystemGray")
                 VStack{
                     TextField("메뉴를 검색하세요.", text: $searchText)
                         .padding(8)
@@ -23,7 +20,8 @@ struct SearchView: View {
                         .overlay(
                             HStack{
                                 Spacer()
-                                if self.editText {
+                                if self.editText
+                                {
                                     Button{ // x버튼을 누르면 입력된 값들 취소하고 키입력 이벤트 종료.
                                         self.editText = false
                                         searchText = ""
@@ -34,7 +32,8 @@ struct SearchView: View {
                                             .padding()
                                     }
                                 }
-                                else {
+                                else
+                                {
                                     Image(systemName: "magnifyingglass")
                                         .foregroundColor(.black)
                                         .padding()
@@ -47,7 +46,6 @@ struct SearchView: View {
                     
                     if !searchText.isEmpty{
                         List {
-                            // 검색어와 일치하는 항목을 위로 오게
                             ForEach(searchResults, id: \.id) { meal in // Set은 순서가 없기 때문에 못넣고 배열을 넣어야 함
                                 Group { // NavigationLink 4개인 이유 : menu1 ~ menu4를 각각 searchMenu 변수로 넣기 위함
                                     if meal.menu1.contains(searchText) {
@@ -96,8 +94,6 @@ struct SearchView: View {
         }
     }
     
-  
-
     // MARK: 검색 필터
     var searchResults: [FoodData] {
         if searchText.isEmpty {
@@ -122,7 +118,6 @@ struct SearchView: View {
                     addedMenus.insert(meal.menu4)
                 }
             }
-            
             return uniqueResults
         }
     }
@@ -140,11 +135,10 @@ struct HighlightedText: View {
         if range.location != NSNotFound {
             attributedString.addAttribute(.foregroundColor, value: UIColor.black, range: range)
         }
-        
         return Text(AttributedString(attributedString)).foregroundColor(.gray) //전체 글씨는 회색. 하이라이트는 검정색
     }
 }
 
-#Preview{
-    SearchView()
-}
+//#Preview{
+//    SearchView()
+//}
