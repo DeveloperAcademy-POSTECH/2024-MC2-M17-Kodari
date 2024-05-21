@@ -8,36 +8,58 @@ struct SearchResultsView: View {
     
     let columns = [GridItem(.flexible())]
     
+    // MARK: 인사이트 통계 변수들
+    @State var weekdayMaxNum = "" // 평일 최대 인원
+    @State var weekdayMinNum = "" // 평일 최소 인원
+    @State var weekdayAvgNum = "" // 평일 평균 인원
+    
+    // 데이터
+    @State var weekendMaxNum = "" // 주말 최대 인원
+    @State var weekendMinNum = "" // 주말 최소 인원
+    @State var weekendAvgNum = "" // 주말 평균 인원
+    
     var body: some View {
         ZStack {
-            
             Color(Constants.AppleGray)
+                .edgesIgnoringSafeArea(.bottom)
+            
             ScrollView {
-                
                 VStack{
                     VStack{
-                        HStack(spacing:0){
-                            Text("\(searchMenu)")
-                                .foregroundColor(Color(Constants.POSTECHRed))
-                                .font(.system(size: 22))
-                                .bold()
-                            Text(" 통계 결과")
-                                .font(.system(size: 22))
-                                .bold()
-                            Spacer()
+                        VStack{
+                            HStack(spacing:0){
+                                Text("\(searchMenu)")
+                                    .foregroundColor(Color(Constants.POSTECHRed))
+                                    .font(.system(size: 22))
+                                    .bold()
+                                Text("이(가) 포함된 식단")
+                                    .font(.system(size: 22))
+                                    .bold()
+                                Spacer()
+                            }
+                            .background(.clear)
+                            .padding(18)
+                            
+                            VStack{
+                                Text("평일 최대인원 : \(weekdayMaxNum)")
+                                Text("펑일 최소인원 : \(weekdayMinNum)")
+                                Text("평일 평균인원 : \(weekdayAvgNum)")
+                                
+                                Text("주말 최대인원 : \(weekendMaxNum)")
+                                Text("주말 최소인원 : \(weekendMinNum)")
+                                Text("주말 평균인원 : \(weekendAvgNum)")
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                Text("텍스트")
+                                Text("텍스트")
+                                Text("텍스트")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Constants.AppleGray)
+                            .cornerRadius(15)
                         }
-                        .padding(18)
-                        HStack(spacing:0){
-                            Text("\(searchMenu)")
-                                .foregroundColor(Color(Constants.POSTECHRed))
-                                .font(.system(size: 22))
-                                .bold()
-                            Text(" 그래프 정보")
-                                .font(.system(size: 22))
-                                .bold()
-                            Spacer()
-                        }
-                        .padding(18)
                     }
                     .background(.white)
                     .cornerRadius(15)
@@ -45,7 +67,6 @@ struct SearchResultsView: View {
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(filteredFoodData, id: \.id) { item in
                             CustomCellView(foodData: item)
-                               
                         }
                     }
                     .background(.clear)
@@ -53,6 +74,9 @@ struct SearchResultsView: View {
                     .padding(.top)
                 }
                 .padding(18)
+            }
+            .onAppear {
+                updateStatistics() // 현재 ResultView로 넘어오면서 바로 함수실행 -> 통계데이터 계산
             }
         }
         .navigationTitle("검색결과")
@@ -67,6 +91,82 @@ struct SearchResultsView: View {
             item.menu4.lowercased().contains(searchLowercased)
         }
     }
+    
+    // MARK: 인사이트 - 통계 데이터 ( 주말 & 평일 구분 )
+    private func updateStatistics() {
+        guard !filteredFoodData.isEmpty else {
+            return
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy:MM:dd"
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        
+        var weekdayArray: [Int] = [] // 평일인경우
+        var weekendArray: [Int] = [] // 주말인경우
+        
+        for data in filteredFoodData {
+            if let date = dateFormatter.date(from: data.date) {
+                let calendar = Calendar.current
+                let components = calendar.component(.weekday, from: date)
+                // 1: 일요일, 2: 월요일, ..., 7: 토요일
+                if components == 1 || components == 7 {
+                    weekendArray.append(Int(data.num) ?? 0)
+                } else {
+                    weekdayArray.append(Int(data.num) ?? 0)
+                }
+            }
+        }
+        print("평일 Total : \(weekdayArray)")
+        print("주말 Total : \(weekendArray)")
+        
+        // 주중 통계
+        if let maxNum = weekdayArray.max() {
+            weekdayMaxNum = "\(maxNum)"
+            print("펑일 max: \(maxNum)")
+        }
+        
+        let weekdayNonZeroArray = weekdayArray.filter { $0 != 0 }
+        if let minNum = weekdayNonZeroArray.min() {
+            weekdayMinNum = "\(minNum)"
+            print("평일 min: \(weekdayMinNum)")
+        } else {
+            weekdayMinNum = "0"
+            print("평일 min: \(weekdayMinNum)")
+        }
+        
+        let weekdayTotal = weekdayNonZeroArray.reduce(0, +)
+        print("평일 미입력 제외 Total: \(weekdayTotal)")
+        let weekdayAverage = weekdayTotal / max(weekdayNonZeroArray.count, 1)
+        weekdayAvgNum = "\(weekdayAverage)"
+        print("평일 avg: \(weekdayAvgNum)")
+        
+        // 주말 통계
+        if let maxNum = weekendArray.max() {
+            weekendMaxNum = "\(maxNum)"
+            print("주말 max: \(weekendMaxNum)")
+        } else {
+            weekendMaxNum = "0"
+            print("주말 max: \(weekendMaxNum)")
+        }
+        
+        
+        let weekendNonZeroArray = weekendArray.filter { $0 != 0 }
+        if let minNum = weekendNonZeroArray.min() {
+            weekendMinNum = "\(minNum)"
+            print("주말 min: \(weekendMinNum)")
+        } else {
+            weekendMinNum = "0"
+            print("주말 min: \(weekendMinNum)")
+        }
+        
+        let weekendTotal = weekendNonZeroArray.reduce(0, +)
+        print("주말 미입력 제외 Total: \(weekendTotal)")
+        let weekendAverage = weekendTotal / max(weekendNonZeroArray.count, 1)
+        weekendAvgNum = "\(weekendAverage)"
+        print("주말 avg: \(weekendAvgNum)")
+    }
+    
 }
 
 // MARK: Cell View
@@ -87,11 +187,9 @@ struct CustomCellView: View {
                 Spacer()
                 dateBadge(day: foodData.date)
                 mealTypeBadge(mealType: foodData.uniqueid)
-                
             }
             .padding(.top, 10)
-            .padding(.leading, 15)
-            .padding(.trailing, 15)
+            .padding(.horizontal, 15)
             
             HStack {
                 mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
@@ -99,7 +197,6 @@ struct CustomCellView: View {
 //                noteAndWeatherIcon
 //                    .padding(.top, 60)
 //                    .padding(.leading, 50)
-                
             }
             .padding(EdgeInsets(top: 2, leading: 15, bottom: 10, trailing: 30))
         }
@@ -108,7 +205,7 @@ struct CustomCellView: View {
         .background(Color.white)
         .cornerRadius(10)
     }
-
+    
     // MARK: 식수
     func counterBadge(count: Int) -> some View {
         ZStack{
@@ -118,7 +215,7 @@ struct CustomCellView: View {
                 .background(Constants.KODARIBlue)
                 .cornerRadius(9)
             
-            Text("\(count)명 방문" )
+            Text(count == 0 ? "미입력" : "\(count)명 방문") // 0명이면 "미입력"으로
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 14)
                         .weight(.bold)
@@ -131,11 +228,10 @@ struct CustomCellView: View {
     
     // MARK: 날짜
     func dateBadge(day: String) -> some View {
-        
         ZStack{
             Rectangle()
                 .foregroundColor(.clear)
-                .frame(width: 130, height: 22)
+                .frame(width: 170, height: 22)
                 .background(Color(red: 0.94, green: 0.94, blue: 0.94))
                 .cornerRadius(6)
             
@@ -146,17 +242,30 @@ struct CustomCellView: View {
                 )
                 .multilineTextAlignment(.center)
                 .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
-                .frame(width: 110, height: 13, alignment: .center)
+                .frame(width: 170, height: 13, alignment: .center)
         }
     }
     
     func parseDateString(_ dateString: String) -> String {
         let components = dateString.split(separator: ":")
         if components.count == 3 {
-            let year = components[0]
-            let month = components[1]
-            let day = components[2]
-            return "\(year)년 \(month)월 \(day)일"
+            let year = String(components[0])
+            let month = String(components[1])
+            let day = String(components[2])
+            
+            // 날짜 문자열을 Date 객체로 변환
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd"
+            guard let date = dateFormatter.date(from: dateString) else {
+                return dateString
+            }
+            
+            // Date 객체를 원하는 형식의 문자열로 변환
+            dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
+            dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일 설정
+            let formattedDateString = dateFormatter.string(from: date)
+            
+            return formattedDateString
         } else {
             return dateString
         }
@@ -168,30 +277,24 @@ struct CustomCellView: View {
         VStack(alignment: .leading, spacing: 0.5){
             Text(menu1)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
-                
                 .padding(2)
             Text(menu2)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
-                
                 .padding(2)
             Text(menu3)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
-               
                 .padding(2)
             Text(menu4)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
-             
                 .padding(2)
         }
-      
+        
     }
     
     // MARK: Meal Type
     func mealTypeBadge(mealType: String)-> some View{
         let mealTypeText: String
-        
-        // uniqueid의 마지막 문자를 확인하여 조식, 중식, 석식 텍스트 설정
-        switch mealType.last {
+        switch mealType.last { // uniqueid의 마지막 문자를 확인하여 조식, 중식, 석식 텍스트 설정
         case "M":
             mealTypeText = "조식"
         case "L":
@@ -219,30 +322,25 @@ struct CustomCellView: View {
                 .frame(width: 29.80556, height: 13, alignment: .center)
         }
     }
-    
-    
-//    var noteAndWeatherIcon: some View{
-//        
-//        HStack{
-//            Image(systemName:"chart.line.uptrend.xyaxis.circle.fill")
-//                .font(.system(size: 20))
-//                .foregroundColor(Constants.KODARIGray)
-//                .frame(width: 15,alignment: .leading)
-//                .padding()
-//            
-//            Image(systemName:"cloud.heavyrain.fill")
-//                .font(.system(size: 20))
-//                .foregroundColor(Constants.KODARIGray)
-//                .frame(width: 15,alignment: .trailing)
-//            
-//        }
-//    }
+    //    var noteAndWeatherIcon: some View{
+    //        HStack{
+    //            Image(systemName:"chart.line.uptrend.xyaxis.circle.fill")
+    //                .font(.system(size: 20))
+    //                .foregroundColor(Constants.KODARIGray)
+    //                .frame(width: 15,alignment: .leading)
+    //                .padding()
+    //
+    //            Image(systemName:"cloud.heavyrain.fill")
+    //                .font(.system(size: 20))
+    //                .foregroundColor(Constants.KODARIGray)
+    //                .frame(width: 15,alignment: .trailing)
+    //        }
+    //    }
 }
-
 
 //#Preview {
 //    SearchResultsView(searchMenu: "서치메뉴", mealsdata: [
-//        FoodData(uniqueid: "1", date: "2024-05-20", menu1: "Menu 1", menu2: "Menu 2", menu3: "Menu 3", menu4: "Menu 4", num: "123", memo:""),
-//        FoodData(uniqueid: "2", date: "2024-05-21", menu1: "Menu A", menu2: "Menu B", menu3: "Menu C", menu4: "Menu D", num: "123", memo:"")
+//        FoodData(uniqueid: "1", date: "2024-05-20", menu1: "Menu 1", menu2: "Menu 2", menu3: "Menu 3", menu4: "Menu 4", num: 123, memo:""),
+//        FoodData(uniqueid: "2", date: "2024-05-21", menu1: "Menu A", menu2: "Menu B", menu3: "Menu C", menu4: "Menu D", num: 123, memo:"")
 //    ])
 //}
