@@ -13,9 +13,9 @@ class FoodData: Identifiable {
     var menu3: String
     var menu4: String
     var num: String// Ing 형 .?
-    //var memo: String
+    var memo: String
     
-    init(uniqueid: String, date: String, menu1: String, menu2: String, menu3: String, menu4: String, num: String ) {
+    init(uniqueid: String, date: String, menu1: String, menu2: String, menu3: String, menu4: String, num: String, memo: String) {
         self.uniqueid = uniqueid
         self.date = date
         self.menu1 = menu1
@@ -23,6 +23,6 @@ class FoodData: Identifiable {
         self.menu3 = menu3
         self.menu4 = menu4
         self.num = num
-      //  self.memo = memo
+        self.memo = memo
     }
 }

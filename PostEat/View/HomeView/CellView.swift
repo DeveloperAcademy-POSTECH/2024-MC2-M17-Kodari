@@ -8,6 +8,9 @@ struct CellView: View {
     
     let calendar = Calendar.current
     
+    @State var recordModalShowing : Bool = false
+    @State var selectedIndex: Int? = 0 // 선택된 인덱스를 추적하는 상태 변수
+    
     @Binding var selectedDate : Date //현재 날짜와 시간 가져오기
     
     @Environment(\.modelContext) var modelContext
@@ -19,11 +22,14 @@ struct CellView: View {
             
             let selectedMealsData = mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))}
             if selectedMealsData.count != 0{
-//                LazyVGrid(columns: columns) {
+                //                LazyVGrid(columns: columns) {
                 ScrollView{
                     ForEach(eatingTime.indices, id: \.self) { index in
                         Button(action:{
-                            
+                            DispatchQueue.main.async{
+                                selectedIndex = index
+                                recordModalShowing.toggle()
+                            }
                         }){
                             ZStack{
                                 RoundedRectangle(cornerRadius: 12)
@@ -114,6 +120,12 @@ struct CellView: View {
                                 }
                             }
                             .frame(width: 360, height: selectedMealsData[index].num.count != 1 ? 163 : 206)
+                        }
+                        .sheet(isPresented: $recordModalShowing) {
+                            if let selectedIndex = selectedIndex {
+                                RecordView(recordModalShowing: $recordModalShowing, mealData: selectedMealsData[selectedIndex])
+                                    .presentationDetents([.height(500), .large])
+                            }
                         }
                     }
                 }

@@ -18,6 +18,9 @@ struct EditView: View {
                 HStack{
                     Button(action:{
                         editModalShowing.toggle()
+                        editDate = ""
+                        editEatingNumber = ""
+                        editMemo = ""
                     } ){
                         Text("취소")
                             .padding()

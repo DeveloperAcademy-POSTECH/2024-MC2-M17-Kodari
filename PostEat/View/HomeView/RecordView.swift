@@ -1,16 +1,19 @@
 
 import SwiftUI
+import SwiftData
 
 struct RecordView: View {
     
-    @State var writeDate : String = "" // 기록 날짜 변수
+    //    @State var writeDate : String // 기록 날짜 변수
     @State var writeEatingNumber : String = "" // 기록 식사 인원 변수
     @State var writeMemo : String = "" // 기록 메모 변수
     
     @State var savePossible : Bool = false // 저장 버튼 활성화/비활성화
     @State var savedViewShowing : Bool = false // 저장 했을 때, 파란색 "저장됨" 뷰
-    @State var recordModalShowing : Bool = true
+    @Binding var recordModalShowing : Bool
     //    @Binding var recordModalShowing : Bool
+    
+    @Bindable var mealData : FoodData
     
     
     var body: some View {
@@ -30,17 +33,16 @@ struct RecordView: View {
                     Spacer()
                     Button(action:{
                         savedViewShowing.toggle()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3){
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
                             //                            recordModalShowing.toggle()
                             savedViewShowing.toggle()
+                            recordModalShowing.toggle()
                         }
                     } ){
                         Text("저장")
                             .padding()
-                            .foregroundStyle(writeEatingNumber.count >= 1 ? Color.blue : Color.gray)
+                            .foregroundStyle(Color.blue)
                     }
-                    .disabled(writeEatingNumber.count == 0) // 조건이 참일 때 버튼 비활성화
-                    
                 }
                 ZStack{
                     RoundedRectangle(cornerSize: CGSize(width: 10, height: 10))
@@ -50,17 +52,17 @@ struct RecordView: View {
                         Spacer()
                         recordTextField(
                             recordPlaceholder: "2024년 5월 12일",
-                            bindingText: $writeDate,
+                            bindingText: $mealData.date,
                             recordName: "날짜")
                         Spacer()
                         recordTextField(
                             recordPlaceholder: "000",
-                            bindingText: $writeEatingNumber,
+                            bindingText: $mealData.num,
                             recordName: "식사 인원")
                         Spacer()
                         recordTextField(
                             recordPlaceholder: "요구르트 모자람",
-                            bindingText: $writeMemo,
+                            bindingText: $mealData.memo,
                             recordName: "메모")
                         Spacer()
                         
@@ -73,11 +75,12 @@ struct RecordView: View {
                         Spacer()
                     }
                 }.frame(width:361, height:132)
-            }
+                Spacer()
+            }.padding(.top, 20)
             
             ZStack{
                 Color(red: 27 / 255, green: 177 / 255, blue: 211 / 255)
-                    .opacity(0.7)
+                    .opacity(1)
                 HStack{
                     Image(systemName:"checkmark.circle.fill")
                         .frame(width:31, height:31)
@@ -89,14 +92,8 @@ struct RecordView: View {
                 }
             }.opacity(savedViewShowing ? 1 : 0) // opacity 1로 설정
                 .animation(.easeIn(duration: 0.5), value: savedViewShowing)
-            
-            
         }
     }
-}
-
-#Preview {
-    RecordView()
 }
 
 struct recordTextField : View{
