@@ -305,7 +305,7 @@ struct CustomCellView: View {
     var body: some View {
         VStack {
             HStack {
-                counterBadge(count: foodData.num)
+                counterBadge(count: foodData.num, tempdate: foodData.date)
                 Spacer()
                 dateBadge(day: foodData.date)
                 mealTypeBadge(mealType: foodData.uniqueid)
@@ -329,22 +329,43 @@ struct CustomCellView: View {
     }
     
     // MARK: 식수
-    func counterBadge(count: Int) -> some View {
-        ZStack{
+    func counterBadge(count: Int, tempdate: String) -> some View {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        print("변형전 :\(tempdate)")
+        let date = formatter.date(from: tempdate) ?? Date()
+        print("변형후 : \(date)")
+        print("현재 Current : \(Calendar.current)")
+        let isFutureDate = Calendar.current.compare(date, to: Date(), toGranularity: .day) == .orderedDescending
+        print("비교: \(isFutureDate)")
+        
+        var displayText: String
+        if count == 0 {
+            if isFutureDate {
+                displayText = "배식전"
+            } else {
+                displayText = "미입력"
+            }
+        } else {
+            displayText = "\(count)명 방문"
+            print("\(displayText) 가능")
+        }
+        
+        return ZStack {
             Rectangle()
                 .foregroundColor(.clear)
-                .frame(width:80, height:22)
-                .background(Constants.KODARIBlue)
+                .frame(width: 80, height: 22)
+                .background(displayText == "미입력" ? Constants.KODARIGray : Constants.KODARIBlue)
                 .cornerRadius(9)
             
-            Text(count == 0 ? "미입력" : "\(count)명 방문") // 0명이면 "미입력"으로
+            Text(displayText)
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 14)
                         .weight(.bold)
                 )
                 .multilineTextAlignment(.center)
                 .foregroundColor(Constants.White)
-                .frame(width: 80, height: 11, alignment: .center)
+                .frame(width: 80, height: 22, alignment: .center) // Adjusted height to match the parent Rectangle
         }
     }
     
