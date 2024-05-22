@@ -20,13 +20,12 @@ struct CellView: View {
         ZStack{
             Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
             
-            let selectedMealsData = mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))}
-            //print(selectedMealsData.count)
+            let RawselectedMealsData = (mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))})
+            let selectedMealsData = RawselectedMealsData.sorted{ $0.uniqueid > $1.uniqueid}
+            
             if selectedMealsData.count != 0{
-                //            if selectedMealsData {
-                //                LazyVGrid(columns: columns) {
                 ScrollView{
-                    ForEach(eatingTime.indices, id: \.self) { index in
+                    ForEach(selectedMealsData.indices, id: \.self) { index in
                         Button(action:{
                             DispatchQueue.main.async{
                                 selectedIndex = index
@@ -130,8 +129,9 @@ struct CellView: View {
                         }
                         .sheet(isPresented: $recordModalShowing) {
                             if let selectedIndex = selectedIndex {
-                                RecordView(recordModalShowing: $recordModalShowing, mealData: selectedMealsData[selectedIndex])
+                                RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex])
                                     .presentationDetents([.height(500), .large])
+                                    .presentationCornerRadius(25)
                             }
                         }
                     }

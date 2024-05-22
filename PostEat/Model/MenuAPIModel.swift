@@ -96,7 +96,7 @@ class MenuAPIModel: ObservableObject {
                                                              memo: self.breakfastMenus.indices.contains(4) ? self.breakfastMenus[4] : ""
                                                             ))
                                 self.lunchMenus = meals.filter { $0.type == "LUNCH" }.flatMap { $0.foods.map { $0.name_kor } }
-                                modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_M",
+                                modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_L",
                                                                   date: dateFormatter.string(from:date),
                                                                   menu1: self.lunchMenus.indices.contains(0) ? self.lunchMenus[0] : "-",
                                                                   menu2: self.lunchMenus.indices.contains(1) ? self.lunchMenus[1] : "-",
@@ -106,7 +106,7 @@ class MenuAPIModel: ObservableObject {
                                                              memo: self.lunchMenus.indices.contains(4) ? self.lunchMenus[4] : ""
                                                             ))
                                 self.dinnerMenus = meals.filter { $0.type == "DINNER" }.flatMap { $0.foods.map { $0.name_kor } }
-                                modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_M",
+                                modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_D",
                                                                   date: dateFormatter.string(from:date),
                                                                   menu1: self.dinnerMenus.indices.contains(0) ? self.dinnerMenus[0] : "-",
                                                                   menu2: self.dinnerMenus.indices.contains(1) ? self.dinnerMenus[1] : "-",
