@@ -35,13 +35,13 @@ struct SearchResultsView: View {
                                     .foregroundColor(Color(Constants.POSTECHRed))
                                     .font(.system(size: 22))
                                     .bold()
-                                Text("이(가) 포함된 식단")
+                                Text(" 포함된 식단")
                                     .font(.system(size: 22))
                                     .bold()
                                 Spacer()
                             }
                             .background(.clear)
-                            .padding(18)
+                            .padding()
                             
                             VStack{
                                 VStack{
@@ -114,7 +114,7 @@ struct SearchResultsView: View {
                                     .cornerRadius(15)
                                     .padding()
                                 }
-                                .background(Constants.AppleGray)
+                                .background(Constants.KODARIGray.opacity(0.15))
                                 .cornerRadius(15)
                             }
                             
@@ -303,27 +303,38 @@ struct CustomCellView: View {
     }()
     
     var body: some View {
-        VStack {
-            HStack {
-                counterBadge(count: foodData.num, tempdate: foodData.date)
-                Spacer()
-                dateBadge(day: foodData.date)
-                mealTypeBadge(mealType: foodData.uniqueid)
-            }
-            .padding(.top, 10)
-            .padding(.horizontal, 15)
+        HStack {
             
-            HStack {
-                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
-                Spacer()
-                //                noteAndWeatherIcon
-                //                    .padding(.top, 60)
-                //                    .padding(.leading, 50)
+            VStack {
+                mealTypeBadge(mealType: foodData.uniqueid)
+                counterBadge(count: foodData.num, tempdate: foodData.date)
+                dateBadge(day: foodData.date)
+                
             }
-            .padding(EdgeInsets(top: 2, leading: 15, bottom: 10, trailing: 30))
+            //.padding(10)
+            
+            HStack{
+                Divider()
+                    .frame(maxHeight: .infinity) // 높이를 적절히 설정
+                
+                    .background(Constants.AppleGray)
+            }
+            .padding(.vertical, 10)
+            
+            VStack {
+                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
+                
+            }
+            .padding(10)
+            
+            Spacer()
+            VStack{
+                noteAndWeatherIcon(useMemo: foodData.memo)
+            }
+           
         }
         .frame(maxWidth: .infinity)
-        //.padding(15)
+        .padding()
         .background(Color.white)
         .cornerRadius(10)
     }
@@ -347,7 +358,7 @@ struct CustomCellView: View {
                 displayText = "미입력"
             }
         } else {
-            displayText = "\(count)명 방문"
+            displayText = "\(count)명"
             print("\(displayText) 가능")
         }
         
@@ -355,16 +366,15 @@ struct CustomCellView: View {
             Rectangle()
                 .foregroundColor(.clear)
                 .frame(width: 80, height: 22)
-                .background(displayText == "미입력" ? Constants.KODARIGray : Constants.KODARIBlue)
                 .cornerRadius(9)
             
             Text(displayText)
                 .font(
-                    Font.custom("Apple SD Gothic Neo", size: 14)
+                    Font.custom("Apple SD Gothic Neo", size: 26)
                         .weight(.bold)
                 )
                 .multilineTextAlignment(.center)
-                .foregroundColor(Constants.White)
+                .foregroundColor(displayText == "미입력" ? Constants.KODARIGray : Constants.KODARIBlue)
                 .frame(width: 80, height: 22, alignment: .center) // Adjusted height to match the parent Rectangle
         }
     }
@@ -374,22 +384,33 @@ struct CustomCellView: View {
         ZStack{
             Rectangle()
                 .foregroundColor(.clear)
-                .frame(width: 170, height: 22)
-                .background(Color(red: 0.94, green: 0.94, blue: 0.94))
+                .frame(width: 80, height: 40)
+                .background(.white)
                 .cornerRadius(6)
             
-            Text("\(parseDateString(day))")
-                .font(
-                    Font.custom("Apple SD Gothic Neo", size: 14)
-                        .weight(.bold)
-                )
-                .multilineTextAlignment(.center)
-                .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
-                .frame(width: 170, height: 13, alignment: .center)
+            VStack { // VStack으로 두 줄을 나눠서 날짜 배치
+                Text(parseDateString(day).datePart)
+                    .font(
+                        Font.custom("Apple SD Gothic Neo", size: 12)
+                            .weight(.bold)
+                    )
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
+                    .frame(alignment: .center)
+                
+                Text(parseDateString(day).dayOfWeek)
+                    .font(
+                        Font.custom("Apple SD Gothic Neo", size: 12)
+                            .weight(.bold)
+                    )
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
+                    .frame(alignment: .center)
+            }
         }
     }
     
-    func parseDateString(_ dateString: String) -> String {
+    func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
         let components = dateString.split(separator: ":")
         if components.count == 3 {
             let year = String(components[0])
@@ -400,24 +421,30 @@ struct CustomCellView: View {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy:MM:dd"
             guard let date = dateFormatter.date(from: dateString) else {
-                return dateString
+                return (dateString, "")
             }
             
             // Date 객체를 원하는 형식의 문자열로 변환
-            dateFormatter.dateFormat = "yyyy년 MM월 dd일 EEEE"
+            dateFormatter.dateFormat = "MM월 dd일"
             dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일 설정
-            let formattedDateString = dateFormatter.string(from: date)
+            let datePart = dateFormatter.string(from: date)
             
-            return formattedDateString
+            dateFormatter.dateFormat = "EEEE"
+            let dayOfWeek = dateFormatter.string(from: date)
+            
+            return (datePart, dayOfWeek)
         } else {
-            return dateString
+            return (dateString, "")
         }
     }
+    
     
     // MARK: 식단
     func mealContents(menu1: String, menu2: String, menu3: String, menu4: String)-> some View{
         
-        VStack(alignment: .leading, spacing: 0.5){
+        
+        return VStack(alignment: .leading, spacing: 0.5){
+            
             Text(menu1)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
                 .padding(2)
@@ -452,7 +479,7 @@ struct CustomCellView: View {
             Rectangle()
                 .foregroundColor(.clear)
                 .frame(width: 37, height: 22)
-                .background(Color(red: 0.94, green: 0.94, blue: 0.94))
+                .background(Constants.KODARIBlue)
                 .cornerRadius(6)
             
             Text("\(mealTypeText)")
@@ -461,24 +488,24 @@ struct CustomCellView: View {
                         .weight(.bold)
                 )
                 .multilineTextAlignment(.center)
-                .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
+                .foregroundColor(.white)
                 .frame(width: 29.80556, height: 13, alignment: .center)
         }
     }
-    //    var noteAndWeatherIcon: some View{
-    //        HStack{
-    //            Image(systemName:"chart.line.uptrend.xyaxis.circle.fill")
-    //                .font(.system(size: 20))
-    //                .foregroundColor(Constants.KODARIGray)
-    //                .frame(width: 15,alignment: .leading)
-    //                .padding()
-    //
-    //            Image(systemName:"cloud.heavyrain.fill")
-    //                .font(.system(size: 20))
-    //                .foregroundColor(Constants.KODARIGray)
-    //                .frame(width: 15,alignment: .trailing)
-    //        }
-    //    }
+    
+    func noteAndWeatherIcon(useMemo: String) -> some View {
+        ZStack {
+//            Circle()
+//                .fill(useMemo.count > 0 ? Constants.KODARIBlue : Constants.KODARIGray.opacity(0.15))
+//                .frame(width: 26, height: 26)
+            Image(systemName: "list.bullet.circle.fill")
+                .font(.system(size: 20))
+                .foregroundColor(useMemo.count > 0 ? Constants.KODARIBlue : Constants.KODARIGray.opacity(0.15))
+                .frame(width: 24, height: 24) // Circle과 동일한 크기
+                .contentShape(Circle()) // 이미지의 컨텐츠 모양을 Circle로 설정
+        }
+    }
+
 }
 
 //#Preview {
