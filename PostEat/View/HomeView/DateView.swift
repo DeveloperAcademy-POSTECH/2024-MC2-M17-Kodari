@@ -14,7 +14,7 @@ struct DateView: View {
     @State private var mealdata: [FoodData] = []
 //    @State private var mealdataLoaded = false // 한번만 로드
     
-    @State var selectedDate = Date() //현재 날짜와 시간 가져오기
+    @Binding var selectedDate : Date //현재 날짜와 시간 가져오기
     private let calendar = Calendar.current //현재를 달력에 저장 /
     
     @State private var triangleLocate: CGPoint = .zero
