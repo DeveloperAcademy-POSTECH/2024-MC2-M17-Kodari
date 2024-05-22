@@ -13,10 +13,13 @@ struct SearchResultsView: View {
     @State var weekdayMinNum = "" // 평일 최소 인원
     @State var weekdayAvgNum = "" // 평일 평균 인원
     
-    // 데이터
     @State var weekendMaxNum = "" // 주말 최대 인원
     @State var weekendMinNum = "" // 주말 최소 인원
     @State var weekendAvgNum = "" // 주말 평균 인원
+    
+    @State var progressValue1: Float = 0.65
+    @State var progressValue2: Float = 0.45
+    
     
     var body: some View {
         ZStack {
@@ -41,25 +44,86 @@ struct SearchResultsView: View {
                             .padding(18)
                             
                             VStack{
-                                Text("평일 최대인원 : \(weekdayMaxNum)")
-                                Text("펑일 최소인원 : \(weekdayMinNum)")
-                                Text("평일 평균인원 : \(weekdayAvgNum)")
-                                
-                                Text("주말 최대인원 : \(weekendMaxNum)")
-                                Text("주말 최소인원 : \(weekendMinNum)")
-                                Text("주말 평균인원 : \(weekendAvgNum)")
+                                VStack{
+                                    HStack{
+                                        Text("방문자 수")
+                                            .fontWeight(.semibold)
+                                    }
+                                    .padding()
+                                    
+                                    HStack{
+                                        VStack{
+                                            Text("평일")
+                                            ZStack{
+                                                WeekdayProgressBar(weekdayprogress: progressValue1, weekdayAvgNum: weekdayAvgNum)
+                                                    .frame(width: 80.0, height: 80.0)
+                                                    .padding(.top, 10)
+                                                
+                                                HStack{
+                                                    Text("\(weekdayMinNum)")
+                                                        .foregroundColor(Constants.KODARIRed)
+                                                    Spacer()
+                                                    Text("\(weekdayMaxNum)")
+                                                }
+                                                .padding(.horizontal, 20)
+                                                .padding(.top, 80)
+                                            }
+                                            
+                                        }
+                                        VStack{
+                                            Text("주말")
+                                            ZStack{
+                                                WeekendProgressBar(weekendprogress: self.$progressValue2, weekendAvgNum: weekendAvgNum)
+                                                    .frame(width: 80.0, height: 80.0)
+                                                    .padding(.top, 10)
+                                                
+                                                HStack{
+                                                    Text("\(weekendMinNum)")
+                                                        .foregroundColor(Constants.KODARIRed)
+                                                    Spacer()
+                                                    Text("\(weekendMaxNum)")
+                                                }
+                                                .padding(.horizontal, 20)
+                                                .padding(.top, 80)
+                                            }
+                                            
+                                        }
+                                    }
+                                    HStack{
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(.blue)
+                                        Text("평균")
+                                            .foregroundColor(.blue)
+                                        
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(.red)
+                                        Text("최고")
+                                            .foregroundColor(.red)
+                                        
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(.black)
+                                        Text("최저")
+                                            .foregroundColor(.black)
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.white.opacity(0.3))
+                                    .cornerRadius(15)
+                                    .padding()
+                                }
+                                .background(Constants.AppleGray)
+                                .cornerRadius(15)
                             }
                             
-                            VStack(alignment: .leading) {
-                                Text("텍스트")
-                                Text("텍스트")
-                                Text("텍스트")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Constants.AppleGray)
-                            .cornerRadius(15)
                         }
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white)
+                        .cornerRadius(15)
+                        .padding(.horizontal)
+                        .padding(.bottom)
                     }
                     .background(.white)
                     .cornerRadius(15)
@@ -169,6 +233,64 @@ struct SearchResultsView: View {
     
 }
 
+struct WeekdayProgressBar: View {
+    var weekdayprogress: Float
+    var weekdayAvgNum: String
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .trim(from: 0.3, to: 0.9)
+                .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
+                .opacity(0.3)
+                .foregroundColor(Color.gray)
+                .rotationEffect(.degrees(54.5))
+            
+            Circle()
+                .trim(from: 0.3, to: CGFloat(self.weekdayprogress))
+                .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
+                .fill(Color.blue)
+                .rotationEffect(.degrees(54.5)) // 게이지 시작 지점 - Start Point
+            
+            VStack{
+                Text("\(weekdayAvgNum)")
+                    .foregroundColor(.blue)
+                    .font(Font.system(size: 20))
+                    .fontWeight(.semibold)
+            }
+        }
+    }
+}
+
+struct WeekendProgressBar: View {
+    @Binding var weekendprogress: Float
+    var weekendAvgNum: String
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .trim(from: 0.3, to: 0.9)
+                .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
+                .opacity(0.3)
+                .foregroundColor(Color.gray)
+                .rotationEffect(.degrees(54.5))
+            
+            Circle()
+                .trim(from: 0.3, to: CGFloat(self.weekendprogress))
+                .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
+                .fill(Color.blue)
+                .rotationEffect(.degrees(54.5)) // 게이지 시작 지점 - Start Point
+            
+            VStack{
+                Text("\(weekendAvgNum)")
+                    .foregroundColor(.blue)
+                    .font(Font.system(size: 20))
+                    .fontWeight(.semibold)
+            }
+        }
+    }
+}
+
 // MARK: Cell View
 struct CustomCellView: View {
     
@@ -194,9 +316,9 @@ struct CustomCellView: View {
             HStack {
                 mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
                 Spacer()
-//                noteAndWeatherIcon
-//                    .padding(.top, 60)
-//                    .padding(.leading, 50)
+                //                noteAndWeatherIcon
+                //                    .padding(.top, 60)
+                //                    .padding(.leading, 50)
             }
             .padding(EdgeInsets(top: 2, leading: 15, bottom: 10, trailing: 30))
         }
