@@ -35,15 +35,7 @@ struct CalendarView: View {
                         }
                 ) .navigationTitle("달력보기")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            print("go back")
-                        }) {
-                            Image(systemName: "chevron.backward")
-                        }
-                    }
-                }
+               
         }
     }
     //월, 연도, 요일 표기
