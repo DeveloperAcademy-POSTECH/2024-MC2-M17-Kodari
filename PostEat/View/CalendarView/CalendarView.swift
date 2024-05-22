@@ -4,177 +4,222 @@
 //
 //  Created by 장유진 on 5/22/24.
 //
+//
+//  CustomDatePicker.swift
+//  ElegantTaskApp
+//
+//  Created by 변준섭 on 5/19/24.
+//
 
 import SwiftUI
 
 struct CalendarView: View {
-    @State var month: Date
-    @State var offset: CGSize = CGSize()
-    @State var clickedDates: Set<Date> = []
-    @State var when: Int
+    @Binding var currentDate: Date
+    var mealsData: [FoodData]
+    // Month update on arrow button click
+    @State var currentMonth: Int = 0
+    let dateFormatter = DateFormatter()
+
     
     var body: some View {
-        NavigationView {
-            VStack {
-                HeaderView
-                CalendarGridView
+        VStack(spacing: 35){
+            // 필터링 및 변환
+            let emptyMealsDates = mealsData.filter { meal in
+                let components = meal.date.split(separator: ":")
+                return components[1] == extraDate()[1] && meal.num == 0
+            }.compactMap { meal in
+                dateFormatter.date(from: meal.date)
+            }
+            // 중복 제거
+            let uniqueEmptyMealsDates = Array(Set(emptyMealsDates))
+            
+            Button(action:{
+                print(emptyMealsDates)
+            }){
+                Circle()
+                    .frame(width:100, height:20)
+            }
+            
+            // Days...
+            let days: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+            
+            HStack(spacing: 20){
                 
-            } .padding()
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            self.offset = gesture.translation
-                        }
-                        .onEnded { gesture in
-                            if gesture.translation.width < -100 {
-                                changeMonth(by: 1)
-                            } else if gesture.translation.width > 100 {
-                                changeMonth(by: -1)
-                            }
-                            self.offset = CGSize()
-                        }
-                ) .navigationTitle("달력보기")
-                .navigationBarTitleDisplayMode(.inline)
-               
-        }
-    }
-    //월, 연도, 요일 표기
-    private var HeaderView: some View {
-        VStack{
-            HStack {
-                Text(month, formatter: Self.dateFormatter)
-                Text("\(when)")
-                Spacer()
-            } .padding()
-            HStack {
-                ForEach(Self.weekdaySymbols, id: \.self) {symbol in Text(symbol)
+                VStack(alignment: .leading, spacing: 10) {
+                    
+                    Text(extraDate()[0])
+                    
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                    
+                    Text(extraDate()[1])
+                        .font(.title.bold())
+                }
+                
+                Spacer(minLength: 0)
+                
+                Button{
+                    withAnimation{
+                        currentMonth -= 1
+                        currentDate = getCurrentMonth()
+
+                    }
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .font(.title2)
+                }
+                Button{
+                    withAnimation{
+                        currentMonth += 1
+                        currentDate = getCurrentMonth()
+
+                    }
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .font(.title2)
+                }
+            }
+            .padding(.horizontal)
+            // Day View...
+            
+            HStack(spacing: 0){
+                ForEach(days, id: \.self){ day in
+                    
+                    Text(day)
+                        .font(.callout)
+                        .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
-                        .foregroundColor(.gray)
                 }
             }
-            .padding()
+            
+            // Dates....
+            // Lazy Grid..
+            let columns = Array(repeating: GridItem(.flexible()), count: 7)
+            
+            LazyVGrid(columns: columns, spacing: 15){
+                
+                ForEach(extractDate()){ value in
+                    CardView(value: value, emptyDays: uniqueEmptyMealsDates)
+                }
+            }
+            
+        }
+        .onAppear{
+            dateFormatter.dateFormat = "yyyy:MM:dd"
+        }
+        
+        .onChange(of: currentMonth) { newValue in
+            // updating Month...
+//            currentDate = getCurrentMonth()
         }
     }
-    //실제 일자별로
-    private var CalendarGridView: some View {
-        
-        let daysInMonth: Int = numberOfDays(in: month) //월이 가진 날짜 수
-        let firstWeekday: Int = firstWeekdayOfMonth(in: month)-1 //해당 월의 첫 날짜가 어떤 요일로 int 값을 갖는지
-        
-        return VStack {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
-                ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
-                    if index < firstWeekday {
-                        //                        RoundedRectangle(cornerRadius: 5)
-                        //                            .foregroundColor(Color.clear)
-                    } else {
-                        let date = getDate(for: index - firstWeekday)
-                        let day = index - firstWeekday + 1
-                        //let clicked = clickedDates.contains(date)
-                        
-                        CalendarCellView(day: day, clicked: false, when: when) // clicked: clicked, cellDate: date
-                            .onTapGesture {
-                                when = day
+    
+    @ViewBuilder
+    func CardView(value: DateValue, emptyDays: [Date])-> some View{
+        VStack{
+            
+            if value.day != -1{
+                Button(action:{
+                    currentDate = value.date
+                    print(emptyDays)
+                }){
+                    
+                    VStack{
+                        ZStack{
+                            if currentDate == value.date{
+                                Circle()
+                                    .frame(width:40, height:40)
+                                    .foregroundStyle(Constants.KODARIBlue)
+                                    .opacity(0.7)
+                                    .padding(0)
                             }
-                    }
+                            Text("\(value.day)") // value.date 를 찍어봐야 함 이게 date 형
+                            // 그러면, value.date 에 해당하는 날짜를 swiftdata 에서 가져온 후애, num 에서 0이 몇개인지 센다.
+                            // 0 이 0개이면 파란불, 나머진 빨간불
+                                .font(.title3.bold())
+                                .foregroundStyle(Color.black)
+                        }.frame(height:40)
+                        Spacer()
+                        if emptyDays.contains(value.date) {
+                            Circle()
+                                .frame(width:5)
+                                .foregroundStyle(Color.red)
+                        } else{
+                            Circle()
+                                .frame(width:5)
+                                .foregroundStyle(Color.blue)
+                        }
+                        
+                        
+                    }.frame(height:55)
+                    
                 }
+                
             }
         }
     }
-}
-
-private struct CalendarCellView: View {
-    var day: Int
-    var clicked: Bool = false
-    var when: Int
-    //var cellDate: Date
     
-    //init(day:Int, clicked: Bool, cellDate: Date) {
-    init(day:Int, clicked: Bool, when: Int) {
-        self.day = day
-        self.clicked = clicked
-        self.when = when
-        //self.cellDate = cellDate
-    }
-    
-    var body: some View {
-        VStack {
-            //Button {
-            //    month = cellDate
-            //} label: {
-//            RoundedRectangle(cornerRadius: 5)
-//                .opacity(0)
-//                .overlay(Text(String(day)))
-//            A()
-                ZStack {
-                    if when == day {
-                        Circle()
-                            .fill(Color.gray.opacity(0.4))
-                    }
-                    Text(String(day))
-                }
-        }
+    // extrating Year And Month for display...
+    func extraDate()-> [String]{
         
-        //if clicked {
-        //    Text("Click")
-        //    .font(.caption)
-        //    .foregroundColor(.blue)
-        //}
-    }
-}
-//
-//struct A: View {
-//    var body: some View {
-//        ZStack {
-//            RoundedRectangle(cornerRadius: 5)
-//                .opacity(0)
-//                .overlay(Text(String(day)))
-//        }
-//    }
-//}
-
-
-extension CalendarView {
-    static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = " yyyy MM"
-        return formatter
-    } ()
-    static let weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
+        formatter.dateFormat = "YYYY MM"
+        
+        let date = formatter.string(from: currentDate)
+        
+        return date.components(separatedBy: " ")
+    }
+    
+    func getCurrentMonth()-> Date{
+        let calendar = Calendar.current
+        
+        // Getting Current Month Date....
+        guard let currentMonth = calendar.date(byAdding: .month, value: self.currentMonth, to: Date()) else{
+            return Date()
+        }
+        return currentMonth
+    }
+    
+    func extractDate() -> [DateValue]{
+        
+        let calendar = Calendar.current
+        
+        // Getting Current Month Date....
+        let currentMonth = getCurrentMonth()
+        
+        var days = currentMonth.getAllDates().compactMap{date -> DateValue in
+            
+            let day = calendar.component(.day, from: date)
+            
+            return DateValue(day: day, date: date)
+        }
+        //adding offset days to get exact week day...
+        let firstWeekday = calendar.component(.weekday, from: days.first?.date ?? Date())
+        
+        for _ in 0..<firstWeekday - 1{
+            days.insert(DateValue(day: -1, date: Date()), at: 0)
+        }
+        
+        return days
+    }
 }
 
-//
-//#Preview {
-//    CalendarView(month: Date(), when: 1)
-//}
 
-
-private extension CalendarView {
-    private func getDate(for day: Int) -> Date {
-        return Calendar.current.date(byAdding: .day, value: day, to: startOfMonth())!
-    }
+// Extending Date to get Current Month Dates...
+extension Date{
     
-    func startOfMonth() -> Date {
-        let components = Calendar.current.dateComponents([.year, .month], from: month)
-        return Calendar.current.date(from: components)!
-    }
-    
-    func numberOfDays(in date: Date) -> Int {
-        return Calendar.current.range(of: .day, in: .month, for: date)?.count ?? 0
-    }
-    //해당 월의 첫 날짜가 갖는 해당 주의 몇 번째 요일
-    func firstWeekdayOfMonth(in date: Date) -> Int {
-        let components = Calendar.current.dateComponents([.year, .month], from: date)
-        let firstDayOfMonth = Calendar.current.date(from: components)!
+    func getAllDates() -> [Date]{
         
-        return Calendar.current.component(.weekday, from: firstDayOfMonth)
-    }
-    
-    func changeMonth(by value: Int) {
         let calendar = Calendar.current
-        if let newMonth = calendar.date(byAdding: .month, value:value, to: month) {
-            self.month = newMonth
+        
+        // getting start Date...
+        let startDate = calendar.date(from: Calendar.current.dateComponents([.year,.month], from: self))!
+        
+        let range = calendar.range(of: .day, in:.month, for:self)!
+        
+        return range.compactMap{ day -> Date in
+            
+            return calendar.date(byAdding: .day, value: day - 1, to: startDate)!
         }
     }
 }
-

@@ -14,9 +14,11 @@ struct PostEatApp: App {
           }
       }()
     
+    @State var selectedDate : Date = Date()
+    
     var body: some Scene {
         WindowGroup {
-            DateView()
+            DateView(selectedDate:$selectedDate)
                 .modelContainer(modelContainer)
         }
     }

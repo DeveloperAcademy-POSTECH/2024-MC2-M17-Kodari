@@ -59,7 +59,7 @@ struct DateView: View {
             }
             
             .navigationBarItems(
-                leading: NavigationLink(destination: CalendarView(month: Date(), when: 1)) {
+                leading: NavigationLink(destination: CalendarView(currentDate: $selectedDate, mealsData: mealsdata)) {
                     Image(systemName: "calendar.badge.clock")
                 },
                 trailing: NavigationLink(destination: SearchView()) {
