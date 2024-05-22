@@ -59,7 +59,7 @@ struct DateView: View {
             }
             
             .navigationBarItems(
-                leading: NavigationLink(destination: CalendarView()) {
+                leading: NavigationLink(destination: CalendarView(month: Date(), when: 1)) {
                     Image(systemName: "calendar.badge.clock")
                 },
                 trailing: NavigationLink(destination: SearchView()) {
@@ -280,6 +280,6 @@ private extension DateView {
     }
 }
 
-#Preview {
-    DateView()
-}
+//#Preview {
+//    DateView()
+//}
