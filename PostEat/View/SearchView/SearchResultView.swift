@@ -38,17 +38,12 @@ struct SearchResultsView: View {
                                         HStack(spacing: 0){
                                             Text("\(searchMenu)")
                                                 .foregroundColor(Color(Constants.POSTECHRed))
-                                            //.fontWeight(.heavy)
-                                                .font(
-                                                    Font.custom("AppleSDGothicNeo", size: 22)
-                                                    // .weight(.heavy)
-                                                )
+                                                .font(.system(size: 22))
+                                                .bold()
                                             
                                             Text("\(josaDecision(searchMenu))")
-                                                .font(
-                                                    Font.custom("Apple SD Gothic Neo", size: 22)
-                                                        .weight(.semibold)
-                                                )
+                                                .font(.system(size: 22))
+                                                .bold()
                                         }
                                         Text("포함된 식단")
                                             .font(.system(size: 22))
@@ -161,7 +156,7 @@ struct SearchResultsView: View {
                     
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(filteredFoodData, id: \.id) { item in
-                            CustomCellView(foodData: item)
+                            CustomCellView(foodData: item, searchMenu: searchMenu)
                         }
                     }
                     .background(.clear)
@@ -177,6 +172,7 @@ struct SearchResultsView: View {
         .navigationTitle("검색결과")
     }
     
+    // MARK: 조사 알고리즘
     func josaDecision(_ name: String) -> String {
         // 글자 마지막 부분 가져오기
         guard let lastText = name.last else { return name }
@@ -193,6 +189,7 @@ struct SearchResultsView: View {
         return str
     } //조사결정
     
+    // MARK: 메뉴 검색 필터
     private var filteredFoodData: [FoodData] {
         return mealsdata.filter { item in
             let searchLowercased = searchMenu.lowercased()
@@ -341,6 +338,7 @@ struct WeekendProgressBar: View {
 struct CustomCellView: View {
     
     let foodData: FoodData
+    let searchMenu: String
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -436,6 +434,7 @@ struct CustomCellView: View {
         }
     }
     
+    // MARK: 날짜 형변환
     func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
         let components = dateString.split(separator: ":")
         if components.count == 3 {
@@ -464,25 +463,39 @@ struct CustomCellView: View {
         }
     }
     
-    // MARK: 식단
+    // MARK: Menus
     func mealContents(menu1: String, menu2: String, menu3: String, menu4: String)-> some View{
-        
-        
         
         return VStack(alignment: .leading, spacing: 0.5){
             
             Text(menu1)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu1 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu1 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             
             Text(menu2)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu2 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu2 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             Text(menu3)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu3 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu3 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             Text(menu4)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu4 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu4 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
         }
         
@@ -520,6 +533,7 @@ struct CustomCellView: View {
         }
     }
     
+    // MARK: Memo Icon
     func noteAndWeatherIcon(useMemo: String) -> some View {
         ZStack {
             Image(systemName: "list.bullet.circle.fill")
@@ -530,10 +544,3 @@ struct CustomCellView: View {
         }
     }
 }
-
-//#Preview {
-//    SearchResultsView(searchMenu: "서치메뉴", mealsdata: [
-//        FoodData(uniqueid: "1", date: "2024-05-20", menu1: "Menu 1", menu2: "Menu 2", menu3: "Menu 3", menu4: "Menu 4", num: 123, memo:""),
-//        FoodData(uniqueid: "2", date: "2024-05-21", menu1: "Menu A", menu2: "Menu B", menu3: "Menu C", menu4: "Menu D", num: 123, memo:"")
-//    ])
-//}
