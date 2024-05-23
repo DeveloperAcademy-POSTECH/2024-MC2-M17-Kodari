@@ -17,8 +17,8 @@ struct DateView: View {
     @Binding var selectedDate : Date //현재 날짜와 시간 가져오기
     private let calendar = Calendar.current //현재를 달력에 저장 /
     
-    @State private var triangleLocate: CGPoint = .zero
-    @State private var circleLocations: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
+    @State private var triangleLocation: CGPoint = .zero
+    @State private var circleLocation: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
     
     @Query private var mealsdata: [FoodData]
     
@@ -28,22 +28,8 @@ struct DateView: View {
                 monthView //날짜 뷰 (이름만 월뷰일뿐)
                 
                 Divider()
-                GeometryReader { geometry in //위치 추적
-                    VStack {
-                        Image(systemName: "arrowtriangle.down.fill")
-                            .background(GeometryReader { geo -> Color in
-                                
-                                DispatchQueue.main.async {
-                                    self.triangleLocate = geo.frame(in: .global).origin
-                                    //triangleLocate 변수에 이미지 위치 저장.
-                                }
-                                return Color.clear
-                            })
-                    }
-                    .frame(width: geometry.size.width, height: geometry.size.height) //위치 가운데로.
-                }
-                .frame(height: 15)
-                // Text("삼각형 위치: \(triangleLocate.x), \(triangleLocate.y)")
+                
+                trackPosition(of: Image(systemName: "arrowtriangle.down.fill"), in: $triangleLocation).frame(height: 15)
                 
                 ZStack{
                     dayView //요일 뷰
@@ -125,78 +111,128 @@ struct DateView: View {
     }
     
     // MARK: - 월 표시 뷰
-    private var monthView: some View {
-        HStack(spacing: 0) {
-            Button(
-                action: {
-                    changeMonth(-1)
-                },
-                label: {
-                    Image(systemName: "chevron.left") // < 꺽쇠표시
-                        .padding()
-                }
-            )
-            HStack{
-                Text("\(yearTitle(from: selectedDate))년 \(monthTitle(from: selectedDate))월 \(dayTitle(from: selectedDate))일 (\(day(from: selectedDate)))")
-                    .font(.title3)
-                    .bold()
-            }
-            Button(
-                action: {
-                    changeMonth(1)
-                },
-                label: {
-                    Image(systemName: "chevron.right")// > 꺽쇠표시
-                        .padding()
-                }
-            )
+    private var monthView: some View { //날짜 뷰 (이름만 월뷰일뿐)
+        return HStack(spacing: 0) {
+            
+            
+            Spacer()
+            
+            Text("\(yearTitle(from: selectedDate))년 \(monthTitle(from: selectedDate))월 \(dayTitle(from: selectedDate))일 (\(day(from: selectedDate)))")
+                .font(.title3)
+                .bold()
+            
+            Spacer()
         }
-        .background(Color.white)
+
     }
     
     // MARK: - 일자 표시 뷰
     @ViewBuilder
     private var dayView: some View {
-        let startDate = calendar.date(from: Calendar.current.dateComponents([.year, .month], from: selectedDate))!
+        let todayDate = Date() //오늘 날짜 저장. (안바꿀거임)
         
-        ScrollView(.horizontal, showsIndicators: false) {
-            
-            HStack(spacing: 10) {
-                let components = (
-                    0..<calendar.range(of: .day, in: .month, for: startDate)!.count)
-                    .map {
-                        calendar.date(byAdding: .day, value: $0, to: startDate)!
-                    }
+        let startDate = calendar.date(from: DateComponents(year: 2024, month: 1, day: 1))!
+
+        let endDate = calendar.date(byAdding: .day, value: 7, to: todayDate)! // 일주일 후 날짜까지 표시
+
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
                 
-                ForEach(components, id: \.self) { date in
-                    VStack {
-                        Text(day(from: date))
-                            .font(.caption)
-                        
-                        GeometryReader { geo in
-                            Circle()
-                                .fill(Color.gray.opacity(0.3))
-                                .fill(calendar.isDate(selectedDate, equalTo: date, toGranularity: .day) ? Color(Constants.KODARIRed) : Color(Constants.KODARIGray))
-                                .frame(width: geo.size.width, height: geo.size.height) // GeometryReader의 크기에 따라 원의 크기를 조정합니다.
-                            // .background(GeometryReader { innerGeo -> Color in
-                            //DispatchQueue.main.async {
-                            //    self.circleLocations[date] = innerGeo.frame(in: .global).origin
-                            //     }
-                            // return Color.gray.opacity(0.3)
-                            // })
+                LazyHStack(spacing: 10) { // LazyHStack으로 변경
+                    let components = dates(from: startDate, to: endDate)
+
+                    ForEach(components, id: \.self) { date in
+                        VStack {
+                            Text(day(from: date))
+                                .font(.caption)
+                            
+                            GeometryReader { geo in
+                                Circle()
+                                    .fill(Constants.CircleGray)
+                                    .stroke(calendar.isDate(todayDate, equalTo: date, toGranularity: .day) ? Color.black : Color.clear) //원의 날짜가 오늘날짜와 같을 경우만 테두리 색 줌.
+                                    .frame(width: 35, height: 35)
+                                    .background(GeometryReader { geo -> Color in
+                                        DispatchQueue.main.async { //우선순위를 가져가는 코드
+                                            self.circleLocation[date] = geo.frame(in: .global).origin
+                                            if abs(triangleLocation.x - circleLocation[date]!.x) < 25{
+                                                selectedDate = date
+                                                print("select:\(selectedDate)\n------------------------------")
+                                                print("date:\(date)\n------------------------------")
+                                            }
+                                        }
+                                        return Color.clear
+                                    })
+                            }
+                            .frame(width: 35, height: 35)
                         }
-                        .frame(width: 35, height: 35) // GeometryReader의 크기를 명시적으로 지정
+                        .padding(5)
+                        .id(date)
+                        
+                        // MARK: - 원을 탭했을 때 선택된 날짜로 스크롤
+                        .onTapGesture {
+                            withAnimation {
+                                selectedDate = date
+                                proxy.scrollTo(date, anchor: .center)
+                            }
+                        }
                     }
-                    .padding(5)
-                    .onTapGesture {
-                        selectedDate = date
+                }
+                .frame(height: 60) // LazyHStack을 사용하기 때문에 ScrollView의 높이를 지정해야 함
+                .padding(.trailing, 150)
+                .padding(.leading, 160)
+                
+            }
+            
+            // MARK: - 앱이 처음 시작될 때 오늘 날짜로 스크롤
+            .onAppear {
+                if let today = getDatesInMonth(for: selectedDate).first(where: { calendar.isDateInToday($0) }) {
+                    DispatchQueue.main.async {
+                        proxy.scrollTo(today, anchor: .center)
                     }
                 }
             }
             
         }
-        
     }
+    
+    // MARK: - 두 날짜 사이의 모든 날짜를 반환하는 함수
+    private func dates(from startDate: Date, to endDate: Date) -> [Date] {
+        var dates: [Date] = []
+        var date = startDate
+
+        while date <= endDate {
+            dates.append(date)
+            date = calendar.date(byAdding: .day, value: 1, to: date)!
+        }
+        return dates
+    }
+    
+    // MARK: - 위치 추적 함수
+    private func trackPosition(of view: some View, in binding: Binding<CGPoint>) -> some View {
+        
+            GeometryReader { geometry in
+                view
+                    .background(GeometryReader { geo -> Color in
+                        DispatchQueue.main.async {
+                            binding.wrappedValue = geo.frame(in: .global).origin
+                        }
+                        return Color.clear
+                    })
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+        }
+        
+    
+    // MARK: - 오늘날짜 가운데로 오게하기!!
+    func getDatesInMonth(for date: Date) -> [Date] {
+        guard let range = calendar.range(of: .day, in: .month, for: date) else { return [] }
+        let startDate = calendar.date(from: calendar.dateComponents([.year, .month], from: date))!
+
+        return range.compactMap { day -> Date? in
+            return calendar.date(byAdding: .day, value: day - 1, to: startDate)
+        }
+    }
+    
     
     // MARK: - 블러 뷰
     private var blurView: some View {
