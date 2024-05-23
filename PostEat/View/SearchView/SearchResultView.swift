@@ -18,8 +18,9 @@ struct SearchResultsView: View {
     @State var weekendMinNum = 0 // 주말 최소 인원
     @State var weekendAvgNum = 0 // 주말 평균 인원
     
-    @State var weekdayProgressValue: Float = 0.4
-    @State var weekendProgressValue: Float = 0.5
+    @State var weekdayProgressValue: Float = 0.3
+    @State var weekendProgressValue: Float = 0.3
+    
     
     
     var body: some View {
@@ -166,6 +167,7 @@ struct SearchResultsView: View {
             }
             .onAppear {
                 updateStatistics() // 현재 ResultView로 넘어오면서 바로 함수실행 -> 통계데이터 계산
+                setupProgressValue()
             }
         }
         .navigationTitle("검색결과")
@@ -197,6 +199,16 @@ struct SearchResultsView: View {
             item.menu3.lowercased().contains(searchLowercased) ||
             item.menu4.lowercased().contains(searchLowercased)
         }
+    }
+    
+    func setupProgressValue() {
+        let weekdayPercentage = (Float(weekdayAvgNum) - Float(weekdayMinNum)) / (Float(weekdayMaxNum) - Float(weekdayMinNum))
+            // 소수점 첫 번째 자리까지 반올림하여 할당
+            weekdayProgressValue = round(weekdayPercentage * 10) / 10
+        
+        let weekendPercentage = (Float(weekendAvgNum) - Float(weekendMinNum)) / (Float(weekendMaxNum) - Float(weekendMinNum))
+            // 소수점 첫 번째 자리까지 반올림하여 할당
+            weekendProgressValue = round(weekendPercentage * 10) / 10
     }
     
     // MARK: 인사이트 - 통계 데이터 ( 주말 & 평일 구분 )
