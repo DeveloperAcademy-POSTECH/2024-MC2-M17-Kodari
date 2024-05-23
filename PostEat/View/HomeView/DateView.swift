@@ -9,7 +9,7 @@ struct DateView: View {
 
 
     // SwiftData
-    // @Query private var meals: [FoodData] // 선언 / ///
+    // @Query private var meals: [FoodData] // 선언 / ////
     @Environment(\.modelContext) var modelContext
     @State private var mealdata: [FoodData] = []
 //    @State private var mealdataLoaded = false // 한번만 로드
