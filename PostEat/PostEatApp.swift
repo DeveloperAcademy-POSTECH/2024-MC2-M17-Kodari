@@ -3,6 +3,8 @@ import SwiftData
 
 @main
 struct PostEatApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     var modelContainer: ModelContainer = {
         let schema = Schema([FoodData.self])
           let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
@@ -14,7 +16,6 @@ struct PostEatApp: App {
           }
       }()
     
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     var body: some Scene {
         WindowGroup {

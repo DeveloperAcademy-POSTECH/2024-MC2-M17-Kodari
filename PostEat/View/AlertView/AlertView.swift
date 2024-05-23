@@ -10,12 +10,50 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         // 앱 실행 시 사용자에게 알림 허용 권한을 받음
         UNUserNotificationCenter.current().delegate = self
-
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound] // 필요한 알림 권한을 설정
         UNUserNotificationCenter.current().requestAuthorization(
             options: authOptions,
-            completionHandler: { _, _ in }
+            completionHandler: { granted, error in
+                            if let error = error {
+                                print("Error requesting notification AppDelegate: \(error)")
+                            } else {
+                                print("Notification permission granted: \(granted)")
+                            }
+                        } // just 에러나면 보여주기 위한 print
         )
+        //알림 예약
+        LocalNotificationHelper
+            .shared
+            .pushNotification(title: "POST-EAT",
+                              body: "[조식 종료] 알림을 눌러 인원을 기록해보세요.",
+                              hour: 9,
+                              minute: 30,
+                              identifier: "M_noti")
+        
+        LocalNotificationHelper
+            .shared
+            .pushNotification(title: "POST-EAT",
+                              body: "[중식 종료] 알림을 눌러 인원을 기록해보세요.",
+                              hour: 13,
+                              minute: 30,
+                              identifier: "L_noti")
+        
+        LocalNotificationHelper
+            .shared
+            .pushNotification(title: "POST-EAT",
+                              body: "[석식 종료] 알림을 눌러 인원을 기록해보세요.",
+                              hour: 19,
+                              minute: 0,
+                              identifier: "D_noti")
+        
+        
+        LocalNotificationHelper
+            .shared
+            .pushNotification(title: "POST-EAT",
+                              body: "페이커 바보~",
+                              hour: 15,
+                              minute: 12,
+                              identifier: "Test_noti")
         return true
     }
 }
@@ -41,21 +79,43 @@ class LocalNotificationHelper {
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound] // 필요한 알림 권한을 설정
         UNUserNotificationCenter.current().requestAuthorization(
             options: authOptions,
-            completionHandler: { _, _ in }
+            completionHandler: { granted, error in
+                            if let error = error {
+                                print("Error requesting notification authorization: \(error)")
+                            } else {
+                                print("Notification permission granted: \(granted)")
+                            } // just 에러나면 보여주기 위한 print
+                        }
         )
     }
     
     //푸시 알림 보내기
-    // PushNotificationHelper.swfit > PushNotificationHelper
-    func pushNotification(title: String, body: String, seconds: Double, identifier: String) {
+    /// 호출 시점을 기점 seconds초 이후에 Notification을 보냅니다.
+        ///
+        /// - Parameters:
+        ///   - title: Push Notification에 표시할 제목입니다.
+        ///   - body: Push Notification에 표시할 본문입니다.
+        ///   - seconds: 현재로부터 seconds초 이후에 알림을 보냅니다. 0보다 커야하며 1이하 실수도 가능합니다. (파라미터 변경해서 세컨드는 없애고 hour,minute이 생겼음.
+        ///   - identifier: 실행 취소, 알림 구분 등에 사용되는 식별자입니다. "TEST_NOTI" 형식으로 작성해주세요.
+    func pushNotification(title: String, body: String, hour: Int, minute: Int, identifier: String) {
+       
+        assert(hour >= 0 || hour <= 24, "시간은 0이상 24이하로 입력해주세요.")
+        
         // 1️⃣ 알림 내용, 설정
         let notificationContent = UNMutableNotificationContent()
         notificationContent.title = title
         notificationContent.body = body
+        notificationContent.sound = UNNotificationSound.default
+        
+        //  ✅ 알림을 보낼 시간 (24시간 형식) 주기설정
+        var dateComponents = DateComponents()
+            dateComponents.hour = hour
+            dateComponents.minute = minute
+        
 
         // 2️⃣ 조건(시간, 반복)
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: false)
-
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true) // ✅ true로 하면 특정 주기로 반복적으로 알람을 보낼 수 있음.
+          
         // 3️⃣ 요청
         let request = UNNotificationRequest(identifier: identifier,
                                             content: notificationContent,
@@ -65,6 +125,8 @@ class LocalNotificationHelper {
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 print("Notification Error: ", error)
+            } else {
+                print("Notification scheduled: \(identifier)")
             }
         }
     }
@@ -93,11 +155,8 @@ class HapticHelper {
 
 struct AlertView: View {
     var body: some View {
-//            LocalNotificationHelper.shared.pushNotification(title: "안녕하세요", body: "푸시 알림 테스트입니다.", seconds: 2, identifier: "PUSH_TEST")
-        Button("push test Button") {
-            
-            LocalNotificationHelper.shared.pushNotification(title: "POST-EAT", body: "[중식 종료 알림을 눌러 인원을 기록해보세요.]", seconds: 5, identifier: "push test")
-        }
+        Text("post-eat 알림 설정 완료^^")
+            .padding()
         
     }
 
