@@ -22,7 +22,9 @@
 		1FCE9CC12BFAE20D00001E2A /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE9CC02BFAE20D00001E2A /* SearchResultView.swift */; };
 		1FCE9CC52BFAE22100001E2A /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE9CC42BFAE22100001E2A /* AlertView.swift */; };
 		1FCE9CC82BFAE69800001E2A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE9CC72BFAE69800001E2A /* Constants.swift */; };
+		9028EF0F2BFF5BDE00007019 /* recordCountData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9028EF0E2BFF5BDE00007019 /* recordCountData.swift */; };
 		90B977432BFB6D2900D5521A /* MenuAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B977422BFB6D2900D5521A /* MenuAPIModel.swift */; };
+		90D251102BFF8FD9009E62A8 /* recordCount.csv in Resources */ = {isa = PBXBuildFile; fileRef = 90D2510F2BFF8FD9009E62A8 /* recordCount.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +44,9 @@
 		1FCE9CC02BFAE20D00001E2A /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
 		1FCE9CC42BFAE22100001E2A /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		1FCE9CC72BFAE69800001E2A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9028EF0E2BFF5BDE00007019 /* recordCountData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recordCountData.swift; sourceTree = "<group>"; };
 		90B977422BFB6D2900D5521A /* MenuAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAPIModel.swift; sourceTree = "<group>"; };
+		90D2510F2BFF8FD9009E62A8 /* recordCount.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = recordCount.csv; path = ../../../../Downloads/recordCount.csv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,7 @@
 		1FCE9CA22BFAE11A00001E2A /* CSVData */ = {
 			isa = PBXGroup;
 			children = (
+				90D2510F2BFF8FD9009E62A8 /* recordCount.csv */,
 				1FCE9CAD2BFAE19E00001E2A /* MealData.csv */,
 			);
 			path = CSVData;
@@ -117,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				1FCE9CA52BFAE14700001E2A /* FoodData.swift */,
+				9028EF0E2BFF5BDE00007019 /* recordCountData.swift */,
 				90B977422BFB6D2900D5521A /* MenuAPIModel.swift */,
 			);
 			path = Model;
@@ -226,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1FCE9C9C2BFAE10400001E2A /* Preview Assets.xcassets in Resources */,
+				90D251102BFF8FD9009E62A8 /* recordCount.csv in Resources */,
 				1FCE9C992BFAE10400001E2A /* Assets.xcassets in Resources */,
 				1FCE9CAE2BFAE19E00001E2A /* MealData.csv in Resources */,
 			);
@@ -244,6 +251,7 @@
 				1FCE9CB52BFAE1CE00001E2A /* RecordView.swift in Sources */,
 				1FCE9CB92BFAE1E500001E2A /* CalendarView.swift in Sources */,
 				1FCE9CB32BFAE1C500001E2A /* CellView.swift in Sources */,
+				9028EF0F2BFF5BDE00007019 /* recordCountData.swift in Sources */,
 				1FCE9CB72BFAE1D300001E2A /* EditView.swift in Sources */,
 				1FCE9CC82BFAE69800001E2A /* Constants.swift in Sources */,
 				1FCE9CC52BFAE22100001E2A /* AlertView.swift in Sources */,
@@ -384,7 +392,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PostEat/Preview Content\"";
-				DEVELOPMENT_TEAM = R83JF9K5WA;
+				DEVELOPMENT_TEAM = WTK65UP9RZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -413,7 +421,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PostEat/Preview Content\"";
-				DEVELOPMENT_TEAM = R83JF9K5WA;
+				DEVELOPMENT_TEAM = WTK65UP9RZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

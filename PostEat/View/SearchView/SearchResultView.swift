@@ -10,17 +10,17 @@ struct SearchResultsView: View {
     
     // MARK: 인사이트 통계 변수들
     
-    @State var weekdayMaxNum = "" // 평일 최대 인원
-    @State var weekdayMinNum = "" // 평일 최소 인원
-    @State var weekdayAvgNum = "" // 평일 평균 인원
+    @State var weekdayMaxNum = 0 // 평일 최대 인원
+    @State var weekdayMinNum = 0 // 평일 최소 인원
+    @State var weekdayAvgNum = 0 // 평일 평균 인원
     
-    @State var weekendMaxNum = "" // 주말 최대 인원
-    @State var weekendMinNum = "" // 주말 최소 인원
-    @State var weekendAvgNum = "" // 주말 평균 인원
+    @State var weekendMaxNum = 0 // 주말 최대 인원
+    @State var weekendMinNum = 0 // 주말 최소 인원
+    @State var weekendAvgNum = 0 // 주말 평균 인원
     
-    /// Progress Bar Value
-    @State var progressValue1: Float = 0.65
-    @State var progressValue2: Float = 0.45
+    @State var weekdayProgressValue: Float = 0.3
+    @State var weekendProgressValue: Float = 0.3
+    
     
     
     var body: some View {
@@ -38,17 +38,12 @@ struct SearchResultsView: View {
                                         HStack(spacing: 0){
                                             Text("\(searchMenu)")
                                                 .foregroundColor(Color(Constants.POSTECHRed))
-                                            //.fontWeight(.heavy)
-                                                .font(
-                                                    Font.custom("AppleSDGothicNeo", size: 22)
-                                                    // .weight(.heavy)
-                                                )
+                                                .font(.system(size: 22))
+                                                .bold()
                                             
                                             Text("\(josaDecision(searchMenu))")
-                                                .font(
-                                                    Font.custom("Apple SD Gothic Neo", size: 22)
-                                                        .weight(.semibold)
-                                                )
+                                                .font(.system(size: 22))
+                                                .bold()
                                         }
                                         Text("포함된 식단")
                                             .font(.system(size: 22))
@@ -82,7 +77,7 @@ struct SearchResultsView: View {
                                         VStack{
                                             Text("평일")
                                             ZStack{
-                                                WeekdayProgressBar(weekdayprogress: progressValue1, weekdayAvgNum: weekdayAvgNum)
+                                                WeekdayProgressBar(weekdayprogress: self.$weekdayProgressValue, weekdayAvgNum: weekdayAvgNum)
                                                     .frame(width: 80.0, height: 80.0)
                                                     .padding(.top, 10)
                                                 
@@ -102,7 +97,7 @@ struct SearchResultsView: View {
                                         VStack{
                                             Text("주말")
                                             ZStack{
-                                                WeekendProgressBar(weekendprogress: self.$progressValue2, weekendAvgNum: weekendAvgNum)
+                                                WeekendProgressBar(weekendprogress: self.$weekendProgressValue, weekendAvgNum: weekendAvgNum)
                                                     .frame(width: 80.0, height: 80.0)
                                                     .padding(.top, 10)
                                                 
@@ -161,7 +156,7 @@ struct SearchResultsView: View {
                     
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(filteredFoodData, id: \.id) { item in
-                            CustomCellView(foodData: item)
+                            CustomCellView(foodData: item, searchMenu: searchMenu)
                         }
                     }
                     .background(.clear)
@@ -172,11 +167,13 @@ struct SearchResultsView: View {
             }
             .onAppear {
                 updateStatistics() // 현재 ResultView로 넘어오면서 바로 함수실행 -> 통계데이터 계산
+                setupProgressValue()
             }
         }
         .navigationTitle("검색결과")
     }
     
+    // MARK: 조사 알고리즘
     func josaDecision(_ name: String) -> String {
         // 글자 마지막 부분 가져오기
         guard let lastText = name.last else { return name }
@@ -193,6 +190,7 @@ struct SearchResultsView: View {
         return str
     } //조사결정
     
+    // MARK: 메뉴 검색 필터
     private var filteredFoodData: [FoodData] {
         return mealsdata.filter { item in
             let searchLowercased = searchMenu.lowercased()
@@ -200,6 +198,22 @@ struct SearchResultsView: View {
             item.menu2.lowercased().contains(searchLowercased) ||
             item.menu3.lowercased().contains(searchLowercased) ||
             item.menu4.lowercased().contains(searchLowercased)
+        }
+    }
+    
+    func setupProgressValue() {
+        if weekdayAvgNum == weekdayMaxNum && weekdayAvgNum == weekdayMinNum{
+            weekdayProgressValue = 0.9
+        } else {
+            let weekdayPercentage = (Float(weekdayAvgNum) - Float(weekdayMinNum)) / (Float(weekdayMaxNum) - Float(weekdayMinNum))
+            weekdayProgressValue = weekdayPercentage
+        }
+        
+        if weekendAvgNum == weekendMaxNum && weekendAvgNum == weekendMinNum{
+            weekendProgressValue = 0.9
+        } else {
+            let weekendPercentage = (Float(weekendAvgNum) - Float(weekendMinNum)) / (Float(weekendMaxNum) - Float(weekendMinNum))
+            weekendProgressValue = weekendPercentage
         }
     }
     
@@ -233,55 +247,56 @@ struct SearchResultsView: View {
         
         // 주중 통계
         if let maxNum = weekdayArray.max() {
-            weekdayMaxNum = "\(maxNum)"
+            weekdayMaxNum = maxNum
             print("펑일 max: \(maxNum)")
         }
         
         let weekdayNonZeroArray = weekdayArray.filter { $0 != 0 }
         if let minNum = weekdayNonZeroArray.min() {
-            weekdayMinNum = "\(minNum)"
+            weekdayMinNum = minNum
             print("평일 min: \(weekdayMinNum)")
         } else {
-            weekdayMinNum = "0"
+            weekdayMinNum = 0
             print("평일 min: \(weekdayMinNum)")
         }
         
         let weekdayTotal = weekdayNonZeroArray.reduce(0, +)
         print("평일 미입력 제외 Total: \(weekdayTotal)")
         let weekdayAverage = weekdayTotal / max(weekdayNonZeroArray.count, 1)
-        weekdayAvgNum = "\(weekdayAverage)"
+        weekdayAvgNum = weekdayAverage
         print("평일 avg: \(weekdayAvgNum)")
         
         // 주말 통계
         if let maxNum = weekendArray.max() {
-            weekendMaxNum = "\(maxNum)"
+            weekendMaxNum = maxNum
             print("주말 max: \(weekendMaxNum)")
         } else {
-            weekendMaxNum = "0"
+            weekendMaxNum = 0
             print("주말 max: \(weekendMaxNum)")
         }
         
         
         let weekendNonZeroArray = weekendArray.filter { $0 != 0 }
         if let minNum = weekendNonZeroArray.min() {
-            weekendMinNum = "\(minNum)"
+            weekendMinNum = minNum
             print("주말 min: \(weekendMinNum)")
         } else {
-            weekendMinNum = "0"
+            weekendMinNum = 0
             print("주말 min: \(weekendMinNum)")
         }
         
         let weekendTotal = weekendNonZeroArray.reduce(0, +)
         print("주말 미입력 제외 Total: \(weekendTotal)")
         let weekendAverage = weekendTotal / max(weekendNonZeroArray.count, 1)
-        weekendAvgNum = "\(weekendAverage)"
+        weekendAvgNum = weekendAverage
         print("주말 avg: \(weekendAvgNum)")
     }
 }
 
+// 평일 ProgresBar
 struct WeekdayProgressBar: View {
-    var weekdayprogress: Float
-    var weekdayAvgNum: String
+    @Binding var weekdayprogress: Float
+    var weekdayAvgNum: Int
     
     var body: some View {
         ZStack {
@@ -308,9 +323,11 @@ struct WeekdayProgressBar: View {
     }
 }
 
+// 주말 ProgressBar
 struct WeekendProgressBar: View {
+    
     @Binding var weekendprogress: Float
-    var weekendAvgNum: String
+    var weekendAvgNum: Int
     
     var body: some View {
         ZStack {
@@ -331,7 +348,7 @@ struct WeekendProgressBar: View {
                 Text("\(weekendAvgNum)")
                     .foregroundColor(Constants.KODARIBlue)
                     .font(Font.system(size: 20))
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
         }
     }
@@ -341,6 +358,7 @@ struct WeekendProgressBar: View {
 struct CustomCellView: View {
     
     let foodData: FoodData
+    let searchMenu: String
     
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -436,6 +454,7 @@ struct CustomCellView: View {
         }
     }
     
+    // MARK: 날짜 형변환
     func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
         let components = dateString.split(separator: ":")
         if components.count == 3 {
@@ -464,25 +483,39 @@ struct CustomCellView: View {
         }
     }
     
-    // MARK: 식단
+    // MARK: Menus
     func mealContents(menu1: String, menu2: String, menu3: String, menu4: String)-> some View{
-        
-        
         
         return VStack(alignment: .leading, spacing: 0.5){
             
             Text(menu1)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu1 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu1 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             
             Text(menu2)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu2 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu2 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             Text(menu3)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu3 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu3 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             Text(menu4)
-                .font( Font.custom("Apple SD Gothic Neo", size: 15) )
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 15)
+                        .weight(menu4 == searchMenu ? .bold : .regular) // 조건에 따라 bold체 또는 regular체 선택
+                )
+                .foregroundColor(menu4 == searchMenu ? Constants.POSTECHRed : Color.black)
                 .padding(2)
         }
         
@@ -520,6 +553,7 @@ struct CustomCellView: View {
         }
     }
     
+    // MARK: Memo Icon
     func noteAndWeatherIcon(useMemo: String) -> some View {
         ZStack {
             Image(systemName: "list.bullet.circle.fill")
@@ -530,10 +564,3 @@ struct CustomCellView: View {
         }
     }
 }
-
-//#Preview {
-//    SearchResultsView(searchMenu: "서치메뉴", mealsdata: [
-//        FoodData(uniqueid: "1", date: "2024-05-20", menu1: "Menu 1", menu2: "Menu 2", menu3: "Menu 3", menu4: "Menu 4", num: 123, memo:""),
-//        FoodData(uniqueid: "2", date: "2024-05-21", menu1: "Menu A", menu2: "Menu B", menu3: "Menu C", menu4: "Menu D", num: 123, memo:"")
-//    ])
-//}

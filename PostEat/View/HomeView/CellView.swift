@@ -32,33 +32,32 @@ struct CellView: View {
                                 recordModalShowing.toggle()
                             }
                         }){
-                            ZStack{
-                                RoundedRectangle(cornerRadius: 25)
-                                    .frame(height: 139)
-                                    .foregroundStyle(Color.white)
+                            VStack{
                                 HStack{
-                                    
                                     VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width:28, height:28)
+                                                .frame(width:20, height: 20)
                                             Text("\(selectedMealsData[index].num)명")
-                                                .font(.system(size:17))
+                                                .font(.system(size: 17))
                                                 .bold()
                                                 .foregroundStyle(Constants.KODARIBlue)
                                         } else{
                                             Image(systemName: "clock.badge.checkmark.fill")
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width:25, height:25)
+                                                .frame(width: 20, height: 20)
                                             Text("기록필요")
-                                                .font(.system(size:14))
                                                 .bold()
+                                                .font(.system(size: 14))
                                                 .foregroundStyle(Constants.KODARIRed)
                                         }
-                                    }.frame(width:83).padding(.leading, 5)
+                                    }
+                                    .frame(width:83).padding(.leading, 5)
                                     
-                                    Divider().padding(.vertical, 25)
+                                    Divider()
+                                        .padding(.vertical, 25)
+                                    
                                     VStack(alignment: .leading, content: {
                                         Text("\(eatingTime[index][0])")
                                             .font(.system(size:14.3))
@@ -79,32 +78,35 @@ struct CellView: View {
                                                 .foregroundStyle(Color.black)
                                                 .font(.system(size:15))
                                         }
-                                    }).padding(.leading, 14)
+                                    })
+                                    .padding(.leading, 14)
                                     Spacer()
+                                    
                                     VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "square.and.pencil")
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width:25, height:25)
+                                                .frame(width: 24, height:24)
                                         } else {
                                             Image(systemName: "square.and.pencil")
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width:25, height:25)
+                                                .frame(width: 24, height: 24)
                                         }
-                                    }.padding(.trailing, 17)
-                                }
-                                
-                            }.frame(height:  139)
-                                .padding(.horizontal, 16.5)
-                            
-                            
-                                .sheet(isPresented: $recordModalShowing) {
-                                    if let selectedIndex = selectedIndex {
-                                        RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex])
-                                            .presentationDetents([.height(500), .large])
-                                            .presentationCornerRadius(25)
                                     }
+                                    .padding()
                                 }
+                            }
+                            .frame(height:  139)
+                            .background(.white)
+                            .cornerRadius(20)
+                            .padding(.horizontal)
+                            .sheet(isPresented: $recordModalShowing) {
+                                if let selectedIndex = selectedIndex {
+                                    RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex])
+                                        .presentationDetents([.height(500), .large])
+                                        .presentationCornerRadius(25)
+                                }
+                            }
                         }
                     }
                     .padding(.top)

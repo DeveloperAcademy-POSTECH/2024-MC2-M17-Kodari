@@ -6,13 +6,14 @@ struct DateView: View {
     @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
     @StateObject private var menuAPIModel = MenuAPIModel()
     @State private var apiRequestTrue = true
-
-
+    
+    
     // SwiftData
     // @Query private var meals: [FoodData] // 선언 / /////
     @Environment(\.modelContext) var modelContext
     @State private var mealdata: [FoodData] = []
-//    @State private var mealdataLoaded = false // 한번만 로드
+    @State private var recorddata: [recordCountData] = []
+    //    @State private var mealdataLoaded = false // 한번만 로드
     
     @State var selectedDate = Date() //현재 날짜와 시간 가져오기
     private let calendar = Calendar.current //현재를 달력에 저장 /
@@ -21,9 +22,11 @@ struct DateView: View {
     @State private var circleLocation: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
     
     @Query private var mealsdata: [FoodData]
-    
+    @Query var recordCountDatas: [recordCountData]
+
     var body: some View {
         NavigationStack{
+
             VStack(spacing: 0) {
                 monthView //날짜 뷰 (이름만 월뷰일뿐)
                 
@@ -40,12 +43,17 @@ struct DateView: View {
                 
                 VStack{
                     CellView(selectedDate: $selectedDate)
-//                        .padding(.bottom, 75)
+                    //                        .padding(.bottom, 75)
                 }
             }
             
             .navigationBarItems(
-                leading: NavigationLink(destination: CalendarView(month: Date(), when: 1)) {
+                //                NavigationLink(destination: ChildView(value: value, onValueChange: { newValue in
+                //                                    self.value = newValue
+                //                                }))
+                leading: NavigationLink(destination: CalendarView(month: selectedDate, onValueChange:  { newValue in
+                    self.selectedDate = newValue
+                })) {
                     Image(systemName: "calendar.badge.clock")
                 },
                 trailing: NavigationLink(destination: SearchView()) {
@@ -58,6 +66,7 @@ struct DateView: View {
             if isFirstLaunch {
                 isFirstLaunch = false
                 saveCSVData()
+                saveRecordCountCSVData()
             }
             
             if apiRequestTrue{
@@ -65,12 +74,12 @@ struct DateView: View {
             }
             apiRequestTrue = false
         }
-//        .onAppear {
-//            if !mealdataLoaded {
-//                saveCSVData()
-//                mealdataLoaded = true
-//            }
-//        }
+        //        .onAppear {
+        //            if !mealdataLoaded {
+        //                saveCSVData()
+        //                mealdataLoaded = true
+        //            }
+        //        }
     }
     
     private func saveCSVData() {
@@ -88,7 +97,7 @@ struct DateView: View {
                 
                 // 공백 제거 및 숫자로 변환 시도
                 let trimmedNum = components[6].trimmingCharacters(in: .whitespacesAndNewlines)
-
+                
                 // 만약 공백이거나 값이 없으면 0으로 설정
                 let convertnum = Int(trimmedNum) ?? 0
                 
@@ -110,6 +119,44 @@ struct DateView: View {
         }
     }
     
+    private func saveRecordCountCSVData() {
+        guard let url = Bundle.main.url(forResource: "recordCount", withExtension: "csv") else {
+            print("CSV file not found")
+            return
+        }
+
+        do {
+            let data = try String(contentsOf: url)
+            let rows = data.components(separatedBy: "\n").dropFirst() // 첫 번째 줄은 헤더이므로 제외합니다.
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd"
+
+            recorddata = rows.compactMap { row -> recordCountData? in
+                let components = row.components(separatedBy: ",")
+                guard components.count >= 2 else { return nil }
+                print("i\(components[0])i")
+                
+                let date = dateFormatter.date(from: components[0]) ?? Date()
+                
+                let trimmedNum = components[1].trimmingCharacters(in: .whitespacesAndNewlines)
+                
+                let recordCount = Int(trimmedNum) ?? 0
+                
+                let newData = recordCountData(date: date, recordCount: recordCount)
+                
+                // SwiftData 모델에 저장
+                modelContext.insert(newData)
+                
+                // 저장한 데이터 가져와서 mealdata 배열에 할당
+                recorddata.append(newData)
+
+                return newData
+            }
+        } catch {
+            print("Error reading CSV file:", error.localizedDescription)
+        }
+    }
+    
     // MARK: - 월 표시 뷰
     private var monthView: some View { //날짜 뷰 (이름만 월뷰일뿐)
         return HStack(spacing: 0) {
@@ -123,7 +170,7 @@ struct DateView: View {
             
             Spacer()
         }
-
+        
     }
     
     // MARK: - 일자 표시 뷰
@@ -132,23 +179,27 @@ struct DateView: View {
         let todayDate = Date() //오늘 날짜 저장. (안바꿀거임)
         
         let startDate = calendar.date(from: DateComponents(year: 2024, month: 1, day: 1))!
-
+        
         let endDate = calendar.date(byAdding: .day, value: 7, to: todayDate)! // 일주일 후 날짜까지 표시
-
+        
         ScrollViewReader { proxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 
                 LazyHStack(spacing: 10) { // LazyHStack으로 변경
                     let components = dates(from: startDate, to: endDate)
-
-                    ForEach(components, id: \.self) { date in
+                    let allRecordData = recordCountDatas.filter{components.contains($0.date)}
+                    let sortedAllRecordData = allRecordData.sorted{ $0.date < $1.date}
+                    
+                    ForEach(sortedAllRecordData, id: \.self) { recordData in
+                        let date = recordData.date
                         VStack {
                             Text(day(from: date))
                                 .font(.caption)
                             
                             GeometryReader { geo in
                                 Circle()
-                                    .fill(Constants.CircleGray)
+//                                    .fill(Constants.CircleGray)
+                                    .fill(recordData.recordCount == 3 ? Constants.KODARIBlue : Constants.KODARIRed)
                                     .stroke(calendar.isDate(todayDate, equalTo: date, toGranularity: .day) ? Color.black : Color.clear) //원의 날짜가 오늘날짜와 같을 경우만 테두리 색 줌.
                                     .frame(width: 35, height: 35)
                                     .background(GeometryReader { geo -> Color in
@@ -199,7 +250,7 @@ struct DateView: View {
     private func dates(from startDate: Date, to endDate: Date) -> [Date] {
         var dates: [Date] = []
         var date = startDate
-
+        
         while date <= endDate {
             dates.append(date)
             date = calendar.date(byAdding: .day, value: 1, to: date)!
@@ -210,24 +261,24 @@ struct DateView: View {
     // MARK: - 위치 추적 함수
     private func trackPosition(of view: some View, in binding: Binding<CGPoint>) -> some View {
         
-            GeometryReader { geometry in
-                view
-                    .background(GeometryReader { geo -> Color in
-                        DispatchQueue.main.async {
-                            binding.wrappedValue = geo.frame(in: .global).origin
-                        }
-                        return Color.clear
-                    })
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-            }
+        GeometryReader { geometry in
+            view
+                .background(GeometryReader { geo -> Color in
+                    DispatchQueue.main.async {
+                        binding.wrappedValue = geo.frame(in: .global).origin
+                    }
+                    return Color.clear
+                })
+                .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        
+    }
+    
     
     // MARK: - 오늘날짜 가운데로 오게하기!!
     func getDatesInMonth(for date: Date) -> [Date] {
         guard let range = calendar.range(of: .day, in: .month, for: date) else { return [] }
         let startDate = calendar.date(from: calendar.dateComponents([.year, .month], from: date))!
-
+        
         return range.compactMap { day -> Date? in
             return calendar.date(byAdding: .day, value: day - 1, to: startDate)
         }
