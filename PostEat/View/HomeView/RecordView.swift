@@ -62,10 +62,12 @@ struct RecordView: View {
                 if mealData.num == 0{
                     Text("\(mealData.uniqueid.last == "M" ? "조식" : mealData.uniqueid.last == "L" ? "중식" : "석식") 식수 기록하기")
                         .font(.system(size:22))
+                        .foregroundStyle(Color.black)
                         .bold()
                 } else{
                     Text("\(mealData.uniqueid.last == "M" ? "조식" : mealData.uniqueid.last == "L" ? "중식" : "석식") 식수 수정하기")
                         .font(.system(size:22))
+                        .foregroundStyle(Color.black)
                         .bold()
                 }
                 
@@ -78,6 +80,7 @@ struct RecordView: View {
                         HStack{
                             HStack{
                                 Text("식사 인원")
+                                    .foregroundStyle(Color.black)
                                 Spacer()
                             }.frame(width:100)
                                 .padding(.leading, 16)
@@ -91,6 +94,7 @@ struct RecordView: View {
                         HStack{
                             HStack{
                                 Text("메모")
+                                    .foregroundStyle(Color.black)
                                 Spacer()
                             }.frame(width:100)
                                 .padding(.leading, 16)
