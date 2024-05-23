@@ -202,13 +202,19 @@ struct SearchResultsView: View {
     }
     
     func setupProgressValue() {
-        let weekdayPercentage = (Float(weekdayAvgNum) - Float(weekdayMinNum)) / (Float(weekdayMaxNum) - Float(weekdayMinNum))
-            // 소수점 첫 번째 자리까지 반올림하여 할당
-            weekdayProgressValue = round(weekdayPercentage * 10) / 10
+        if weekdayAvgNum == weekdayMaxNum && weekdayAvgNum == weekdayMinNum{
+            weekdayProgressValue = 0.9
+        } else {
+            let weekdayPercentage = (Float(weekdayAvgNum) - Float(weekdayMinNum)) / (Float(weekdayMaxNum) - Float(weekdayMinNum))
+            weekdayProgressValue = weekdayPercentage
+        }
         
-        let weekendPercentage = (Float(weekendAvgNum) - Float(weekendMinNum)) / (Float(weekendMaxNum) - Float(weekendMinNum))
-            // 소수점 첫 번째 자리까지 반올림하여 할당
-            weekendProgressValue = round(weekendPercentage * 10) / 10
+        if weekendAvgNum == weekendMaxNum && weekendAvgNum == weekendMinNum{
+            weekendProgressValue = 0.9
+        } else {
+            let weekendPercentage = (Float(weekendAvgNum) - Float(weekendMinNum)) / (Float(weekendMaxNum) - Float(weekendMinNum))
+            weekendProgressValue = weekendPercentage
+        }
     }
     
     // MARK: 인사이트 - 통계 데이터 ( 주말 & 평일 구분 )
@@ -287,6 +293,7 @@ struct SearchResultsView: View {
     }
 }
 
+// 평일 ProgresBar
 struct WeekdayProgressBar: View {
     @Binding var weekdayprogress: Float
     var weekdayAvgNum: Int
@@ -316,7 +323,9 @@ struct WeekdayProgressBar: View {
     }
 }
 
+// 주말 ProgressBar
 struct WeekendProgressBar: View {
+    
     @Binding var weekendprogress: Float
     var weekendAvgNum: Int
     
@@ -339,7 +348,7 @@ struct WeekendProgressBar: View {
                 Text("\(weekendAvgNum)")
                     .foregroundColor(Constants.KODARIBlue)
                     .font(Font.system(size: 20))
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
         }
     }
