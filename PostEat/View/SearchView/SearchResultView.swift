@@ -364,22 +364,19 @@ struct CustomCellView: View {
     
     var body: some View {
         ZStack{
-            if isFlipped {
-//                MemoView
+            if isFlipped && foodData.memo != nil {
                 MemoView(memo: foodData.memo)
             } else {
-//                ResultCellView
                 ResultCellView(uniqueid: foodData.uniqueid, noCount: foodData.num, tempdate: foodData.date, day: foodData.date)
             }
         }
         .scaleEffect(x: isFlipped ? -1 : 1)
         .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: -1, z: 0))
-//         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임
-
+//         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임 ✅
         .onTapGesture {
-            withAnimation(.easeInOut) { // 이거를 지우고 .animation 해도
+            withAnimation(.easeInOut) { // 이거를 지우고 .animation 해도 ✅
                             isFlipped.toggle()
-                        }
+            }
         }
     }
     
@@ -409,87 +406,49 @@ struct CustomCellView: View {
             }
         }
         .frame(maxWidth: .infinity)
+        //.frame(height: 100)
         .padding()
         .background(Color.white)
         .cornerRadius(25)
     }
     
     func MemoView(memo: String) -> some View{
-        HStack {
-            HStack{
-                Text(memo)
-            }
+        VStack {
+                VStack {
+                    HStack{
+                        Text("메모")
+                            .font(.system(size: 15))
+                            .foregroundColor(Constants.POSTECHGray)
+                            .bold()
+                            .padding(2.5)
+                            Spacer()
+                    }
+                    HStack {
+                        Text("\(memo)")
+                            .font(.system(size: 15))
+                            .foregroundColor(Constants.POSTECHGray)
+                            
+                        Spacer()
+                    }
+                    Spacer()
+                    HStack{
+                        Spacer()
+                        Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.gray.opacity(0.3))
+                    }
+                   // .background(.red)
+                }
+                .frame(maxWidth: .infinity)
+                //.background(.yellow)
+                .padding(10)
         }
         .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color.white)
+        .frame(height: 137) // ✅ 프레임이 다른 플립뷰랑 같아지면 왜 에러지 ?
+        .background(.white)
+        //.background(Color.white)
         .cornerRadius(25)
     }
-    // MARK: Flip 될 2가지 View
-//    var ResultCellView: some View {
-//        HStack {
-//            VStack {
-//                mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
-//                counterBadge(count: foodData.num, tempdate: foodData.date)
-//                dateBadge(day: foodData.date, noCount: foodData.num)
-//            }
-//            
-//            HStack{
-//                Divider()
-//                    .frame(maxHeight: .infinity) // 높이를 적절히 설정
-//                    .background(Constants.AppleGray)
-//            }
-//            .padding(.vertical, 10)
-//            
-//            VStack {
-//                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
-//            }
-//            .padding(10)
-//            Spacer()
-//            
-//            VStack{
-//                noteAndWeatherIcon(useMemo: foodData.memo)
-//            }
-//        }
-//        .frame(maxWidth: .infinity)
-//        .padding()
-//        .background(Color.white)
-//        .cornerRadius(25)
-//    }
-    
-//    var MemoView: some View {
-//        HStack {
-//            HStack{
-//                Text(foodData.memo)
-//            }
-//            VStack {
-//                mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
-//                counterBadge(count: foodData.num, tempdate: foodData.date)
-//                dateBadge(day: foodData.date, noCount: foodData.num)
-//            }
-//            
-//            HStack{
-//                Divider()
-//                    .frame(maxHeight: .infinity) // 높이를 적절히 설정
-//                    .background(Constants.AppleGray)
-//            }
-//            .padding(.vertical, 10)
-//            
-//            VStack {
-//                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
-//            }
-//            .padding(10)
-//            Spacer()
-//            
-//            VStack{
-//                noteAndWeatherIcon(useMemo: foodData.memo)
-//            }
-//        }
-//        .frame(maxWidth: .infinity)
-//        .padding()
-//        .background(Color.white)
-//        .cornerRadius(25)
-//    }
     
     // MARK: 날짜 형변환
     func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
