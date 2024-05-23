@@ -14,6 +14,8 @@ struct PostEatApp: App {
           }
       }()
     
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     var body: some Scene {
         WindowGroup {
             DateView()

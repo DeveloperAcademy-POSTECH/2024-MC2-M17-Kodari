@@ -25,6 +25,7 @@ struct DateView: View {
     var body: some View {
         NavigationStack{
             VStack(spacing: 0) {
+                AlertView()
                 monthView //날짜 뷰 (이름만 월뷰일뿐)
                 
                 Divider()
