@@ -10,17 +10,17 @@ struct SearchResultsView: View {
     
     // MARK: 인사이트 통계 변수들
     
-    @State var weekdayMaxNum = "" // 평일 최대 인원
-    @State var weekdayMinNum = "" // 평일 최소 인원
-    @State var weekdayAvgNum = "" // 평일 평균 인원
+    @State var weekdayMaxNum = 0 // 평일 최대 인원
+    @State var weekdayMinNum = 0 // 평일 최소 인원
+    @State var weekdayAvgNum = 0 // 평일 평균 인원
     
-    @State var weekendMaxNum = "" // 주말 최대 인원
-    @State var weekendMinNum = "" // 주말 최소 인원
-    @State var weekendAvgNum = "" // 주말 평균 인원
+    @State var weekendMaxNum = 0 // 주말 최대 인원
+    @State var weekendMinNum = 0 // 주말 최소 인원
+    @State var weekendAvgNum = 0 // 주말 평균 인원
     
-    /// Progress Bar Value
-    @State var progressValue1: Float = 0.65
-    @State var progressValue2: Float = 0.45
+    @State var weekdayProgressValue: Float = 0.3
+    @State var weekendProgressValue: Float = 0.3
+    
     
     
     var body: some View {
@@ -77,7 +77,7 @@ struct SearchResultsView: View {
                                         VStack{
                                             Text("평일")
                                             ZStack{
-                                                WeekdayProgressBar(weekdayprogress: progressValue1, weekdayAvgNum: weekdayAvgNum)
+                                                WeekdayProgressBar(weekdayprogress: self.$weekdayProgressValue, weekdayAvgNum: weekdayAvgNum)
                                                     .frame(width: 80.0, height: 80.0)
                                                     .padding(.top, 10)
                                                 
@@ -97,7 +97,7 @@ struct SearchResultsView: View {
                                         VStack{
                                             Text("주말")
                                             ZStack{
-                                                WeekendProgressBar(weekendprogress: self.$progressValue2, weekendAvgNum: weekendAvgNum)
+                                                WeekendProgressBar(weekendprogress: self.$weekendProgressValue, weekendAvgNum: weekendAvgNum)
                                                     .frame(width: 80.0, height: 80.0)
                                                     .padding(.top, 10)
                                                 
@@ -167,6 +167,7 @@ struct SearchResultsView: View {
             }
             .onAppear {
                 updateStatistics() // 현재 ResultView로 넘어오면서 바로 함수실행 -> 통계데이터 계산
+                setupProgressValue()
             }
         }
         .navigationTitle("검색결과")
@@ -200,6 +201,22 @@ struct SearchResultsView: View {
         }
     }
     
+    func setupProgressValue() {
+        if weekdayAvgNum == weekdayMaxNum && weekdayAvgNum == weekdayMinNum{
+            weekdayProgressValue = 0.9
+        } else {
+            let weekdayPercentage = (Float(weekdayAvgNum) - Float(weekdayMinNum)) / (Float(weekdayMaxNum) - Float(weekdayMinNum))
+            weekdayProgressValue = weekdayPercentage
+        }
+        
+        if weekendAvgNum == weekendMaxNum && weekendAvgNum == weekendMinNum{
+            weekendProgressValue = 0.9
+        } else {
+            let weekendPercentage = (Float(weekendAvgNum) - Float(weekendMinNum)) / (Float(weekendMaxNum) - Float(weekendMinNum))
+            weekendProgressValue = weekendPercentage
+        }
+    }
+    
     // MARK: 인사이트 - 통계 데이터 ( 주말 & 평일 구분 )
     private func updateStatistics() {
         guard !filteredFoodData.isEmpty else {
@@ -230,55 +247,56 @@ struct SearchResultsView: View {
         
         // 주중 통계
         if let maxNum = weekdayArray.max() {
-            weekdayMaxNum = "\(maxNum)"
+            weekdayMaxNum = maxNum
             print("펑일 max: \(maxNum)")
         }
         
         let weekdayNonZeroArray = weekdayArray.filter { $0 != 0 }
         if let minNum = weekdayNonZeroArray.min() {
-            weekdayMinNum = "\(minNum)"
+            weekdayMinNum = minNum
             print("평일 min: \(weekdayMinNum)")
         } else {
-            weekdayMinNum = "0"
+            weekdayMinNum = 0
             print("평일 min: \(weekdayMinNum)")
         }
         
         let weekdayTotal = weekdayNonZeroArray.reduce(0, +)
         print("평일 미입력 제외 Total: \(weekdayTotal)")
         let weekdayAverage = weekdayTotal / max(weekdayNonZeroArray.count, 1)
-        weekdayAvgNum = "\(weekdayAverage)"
+        weekdayAvgNum = weekdayAverage
         print("평일 avg: \(weekdayAvgNum)")
         
         // 주말 통계
         if let maxNum = weekendArray.max() {
-            weekendMaxNum = "\(maxNum)"
+            weekendMaxNum = maxNum
             print("주말 max: \(weekendMaxNum)")
         } else {
-            weekendMaxNum = "0"
+            weekendMaxNum = 0
             print("주말 max: \(weekendMaxNum)")
         }
         
         
         let weekendNonZeroArray = weekendArray.filter { $0 != 0 }
         if let minNum = weekendNonZeroArray.min() {
-            weekendMinNum = "\(minNum)"
+            weekendMinNum = minNum
             print("주말 min: \(weekendMinNum)")
         } else {
-            weekendMinNum = "0"
+            weekendMinNum = 0
             print("주말 min: \(weekendMinNum)")
         }
         
         let weekendTotal = weekendNonZeroArray.reduce(0, +)
         print("주말 미입력 제외 Total: \(weekendTotal)")
         let weekendAverage = weekendTotal / max(weekendNonZeroArray.count, 1)
-        weekendAvgNum = "\(weekendAverage)"
+        weekendAvgNum = weekendAverage
         print("주말 avg: \(weekendAvgNum)")
     }
 }
 
+// 평일 ProgresBar
 struct WeekdayProgressBar: View {
-    var weekdayprogress: Float
-    var weekdayAvgNum: String
+    @Binding var weekdayprogress: Float
+    var weekdayAvgNum: Int
     
     var body: some View {
         ZStack {
@@ -305,9 +323,11 @@ struct WeekdayProgressBar: View {
     }
 }
 
+// 주말 ProgressBar
 struct WeekendProgressBar: View {
+    
     @Binding var weekendprogress: Float
-    var weekendAvgNum: String
+    var weekendAvgNum: Int
     
     var body: some View {
         ZStack {
@@ -328,7 +348,7 @@ struct WeekendProgressBar: View {
                 Text("\(weekendAvgNum)")
                     .foregroundColor(Constants.KODARIBlue)
                     .font(Font.system(size: 20))
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
         }
     }
