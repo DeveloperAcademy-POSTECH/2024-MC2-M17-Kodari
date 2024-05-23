@@ -359,144 +359,137 @@ struct CustomCellView: View {
     
     let foodData: FoodData
     let searchMenu: String
+    
     @State var isFlipped = false
     
     var body: some View {
         ZStack{
-            
-            HStack {
-                VStack {
-                    mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
-                    counterBadge(count: foodData.num, tempdate: foodData.date)
-                    dateBadge(day: foodData.date, noCount: foodData.num)
-                }
-                
-                HStack{
-                    Divider()
-                        .frame(maxHeight: .infinity) // 높이를 적절히 설정
-                        .background(Constants.AppleGray)
-                }
-                .padding(.vertical, 10)
-                
-                VStack {
-                    Text(foodData.memo)
-                }
-                .padding(10)
-                Spacer()
-                
-                VStack{
-                    noteAndWeatherIcon(useMemo: foodData.memo)
-                }
+            if isFlipped {
+//                MemoView
+                MemoView(memo: foodData.memo)
+            } else {
+//                ResultCellView
+                ResultCellView(uniqueid: foodData.uniqueid, noCount: foodData.num, tempdate: foodData.date, day: foodData.date)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.white)
-            .cornerRadius(25)
-            .rotation3DEffect(
-                .degrees(isFlipped ? 90 : 0),
-                axis: (x: 0.0, y: 1.0, z: 0.0)
-            )
-            .animation(isFlipped ? .linear.delay(0.35) : .linear, value: isFlipped)
-            
-            
-            HStack {
-                VStack {
-                    mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
-                    counterBadge(count: foodData.num, tempdate: foodData.date)
-                    dateBadge(day: foodData.date, noCount: foodData.num)
-                }
-                
-                HStack{
-                    Divider()
-                        .frame(maxHeight: .infinity) // 높이를 적절히 설정
-                        .background(Constants.AppleGray)
-                }
-                .padding(.vertical, 10)
-                
-                VStack {
-                    mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
-                }
-                .padding(10)
-                Spacer()
-                
-                VStack{
-                    noteAndWeatherIcon(useMemo: foodData.memo)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.white)
-            .cornerRadius(25)
-            .rotation3DEffect(
-                .degrees(isFlipped ? 90 : 0),
-                axis: (x: 0.0, y: 1.0, z: 0.0)
-            )
-            .animation(isFlipped ? .linear.delay(0.35) : .linear, value: isFlipped)
-            
         }
+        .scaleEffect(x: isFlipped ? -1 : 1)
+        .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: -1, z: 0))
+//         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임
+
         .onTapGesture {
-            withAnimation(.easeInOut) {
-                isFlipped.toggle()
-            }
+            withAnimation(.easeInOut) { // 이거를 지우고 .animation 해도
+                            isFlipped.toggle()
+                        }
         }
     }
-        
-        // MARK: 식수
-        func counterBadge(count: Int, tempdate: String) -> some View {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            print("변형전 :\(tempdate)")
-            let date = formatter.date(from: tempdate) ?? Date()
-            print("변형후 : \(date)")
-            print("현재 Current : \(Calendar.current)")
-            let isFutureDate = Calendar.current.compare(date, to: Date(), toGranularity: .day) == .orderedDescending
-            print("비교: \(isFutureDate)")
-            
-            var displayText: String
-            if count == 0 {
-                if isFutureDate {
-                    displayText = "배식전"
-                } else {
-                    displayText = "미입력"
-                }
-            } else {
-                displayText = "\(count)명"
-                print("\(displayText) 가능")
+    
+    func ResultCellView(uniqueid: String ,noCount: Int, tempdate: String, day: String) -> some View{
+        HStack {
+            VStack {
+                mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
+                counterBadge(count: foodData.num, tempdate: foodData.date)
+                dateBadge(day: foodData.date, noCount: foodData.num)
             }
             
-            return ZStack {
-                Rectangle()
-                    .frame(width: 80, height: 22)
-                    .foregroundColor(.clear)
-                
-                Text(displayText)
-                    .font(
-                        Font.custom("Apple SD Gothic Neo", size: 26)
-                            .weight(.bold)
-                    )
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(displayText == "미입력" ? Constants.KODARIGray : Constants.KODARIBlue)
-                    .frame(width: 80, height: 22, alignment: .center) // Adjusted height to match the parent Rectangle
+            HStack{
+                Divider()
+                    .frame(maxHeight: .infinity) // 높이를 적절히 설정
+                    .background(Constants.AppleGray)
+            }
+            .padding(.vertical, 10)
+            
+            VStack {
+                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
+            }
+            .padding(10)
+            Spacer()
+            
+            VStack{
+                noteAndWeatherIcon(useMemo: foodData.memo)
             }
         }
-        
-        // MARK: 날짜
-        func dateBadge(day: String, noCount: Int) -> some View {
-            ZStack{
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(width: 70, height: 30)
-                
-                Text("\(parseDateString(day).datePart) \n \(parseDateString(day).dayOfWeek)")
-                    .font(
-                        Font.custom("Apple SD Gothic Neo", size: 12)
-                            .weight(.bold)
-                    )
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(noCount == 0 ? Constants.KODARIGray : Constants.POSTECHGray)
-                    .frame(alignment: .center)
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.white)
+        .cornerRadius(25)
+    }
+    
+    func MemoView(memo: String) -> some View{
+        HStack {
+            HStack{
+                Text(memo)
             }
         }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.white)
+        .cornerRadius(25)
+    }
+    // MARK: Flip 될 2가지 View
+//    var ResultCellView: some View {
+//        HStack {
+//            VStack {
+//                mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
+//                counterBadge(count: foodData.num, tempdate: foodData.date)
+//                dateBadge(day: foodData.date, noCount: foodData.num)
+//            }
+//            
+//            HStack{
+//                Divider()
+//                    .frame(maxHeight: .infinity) // 높이를 적절히 설정
+//                    .background(Constants.AppleGray)
+//            }
+//            .padding(.vertical, 10)
+//            
+//            VStack {
+//                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
+//            }
+//            .padding(10)
+//            Spacer()
+//            
+//            VStack{
+//                noteAndWeatherIcon(useMemo: foodData.memo)
+//            }
+//        }
+//        .frame(maxWidth: .infinity)
+//        .padding()
+//        .background(Color.white)
+//        .cornerRadius(25)
+//    }
+    
+//    var MemoView: some View {
+//        HStack {
+//            HStack{
+//                Text(foodData.memo)
+//            }
+//            VStack {
+//                mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
+//                counterBadge(count: foodData.num, tempdate: foodData.date)
+//                dateBadge(day: foodData.date, noCount: foodData.num)
+//            }
+//            
+//            HStack{
+//                Divider()
+//                    .frame(maxHeight: .infinity) // 높이를 적절히 설정
+//                    .background(Constants.AppleGray)
+//            }
+//            .padding(.vertical, 10)
+//            
+//            VStack {
+//                mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
+//            }
+//            .padding(10)
+//            Spacer()
+//            
+//            VStack{
+//                noteAndWeatherIcon(useMemo: foodData.memo)
+//            }
+//        }
+//        .frame(maxWidth: .infinity)
+//        .padding()
+//        .background(Color.white)
+//        .cornerRadius(25)
+//    }
     
     // MARK: 날짜 형변환
     func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
@@ -524,6 +517,63 @@ struct CustomCellView: View {
             return (datePart, dayOfWeek)
         } else {
             return (dateString, "")
+        }
+    }
+    
+    // MARK: 식수
+    func counterBadge(count: Int, tempdate: String) -> some View {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        print("변형전 :\(tempdate)")
+        let date = formatter.date(from: tempdate) ?? Date()
+        print("변형후 : \(date)")
+        print("현재 Current : \(Calendar.current)")
+        let isFutureDate = Calendar.current.compare(date, to: Date(), toGranularity: .day) == .orderedDescending
+        print("비교: \(isFutureDate)")
+        
+        var displayText: String
+        if count == 0 {
+            if isFutureDate {
+                displayText = "배식전"
+            } else {
+                displayText = "미입력"
+            }
+        } else {
+            displayText = "\(count)명"
+            print("\(displayText) 가능")
+        }
+        
+        return ZStack {
+            Rectangle()
+                .frame(width: 80, height: 22)
+                .foregroundColor(.clear)
+            
+            Text(displayText)
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 26)
+                        .weight(.bold)
+                )
+                .multilineTextAlignment(.center)
+                .foregroundColor(displayText == "미입력" ? Constants.KODARIGray : Constants.KODARIBlue)
+                .frame(width: 80, height: 22, alignment: .center) // Adjusted height to match the parent Rectangle
+        }
+    }
+    
+    // MARK: 날짜
+    func dateBadge(day: String, noCount: Int) -> some View {
+        ZStack{
+            Rectangle()
+                .foregroundColor(.clear)
+                .frame(width: 70, height: 30)
+            
+            Text("\(parseDateString(day).datePart) \n \(parseDateString(day).dayOfWeek)")
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 12)
+                        .weight(.bold)
+                )
+                .multilineTextAlignment(.center)
+                .foregroundColor(noCount == 0 ? Constants.KODARIGray : Constants.POSTECHGray)
+                .frame(alignment: .center)
         }
     }
     
@@ -615,3 +665,4 @@ struct CustomCellView: View {
         return formatter
     }()
 }
+
