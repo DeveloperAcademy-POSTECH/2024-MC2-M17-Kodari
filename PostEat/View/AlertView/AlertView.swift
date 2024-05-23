@@ -22,8 +22,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 // Foreground(앱 켜진 상태)에서도 알림 오는 설정
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.list, .banner])
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+            HapticHelper.shared.impact(style: .medium)
+            completionHandler([.list, .banner])
     }
 }
 
@@ -68,13 +72,31 @@ class LocalNotificationHelper {
 
 }
 
+//햅틱(진동) 넣기
+class HapticHelper {
+    
+    static let shared = HapticHelper()
+    
+    private init() { }
+    
+    func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
+    }
+    
+    func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
+    }
+}
+
 
 struct AlertView: View {
     var body: some View {
 //            LocalNotificationHelper.shared.pushNotification(title: "안녕하세요", body: "푸시 알림 테스트입니다.", seconds: 2, identifier: "PUSH_TEST")
         Button("push test Button") {
             
-            LocalNotificationHelper.shared.pushNotification(title: "POST-EAT", body: "[중식 종료 알림을 눌러 인원을 기록해보세요.]", seconds: 2, identifier: "push test")
+            LocalNotificationHelper.shared.pushNotification(title: "POST-EAT", body: "[중식 종료 알림을 눌러 인원을 기록해보세요.]", seconds: 5, identifier: "push test")
         }
         
     }
