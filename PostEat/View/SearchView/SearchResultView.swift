@@ -3,12 +3,13 @@ import SwiftData
 
 struct SearchResultsView: View {
     
-    @State var searchMenu: String
+    @State var searchMenu: String // 검색한 메뉴 이름
     @State var mealsdata: [FoodData]
     
     let columns = [GridItem(.flexible())]
     
     // MARK: 인사이트 통계 변수들
+    
     @State var weekdayMaxNum = "" // 평일 최대 인원
     @State var weekdayMinNum = "" // 평일 최소 인원
     @State var weekdayAvgNum = "" // 평일 평균 인원
@@ -17,6 +18,7 @@ struct SearchResultsView: View {
     @State var weekendMinNum = "" // 주말 최소 인원
     @State var weekendAvgNum = "" // 주말 평균 인원
     
+    /// Progress Bar Value
     @State var progressValue1: Float = 0.65
     @State var progressValue2: Float = 0.45
     
@@ -31,17 +33,42 @@ struct SearchResultsView: View {
                     VStack{
                         VStack{
                             HStack(spacing:0){
-                                Text("\(searchMenu)")
-                                    .foregroundColor(Color(Constants.POSTECHRed))
-                                    .font(.system(size: 22))
-                                    .bold()
-                                Text(" 포함된 식단")
-                                    .font(.system(size: 22))
-                                    .bold()
-                                Spacer()
+                                if searchMenu.count > 6 {
+                                    VStack(alignment: .leading){
+                                        HStack(spacing: 0){
+                                            Text("\(searchMenu)")
+                                                .foregroundColor(Color(Constants.POSTECHRed))
+                                            //.fontWeight(.heavy)
+                                                .font(
+                                                    Font.custom("AppleSDGothicNeo", size: 22)
+                                                    // .weight(.heavy)
+                                                )
+                                            
+                                            Text("\(josaDecision(searchMenu))")
+                                                .font(
+                                                    Font.custom("Apple SD Gothic Neo", size: 22)
+                                                        .weight(.semibold)
+                                                )
+                                        }
+                                        Text("포함된 식단")
+                                            .font(.system(size: 22))
+                                            .bold()
+                                    }
+                                    Spacer()
+                                } else {
+                                    Text("\(searchMenu)")
+                                        .foregroundColor(Color(Constants.POSTECHRed))
+                                        .font(.system(size: 22))
+                                        .bold()
+                                    Text("\(josaDecision(searchMenu)) 포함된 식단")
+                                        .font(.system(size: 22))
+                                        .bold()
+                                    Spacer()
+                                }
                             }
                             .background(.clear)
-                            .padding()
+                            .padding(.top)
+                            .padding(.leading)
                             
                             VStack{
                                 VStack{
@@ -61,15 +88,17 @@ struct SearchResultsView: View {
                                                 
                                                 HStack{
                                                     Text("\(weekdayMinNum)")
-                                                        .foregroundColor(Constants.KODARIRed)
+                                                        .foregroundColor(Constants.POSTECHGray)
                                                     Spacer()
                                                     Text("\(weekdayMaxNum)")
+                                                        .foregroundColor(Constants.POSTECHRed)
                                                 }
                                                 .padding(.horizontal, 20)
                                                 .padding(.top, 80)
                                             }
                                             
                                         }
+                                        
                                         VStack{
                                             Text("주말")
                                             ZStack{
@@ -79,9 +108,10 @@ struct SearchResultsView: View {
                                                 
                                                 HStack{
                                                     Text("\(weekendMinNum)")
-                                                        .foregroundColor(Constants.KODARIRed)
+                                                        .foregroundColor(Constants.POSTECHGray)
                                                     Spacer()
                                                     Text("\(weekendMaxNum)")
+                                                        .foregroundColor(Constants.POSTECHRed)
                                                 }
                                                 .padding(.horizontal, 20)
                                                 .padding(.top, 80)
@@ -92,21 +122,23 @@ struct SearchResultsView: View {
                                     HStack{
                                         Circle()
                                             .frame(width: 10, height: 10)
-                                            .foregroundColor(.blue)
-                                        Text("평균")
-                                            .foregroundColor(.blue)
-                                        
-                                        Circle()
-                                            .frame(width: 10, height: 10)
-                                            .foregroundColor(.red)
-                                        Text("최고")
-                                            .foregroundColor(.red)
-                                        
-                                        Circle()
-                                            .frame(width: 10, height: 10)
-                                            .foregroundColor(.black)
+                                            .foregroundColor(Constants.POSTECHGray)
                                         Text("최저")
-                                            .foregroundColor(.black)
+                                            .foregroundColor(Constants.POSTECHGray)
+                                        
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(Constants.KODARIBlue)
+                                        Text("평균")
+                                            .foregroundColor(Constants.KODARIBlue)
+                                        
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(Constants.POSTECHRed)
+                                        Text("최고")
+                                            .foregroundColor(Constants.POSTECHRed)
+                                        
+                                        
                                     }
                                     .padding()
                                     .frame(maxWidth: .infinity)
@@ -115,18 +147,17 @@ struct SearchResultsView: View {
                                     .padding()
                                 }
                                 .background(Constants.KODARIGray.opacity(0.15))
-                                .cornerRadius(15)
+                                .cornerRadius(12)
                             }
                             
                         }
                         .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .cornerRadius(15)
+                        .cornerRadius(12)
                         .padding(.horizontal)
                         .padding(.bottom)
                     }
                     .background(.white)
-                    .cornerRadius(15)
+                    .cornerRadius(20)
                     
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(filteredFoodData, id: \.id) { item in
@@ -134,7 +165,7 @@ struct SearchResultsView: View {
                         }
                     }
                     .background(.clear)
-                    .cornerRadius(15)
+                    .cornerRadius(20)
                     .padding(.top)
                 }
                 .padding(18)
@@ -145,6 +176,22 @@ struct SearchResultsView: View {
         }
         .navigationTitle("검색결과")
     }
+    
+    func josaDecision(_ name: String) -> String {
+        // 글자 마지막 부분 가져오기
+        guard let lastText = name.last else { return name }
+        // 유니코드 변환
+        let unicodeVal = UnicodeScalar(String(lastText))?.value
+        
+        guard let value = unicodeVal else { return name }
+        // 한글아니면 반환
+        if (value < 0xAC00 || value > 0xD7A3) { return name }
+        // 종성인지 확인
+        let last = (value - 0xAC00) % 28
+        // 받침있으면 "이" 없으면 "가" 반환
+        let str = last > 0 ? "이" : "가"
+        return str
+    } //조사결정
     
     private var filteredFoodData: [FoodData] {
         return mealsdata.filter { item in
@@ -230,7 +277,6 @@ struct SearchResultsView: View {
         weekendAvgNum = "\(weekendAverage)"
         print("주말 avg: \(weekendAvgNum)")
     }
-    
 }
 
 struct WeekdayProgressBar: View {
@@ -249,12 +295,12 @@ struct WeekdayProgressBar: View {
             Circle()
                 .trim(from: 0.3, to: CGFloat(self.weekdayprogress))
                 .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
-                .fill(Color.blue)
+                .fill(Constants.KODARIBlue)
                 .rotationEffect(.degrees(54.5)) // 게이지 시작 지점 - Start Point
             
             VStack{
                 Text("\(weekdayAvgNum)")
-                    .foregroundColor(.blue)
+                    .foregroundColor(Constants.KODARIBlue)
                     .font(Font.system(size: 20))
                     .fontWeight(.semibold)
             }
@@ -278,12 +324,12 @@ struct WeekendProgressBar: View {
             Circle()
                 .trim(from: 0.3, to: CGFloat(self.weekendprogress))
                 .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
-                .fill(Color.blue)
+                .fill(Constants.KODARIBlue)
                 .rotationEffect(.degrees(54.5)) // 게이지 시작 지점 - Start Point
             
             VStack{
                 Text("\(weekendAvgNum)")
-                    .foregroundColor(.blue)
+                    .foregroundColor(Constants.KODARIBlue)
                     .font(Font.system(size: 20))
                     .fontWeight(.semibold)
             }
@@ -304,39 +350,33 @@ struct CustomCellView: View {
     
     var body: some View {
         HStack {
-            
             VStack {
-                mealTypeBadge(mealType: foodData.uniqueid)
+                mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
                 counterBadge(count: foodData.num, tempdate: foodData.date)
-                dateBadge(day: foodData.date)
-                
+                dateBadge(day: foodData.date, noCount: foodData.num)
             }
-            //.padding(10)
             
             HStack{
                 Divider()
                     .frame(maxHeight: .infinity) // 높이를 적절히 설정
-                
                     .background(Constants.AppleGray)
             }
             .padding(.vertical, 10)
             
             VStack {
                 mealContents(menu1: foodData.menu1, menu2: foodData.menu2, menu3: foodData.menu3, menu4: foodData.menu4)
-                
             }
             .padding(10)
-            
             Spacer()
+            
             VStack{
                 noteAndWeatherIcon(useMemo: foodData.memo)
             }
-           
         }
         .frame(maxWidth: .infinity)
         .padding()
         .background(Color.white)
-        .cornerRadius(10)
+        .cornerRadius(25)
     }
     
     // MARK: 식수
@@ -364,9 +404,8 @@ struct CustomCellView: View {
         
         return ZStack {
             Rectangle()
-                .foregroundColor(.clear)
                 .frame(width: 80, height: 22)
-                .cornerRadius(9)
+                .foregroundColor(.clear)
             
             Text(displayText)
                 .font(
@@ -380,33 +419,20 @@ struct CustomCellView: View {
     }
     
     // MARK: 날짜
-    func dateBadge(day: String) -> some View {
+    func dateBadge(day: String, noCount: Int) -> some View {
         ZStack{
             Rectangle()
                 .foregroundColor(.clear)
-                .frame(width: 80, height: 40)
-                .background(.white)
-                .cornerRadius(6)
+                .frame(width: 70, height: 30)
             
-            VStack { // VStack으로 두 줄을 나눠서 날짜 배치
-                Text(parseDateString(day).datePart)
-                    .font(
-                        Font.custom("Apple SD Gothic Neo", size: 12)
-                            .weight(.bold)
-                    )
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
-                    .frame(alignment: .center)
-                
-                Text(parseDateString(day).dayOfWeek)
-                    .font(
-                        Font.custom("Apple SD Gothic Neo", size: 12)
-                            .weight(.bold)
-                    )
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(Color(red: 0.41, green: 0.41, blue: 0.41))
-                    .frame(alignment: .center)
-            }
+            Text("\(parseDateString(day).datePart) \n \(parseDateString(day).dayOfWeek)")
+                .font(
+                    Font.custom("Apple SD Gothic Neo", size: 12)
+                        .weight(.bold)
+                )
+                .multilineTextAlignment(.center)
+                .foregroundColor(noCount == 0 ? Constants.KODARIGray : Constants.POSTECHGray)
+                .frame(alignment: .center)
         }
     }
     
@@ -438,9 +464,9 @@ struct CustomCellView: View {
         }
     }
     
-    
     // MARK: 식단
     func mealContents(menu1: String, menu2: String, menu3: String, menu4: String)-> some View{
+        
         
         
         return VStack(alignment: .leading, spacing: 0.5){
@@ -448,6 +474,7 @@ struct CustomCellView: View {
             Text(menu1)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
                 .padding(2)
+            
             Text(menu2)
                 .font( Font.custom("Apple SD Gothic Neo", size: 15) )
                 .padding(2)
@@ -462,7 +489,7 @@ struct CustomCellView: View {
     }
     
     // MARK: Meal Type
-    func mealTypeBadge(mealType: String)-> some View{
+    func mealTypeBadge(mealType: String, noCount: Int)-> some View{
         let mealTypeText: String
         switch mealType.last { // uniqueid의 마지막 문자를 확인하여 조식, 중식, 석식 텍스트 설정
         case "M":
@@ -479,8 +506,8 @@ struct CustomCellView: View {
             Rectangle()
                 .foregroundColor(.clear)
                 .frame(width: 37, height: 22)
-                .background(Constants.KODARIBlue)
-                .cornerRadius(6)
+                .background(noCount == 0 ? Constants.KODARIGray : Constants.KODARIBlue) // 0명이면 뱃지도 gray
+                .cornerRadius(7)
             
             Text("\(mealTypeText)")
                 .font(
@@ -495,9 +522,6 @@ struct CustomCellView: View {
     
     func noteAndWeatherIcon(useMemo: String) -> some View {
         ZStack {
-//            Circle()
-//                .fill(useMemo.count > 0 ? Constants.KODARIBlue : Constants.KODARIGray.opacity(0.15))
-//                .frame(width: 26, height: 26)
             Image(systemName: "list.bullet.circle.fill")
                 .font(.system(size: 20))
                 .foregroundColor(useMemo.count > 0 ? Constants.KODARIBlue : Constants.KODARIGray.opacity(0.15))
@@ -505,7 +529,6 @@ struct CustomCellView: View {
                 .contentShape(Circle()) // 이미지의 컨텐츠 모양을 Circle로 설정
         }
     }
-
 }
 
 //#Preview {
