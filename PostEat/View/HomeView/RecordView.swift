@@ -16,7 +16,7 @@ struct RecordView: View {
     
     @Bindable var mealData : FoodData
     
-    private let calendar = Calendar.current //현재를 달력에 저장 /
+    private let calendar = Calendar.current //현재를 달력에 저장
     
     @State private var cancelNum : Int = 0
     @State private var cancelMemo : String = ""
@@ -59,6 +59,7 @@ struct RecordView: View {
                     .font(.system(size:13))
                     .foregroundStyle(Color(Constants.POSTECHGray))
                 
+                
                 if mealData.num == 0{
                     Text("\(mealData.uniqueid.last == "M" ? "조식" : mealData.uniqueid.last == "L" ? "중식" : "석식") 식수 기록하기")
                         .font(.system(size:22))
@@ -69,49 +70,44 @@ struct RecordView: View {
                         .font(.system(size:22))
                         .foregroundStyle(Color.black)
                         .bold()
+                        .padding(.top)
                 }
-                
-                ZStack{
-                    RoundedRectangle(cornerSize: CGSize(width: 10, height: 10))
-                        .foregroundStyle(Color.white)
-                        .frame(width:361, height:88)
+                VStack{
                     VStack{
-                        Spacer()
                         HStack{
-                            HStack{
-                                Text("식사 인원")
-                                    .foregroundStyle(Color.black)
-                                Spacer()
-                            }.frame(width:100)
-                                .padding(.leading, 16)
+                            Text("식수")
+                                .foregroundColor(.black)
                             
-                            TextField("숫자로 입력", text: Binding(
+                            TextField("숫자 입력", text: Binding(
                                 get: { String(textfieldNum) == "0" ? "" : String(textfieldNum) },
                                 set: { textfieldNum = Int($0) ?? 0 } ))
-                                .keyboardType(.decimalPad)  //키패드 종류(숫자)
+                            .keyboardType(.decimalPad)  //키패드 종류(숫자)
+                            .multilineTextAlignment(.leading)
+                            .padding(.leading, 10)
                         }
-                        Spacer().frame(height:20)
-                        HStack{
-                            HStack{
-                                Text("메모")
-                                    .foregroundStyle(Color.black)
-                                Spacer()
-                            }.frame(width:100)
-                                .padding(.leading, 16)
-                            TextField("메뉴 쇼트, 교내 행사 등", text: $textfieldMemo)
-                        }
-                        Spacer()
+                        .padding(.leading, 10)
                         
+                        Divider()
+                            .padding(5)
+                        
+                        HStack{
+                            Text("메모")
+                                .foregroundColor(.black)
+                            TextField("교내 행사 등 특이사항 입력", text: $textfieldMemo)
+                                .multilineTextAlignment(.leading)
+                                .padding(.leading, 10)
+                        }
+                        .padding(.leading, 10)
                     }
-                    VStack{
-                        Spacer()
-                        Divider().padding(.horizontal, 13)
-                        Spacer()
-                    }
-                }.frame(width:361, height:132)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.white)
+                    .cornerRadius(15)
+                }
+                .padding()
                 Spacer()
-                    .padding(.top, 10)
-            }.padding(.top, 20)
+            }
+            .padding(.top, 20)
             
             ZStack{
                 Color(red: 27 / 255, green: 177 / 255, blue: 211 / 255)
@@ -125,9 +121,11 @@ struct RecordView: View {
                         .bold()
                         .foregroundStyle(Color.white)
                 }
-            }.opacity(savedViewShowing ? 1 : 0) // opacity 1로 설정
-                .animation(.easeIn(duration: 0.5), value: savedViewShowing)
-        }.onAppear(){
+            }
+            .opacity(savedViewShowing ? 1 : 0) // opacity 1로 설정
+            .animation(.easeIn(duration: 0.5), value: savedViewShowing)
+        }
+        .onAppear(){
             cancelNum = mealData.num
             cancelMemo = mealData.memo
             textfieldNum = mealData.num
