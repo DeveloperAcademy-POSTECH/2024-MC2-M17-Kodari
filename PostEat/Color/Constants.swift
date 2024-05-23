@@ -11,4 +11,5 @@ struct Constants {
     static let KODARIBlue: Color = Color(red: 0.52, green: 0.77, blue: 0.95)
     static let AppleBlue: Color = Color(red: 0.2, green: 0.68, blue: 0.9)
     static let AppleGray: Color = Color(red: 0.95, green: 0.95, blue: 0.97)
+    static let CircleGray: Color = Color(red: 0.898, green: 0.898, blue: 0.918)
 } //지정색상
