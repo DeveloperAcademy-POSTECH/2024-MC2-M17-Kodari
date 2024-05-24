@@ -3,19 +3,18 @@ import SwiftData
 
 @main
 struct PostEatApp: App {
+    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    var modelContainer: ModelContainer = {
-        let schema = Schema([FoodData.self])
-          let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-          
-          do {
-              return try ModelContainer(for: schema, configurations: [modelConfiguration])
-          } catch {
-              fatalError("Could not create ModelContainer: \(error)")
-          }
-      }()
-    
+    var modelContainer: ModelContainer
+        
+        init() {
+            do {
+                modelContainer = try ModelContainer(for: FoodData.self, recordCountData.self)
+            } catch {
+                fatalError("Failed to configure SwiftData container.")
+            }
+        }
     
     var body: some Scene {
         WindowGroup {

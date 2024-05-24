@@ -199,6 +199,7 @@ struct SearchResultsView: View {
         }
     }
     
+    // MARK: Set Up ProgressValue Method
     func setupProgressValue() {
         if weekdayAvgNum == weekdayMaxNum && weekdayAvgNum == weekdayMinNum{
             weekdayProgressValue = 0.9
@@ -371,13 +372,11 @@ struct CustomCellView: View {
         }
         .scaleEffect(x: isFlipped ? -1 : 1)
         .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: -1, z: 0))
-        //         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임 ✅
+        //        .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임 ✅
         .onTapGesture {
-//            withAnimation(.easeIn) { // 이거를 지우고 .animation 해도 ✅
-                
-                isFlipped.toggle()
-                
-//            }
+            //            withAnimation(.easeIn) { // 이거를 지우고 .animation 해도 ✅
+            isFlipped.toggle()
+            //            }
         }
         
     }

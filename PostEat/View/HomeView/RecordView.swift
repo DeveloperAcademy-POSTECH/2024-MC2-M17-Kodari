@@ -4,7 +4,7 @@ import SwiftData
 
 struct RecordView: View {
     
-    //    @State var writeDate : String // 기록 날짜 변수
+//    @State var writeDate : String // 기록 날짜 변수
     @State var writeEatingNumber : String = "" // 기록 식사 인원 변수
     @State var writeMemo : String = "" // 기록 메모 변수
     
@@ -12,7 +12,7 @@ struct RecordView: View {
     @State var savedViewShowing : Bool = false // 저장 했을 때, 파란색 "저장됨" 뷰
     @Binding var recordModalShowing : Bool
     @Binding var selectedDate: Date
-    //    @Binding var recordModalShowing : Bool
+//    @Binding var recordModalShowing : Bool
     
     @Bindable var mealData : FoodData
     
@@ -24,6 +24,9 @@ struct RecordView: View {
     @State private var textfieldNum : Int = 0
     @State private var textfieldMemo : String = ""
     @State private var isFirstResponder = true
+    
+    @Query private var mealsdata: [FoodData]
+    @Bindable var selectedrecordData : recordCountData
     
     var body: some View {
         ZStack{
@@ -41,10 +44,11 @@ struct RecordView: View {
                     Spacer()
                     Button(action:{
                         savedViewShowing.toggle()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-                            //                            recordModalShowing.toggle()
+                        let recordCountFoodData = mealsdata.filter{$0.date == mealData.date && $0.num != 0}
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8){
                             mealData.num = textfieldNum
                             mealData.memo = textfieldMemo
+                            selectedrecordData.recordCount = recordCountFoodData.count
                             savedViewShowing.toggle()
                             recordModalShowing.toggle()
                         }

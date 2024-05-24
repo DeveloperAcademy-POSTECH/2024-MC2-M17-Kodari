@@ -6,44 +6,103 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CalendarView: View {
     @State var month: Date
     @State var offset: CGSize = CGSize()
-    @State var clickedDates: Set<Date> = []
-    @State var when: Int
+    @Environment(\.presentationMode) var presentationMode
+    
+    var onValueChange: (Date) -> Void
+    init(month: Date, onValueChange: @escaping (Date) -> Void) {
+        self._month = State(initialValue: month)
+        self.onValueChange = onValueChange
+    }
+    
+    @Query var recordCountDatas: [recordCountData]
     
     var body: some View {
-        NavigationView {
+        let daysInMonth: Int = numberOfDays(in: month) //월이 가진 날짜 수
+        let firstWeekday: Int = firstWeekdayOfMonth(in: month)-1 //해당 월의 첫 날짜가 어떤 요일로 int 값을 갖는지
+        
+        //        let nowMonth = formatDate(.dateToString(month))?.split(separator: ":")[1]
+        //        let monthRecordData = recordCountData.filter{formatDate(.dateToString($0.date))?.split(separator: ":")[1] == nowMonth}
+        
+        VStack {
+            HeaderView
             VStack {
-                HeaderView
-                CalendarGridView
-                
-            } .padding()
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            self.offset = gesture.translation
-                        }
-                        .onEnded { gesture in
-                            if gesture.translation.width < -100 {
-                                changeMonth(by: 1)
-                            } else if gesture.translation.width > 100 {
-                                changeMonth(by: -1)
+                LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
+                    ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
+                        if index < firstWeekday {
+                            RoundedRectangle(cornerRadius: 5)
+                                .foregroundColor(Color.clear)
+                        } else {
+                            let date = getDate(for: index - firstWeekday)
+                            let day = index - firstWeekday + 1
+                            let dayRecordCountData = recordCountDatas.filter{$0.date == date}
+                            
+                            VStack {
+                                ZStack {
+                                    if month == date {
+                                        Circle()
+                                            .fill(Color.gray.opacity(0.4))
+                                    }
+                                    Text(String(day))
+                                }
+                                
+                                if dayRecordCountData.count != 0{
+                                    if dayRecordCountData[0].recordCount == 3{
+                                        Circle()
+                                            .frame(width:5)
+                                            .foregroundStyle(Constants.KODARIBlue)
+                                    } else{
+                                        Circle()
+                                            .frame(width:5)
+                                            .foregroundStyle(Constants.KODARIRed)
+                                    }
+                                }
                             }
-                            self.offset = CGSize()
+                            .onTapGesture {
+                                month = date
+                            }
                         }
-                ) .navigationTitle("달력보기")
-                .navigationBarTitleDisplayMode(.inline)
-               
+                    }
+                }
+            }
         }
+        .padding()
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    self.offset = gesture.translation
+                }
+                .onEnded { gesture in
+                    if gesture.translation.width < -100 {
+                        changeMonth(by: 1)
+                    } else if gesture.translation.width > 100 {
+                        changeMonth(by: -1)
+                    }
+                    self.offset = CGSize()
+                }
+        )
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true) // 기본 백 버튼 숨기기
+        .navigationBarTitle("달력 보기", displayMode: .inline)
+        .navigationBarItems(leading: Button(action:{
+            onValueChange(month)
+            self.presentationMode.wrappedValue.dismiss() }) {
+            HStack{
+                Image(systemName: "chevron.left")
+                Text("Home")
+            }
+        })
     }
+    
     //월, 연도, 요일 표기
     private var HeaderView: some View {
         VStack{
             HStack {
-                Text(month, formatter: Self.dateFormatter)
-                Text("\(when)")
+                Text(formatDate(.dateToString(month)) ?? "")
                 Spacer()
             } .padding()
             HStack {
@@ -56,83 +115,13 @@ struct CalendarView: View {
         }
     }
     //실제 일자별로
-    private var CalendarGridView: some View {
-        
-        let daysInMonth: Int = numberOfDays(in: month) //월이 가진 날짜 수
-        let firstWeekday: Int = firstWeekdayOfMonth(in: month)-1 //해당 월의 첫 날짜가 어떤 요일로 int 값을 갖는지
-        
-        return VStack {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
-                ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
-                    if index < firstWeekday {
-                        //                        RoundedRectangle(cornerRadius: 5)
-                        //                            .foregroundColor(Color.clear)
-                    } else {
-                        let date = getDate(for: index - firstWeekday)
-                        let day = index - firstWeekday + 1
-                        //let clicked = clickedDates.contains(date)
-                        
-                        CalendarCellView(day: day, clicked: false, when: when) // clicked: clicked, cellDate: date
-                            .onTapGesture {
-                                when = day
-                            }
-                    }
-                }
-            }
-        }
-    }
+    //    private var CalendarGridView: some View {
+    //
+    //
+    //
+    //        return
+    //    }
 }
-
-private struct CalendarCellView: View {
-    var day: Int
-    var clicked: Bool = false
-    var when: Int
-    //var cellDate: Date
-    
-    //init(day:Int, clicked: Bool, cellDate: Date) {
-    init(day:Int, clicked: Bool, when: Int) {
-        self.day = day
-        self.clicked = clicked
-        self.when = when
-        //self.cellDate = cellDate
-    }
-    
-    var body: some View {
-        VStack {
-            //Button {
-            //    month = cellDate
-            //} label: {
-//            RoundedRectangle(cornerRadius: 5)
-//                .opacity(0)
-//                .overlay(Text(String(day)))
-//            A()
-                ZStack {
-                    if when == day {
-                        Circle()
-                            .fill(Color.gray.opacity(0.4))
-                    }
-                    Text(String(day))
-                }
-        }
-        
-        //if clicked {
-        //    Text("Click")
-        //    .font(.caption)
-        //    .foregroundColor(.blue)
-        //}
-    }
-}
-//
-//struct A: View {
-//    var body: some View {
-//        ZStack {
-//            RoundedRectangle(cornerRadius: 5)
-//                .opacity(0)
-//                .overlay(Text(String(day)))
-//        }
-//    }
-//}
-
 
 extension CalendarView {
     static let dateFormatter: DateFormatter = {
@@ -142,12 +131,6 @@ extension CalendarView {
     } ()
     static let weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
 }
-
-//
-//#Preview {
-//    CalendarView(month: Date(), when: 1)
-//}
-
 
 private extension CalendarView {
     private func getDate(for day: Int) -> Date {
@@ -162,6 +145,7 @@ private extension CalendarView {
     func numberOfDays(in date: Date) -> Int {
         return Calendar.current.range(of: .day, in: .month, for: date)?.count ?? 0
     }
+    
     //해당 월의 첫 날짜가 갖는 해당 주의 몇 번째 요일
     func firstWeekdayOfMonth(in date: Date) -> Int {
         let components = Calendar.current.dateComponents([.year, .month], from: date)
@@ -177,4 +161,3 @@ private extension CalendarView {
         }
     }
 }
-

@@ -20,8 +20,7 @@ struct SearchView: View {
                         .overlay(
                             HStack{
                                 Spacer()
-                                if self.editText
-                                {
+                                if self.editText {
                                     Button{ // x버튼을 누르면 입력된 값들 취소하고 키입력 이벤트 종료.
                                         self.editText = false
                                         searchText = ""
@@ -31,9 +30,7 @@ struct SearchView: View {
                                             .foregroundColor(.black)
                                             .padding()
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     Image(systemName: "magnifyingglass")
                                         .foregroundColor(.black)
                                         .padding()
@@ -138,7 +135,3 @@ struct HighlightedText: View {
         return Text(AttributedString(attributedString)).foregroundColor(.gray) //전체 글씨는 회색. 하이라이트는 검정색
     }
 }
-
-//#Preview{
-//    SearchView()
-//}
