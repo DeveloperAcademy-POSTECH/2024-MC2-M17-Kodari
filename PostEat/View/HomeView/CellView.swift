@@ -15,13 +15,15 @@ struct CellView: View {
     
     @Environment(\.modelContext) var modelContext
     @Query() private var mealsdata: [FoodData]
-    
+    @Query var recordCountDatas: [recordCountData]
+
     var body: some View {
         ZStack{
             Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
             
             let RawselectedMealsData = (mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))})
             let selectedMealsData = RawselectedMealsData.sorted{ $0.uniqueid > $1.uniqueid}
+            let selectedrecordData = recordCountDatas.filter{$0.date == selectedDate}
             
             if selectedMealsData.count != 0{
                 ScrollView{
@@ -102,7 +104,7 @@ struct CellView: View {
                             .padding(.horizontal)
                             .sheet(isPresented: $recordModalShowing) {
                                 if let selectedIndex = selectedIndex {
-                                    RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex])
+                                    RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex], selectedrecordData: selectedrecordData[0])
                                         .presentationDetents([.height(500), .large])
                                         .presentationCornerRadius(25)
                                 }

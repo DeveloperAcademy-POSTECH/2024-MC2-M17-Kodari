@@ -16,6 +16,7 @@ struct RecordView: View {
     
     @Bindable var mealData : FoodData
     
+    
     private let calendar = Calendar.current //현재를 달력에 저장
     
     @State private var cancelNum : Int = 0
@@ -24,6 +25,10 @@ struct RecordView: View {
     @State private var textfieldNum : Int = 0
     @State private var textfieldMemo : String = ""
     @State private var isFirstResponder = true
+    
+    @Query private var mealsdata: [FoodData]
+    @Bindable var selectedrecordData : recordCountData
+
     
     var body: some View {
         ZStack{
@@ -41,10 +46,11 @@ struct RecordView: View {
                     Spacer()
                     Button(action:{
                         savedViewShowing.toggle()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-                            //                            recordModalShowing.toggle()
+                        let recordCountFoodData = mealsdata.filter{$0.date == mealData.date && $0.num != 0}
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8){
                             mealData.num = textfieldNum
                             mealData.memo = textfieldMemo
+                            selectedrecordData.recordCount = recordCountFoodData.count
                             savedViewShowing.toggle()
                             recordModalShowing.toggle()
                         }
