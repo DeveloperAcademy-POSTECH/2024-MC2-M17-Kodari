@@ -22,7 +22,8 @@ struct Meal: Codable {
 
 class MenuAPIModel: ObservableObject {
     var foodDatas : [FoodData]?
-
+    var recordCountDatas : [recordCountData]?
+    
     @Published var breakfastMenus: [String] = []
     @Published var lunchMenus: [String] = []
     @Published var dinnerMenus: [String] = []
@@ -50,7 +51,10 @@ class MenuAPIModel: ObservableObject {
         // 첫번째 날을 requireDay로 설정하고 다음 날로 설정
         requireDay = calendar.date(byAdding: .day, value: 1, to: requireDay)!
         
+        
+        
         func fetchMenus(for date: Date, requestCount: Int) {
+            
             guard requestCount <= 20 else {
 //                print("Reached maximum request count of 14.")
                 return
@@ -84,7 +88,8 @@ class MenuAPIModel: ObservableObject {
                             let meals = try decoder.decode([Meal].self, from: data)
                             
                             DispatchQueue.main.async {
-                                
+                                modelContext.insert(recordCountData(date: date, recordCount: 0))
+
                                 self.breakfastMenus = meals.filter { $0.type == "BREAKFAST_A"/* || $0.type == "BREAKFAST_B" */}.flatMap { $0.foods.map { $0.name_kor } }
                                 modelContext.insert(FoodData(uniqueid: "\(dateFormatter.string(from: date))_M",
                                                                   date: dateFormatter.string(from:date),
