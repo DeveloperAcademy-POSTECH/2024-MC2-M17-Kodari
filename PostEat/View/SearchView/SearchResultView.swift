@@ -21,8 +21,6 @@ struct SearchResultsView: View {
     @State var weekdayProgressValue: Float = 0.3
     @State var weekendProgressValue: Float = 0.3
     
-    
-    
     var body: some View {
         ZStack {
             Color(Constants.AppleGray)
@@ -363,8 +361,9 @@ struct CustomCellView: View {
     @State var isFlipped = false
     
     var body: some View {
+        
         ZStack{
-            if isFlipped && foodData.memo != nil {
+            if isFlipped {
                 MemoView(memo: foodData.memo)
             } else {
                 ResultCellView(uniqueid: foodData.uniqueid, noCount: foodData.num, tempdate: foodData.date, day: foodData.date)
@@ -372,12 +371,15 @@ struct CustomCellView: View {
         }
         .scaleEffect(x: isFlipped ? -1 : 1)
         .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: -1, z: 0))
-//         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임 ✅
+        //         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임 ✅
         .onTapGesture {
-            withAnimation(.easeInOut) { // 이거를 지우고 .animation 해도 ✅
-                            isFlipped.toggle()
-            }
+//            withAnimation(.easeIn) { // 이거를 지우고 .animation 해도 ✅
+                
+                isFlipped.toggle()
+                
+//            }
         }
+        
     }
     
     func ResultCellView(uniqueid: String ,noCount: Int, tempdate: String, day: String) -> some View{
@@ -414,34 +416,34 @@ struct CustomCellView: View {
     
     func MemoView(memo: String) -> some View{
         VStack {
-                VStack {
-                    HStack{
-                        Text("메모")
-                            .font(.system(size: 15))
-                            .foregroundColor(Constants.POSTECHGray)
-                            .bold()
-                            .padding(2.5)
-                            Spacer()
-                    }
-                    HStack {
-                        Text("\(memo)")
-                            .font(.system(size: 15))
-                            .foregroundColor(Constants.POSTECHGray)
-                            
-                        Spacer()
-                    }
+            VStack {
+                HStack{
+                    Text("메모")
+                        .font(.system(size: 15))
+                        .foregroundColor(Constants.POSTECHGray)
+                        .bold()
+                        .padding(2.5)
                     Spacer()
-                    HStack{
-                        Spacer()
-                        Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.gray.opacity(0.3))
-                    }
-                   // .background(.red)
                 }
-                .frame(maxWidth: .infinity)
-                //.background(.yellow)
-                .padding(10)
+                HStack {
+                    Text("\(memo)")
+                        .font(.system(size: 15))
+                        .foregroundColor(Constants.POSTECHGray)
+                    
+                    Spacer()
+                }
+                Spacer()
+                HStack{
+                    Spacer()
+                    Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(Color.gray.opacity(0.3))
+                }
+                // .background(.red)
+            }
+            .frame(maxWidth: .infinity)
+            //.background(.yellow)
+            .padding(10)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 137) // ✅ 프레임이 다른 플립뷰랑 같아지면 왜 에러지 ?
