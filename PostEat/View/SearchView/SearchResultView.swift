@@ -21,8 +21,6 @@ struct SearchResultsView: View {
     @State var weekdayProgressValue: Float = 0.3
     @State var weekendProgressValue: Float = 0.3
     
-    
-    
     var body: some View {
         ZStack {
             Color(Constants.AppleGray)
@@ -360,13 +358,31 @@ struct CustomCellView: View {
     let foodData: FoodData
     let searchMenu: String
     
-    let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일" // 원하는 날짜 형식 설정
-        return formatter
-    }()
+    @State var isFlipped = false
     
     var body: some View {
+        
+        ZStack{
+            if isFlipped {
+                MemoView(memo: foodData.memo)
+            } else {
+                ResultCellView(uniqueid: foodData.uniqueid, noCount: foodData.num, tempdate: foodData.date, day: foodData.date)
+            }
+        }
+        .scaleEffect(x: isFlipped ? -1 : 1)
+        .rotation3DEffect(.degrees(isFlipped ? 180 : 0), axis: (x: 0, y: -1, z: 0))
+        //         .animation(.easeInOut(duration: 0.6), value: isFlipped) // 이거하면 에러임 ✅
+        .onTapGesture {
+//            withAnimation(.easeIn) { // 이거를 지우고 .animation 해도 ✅
+                
+                isFlipped.toggle()
+                
+//            }
+        }
+        
+    }
+    
+    func ResultCellView(uniqueid: String ,noCount: Int, tempdate: String, day: String) -> some View{
         HStack {
             VStack {
                 mealTypeBadge(mealType: foodData.uniqueid, noCount: foodData.num)
@@ -392,9 +408,77 @@ struct CustomCellView: View {
             }
         }
         .frame(maxWidth: .infinity)
+        //.frame(height: 100)
         .padding()
         .background(Color.white)
         .cornerRadius(25)
+    }
+    
+    func MemoView(memo: String) -> some View{
+        VStack {
+            VStack {
+                HStack{
+                    Text("메모")
+                        .font(.system(size: 15))
+                        .foregroundColor(Constants.POSTECHGray)
+                        .bold()
+                        .padding(2.5)
+                    Spacer()
+                }
+                HStack {
+                    Text("\(memo)")
+                        .font(.system(size: 15))
+                        .foregroundColor(Constants.POSTECHGray)
+                    
+                    Spacer()
+                }
+                Spacer()
+                HStack{
+                    Spacer()
+                    Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(Color.gray.opacity(0.3))
+                }
+                // .background(.red)
+            }
+            .frame(maxWidth: .infinity)
+            //.background(.yellow)
+            .padding(10)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 137) // ✅ 프레임이 다른 플립뷰랑 같아지면 왜 에러지 ?
+        .background(.white)
+        //.background(Color.white)
+        .cornerRadius(25)
+    }
+    
+    // MARK: 날짜 형변환
+    func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
+        let components = dateString.split(separator: ":")
+        if components.count == 3 {
+            let year = String(components[0])
+            let month = String(components[1])
+            let day = String(components[2])
+            
+            // 날짜 문자열을 Date 객체로 변환
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd"
+            guard let date = dateFormatter.date(from: dateString) else {
+                return (dateString, "")
+            }
+            
+            // Date 객체를 원하는 형식의 문자열로 변환
+            dateFormatter.dateFormat = "MM월 dd일"
+            dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일 설정
+            let datePart = dateFormatter.string(from: date)
+            
+            dateFormatter.dateFormat = "EEEE"
+            let dayOfWeek = dateFormatter.string(from: date)
+            
+            return (datePart, dayOfWeek)
+        } else {
+            return (dateString, "")
+        }
     }
     
     // MARK: 식수
@@ -451,35 +535,6 @@ struct CustomCellView: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(noCount == 0 ? Constants.KODARIGray : Constants.POSTECHGray)
                 .frame(alignment: .center)
-        }
-    }
-    
-    // MARK: 날짜 형변환
-    func parseDateString(_ dateString: String) -> (datePart: String, dayOfWeek: String) {
-        let components = dateString.split(separator: ":")
-        if components.count == 3 {
-            let year = String(components[0])
-            let month = String(components[1])
-            let day = String(components[2])
-            
-            // 날짜 문자열을 Date 객체로 변환
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy:MM:dd"
-            guard let date = dateFormatter.date(from: dateString) else {
-                return (dateString, "")
-            }
-            
-            // Date 객체를 원하는 형식의 문자열로 변환
-            dateFormatter.dateFormat = "MM월 dd일"
-            dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일 설정
-            let datePart = dateFormatter.string(from: date)
-            
-            dateFormatter.dateFormat = "EEEE"
-            let dayOfWeek = dateFormatter.string(from: date)
-            
-            return (datePart, dayOfWeek)
-        } else {
-            return (dateString, "")
         }
     }
     
@@ -563,4 +618,12 @@ struct CustomCellView: View {
                 .contentShape(Circle()) // 이미지의 컨텐츠 모양을 Circle로 설정
         }
     }
+    
+    // 날짜 형변환
+    let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일" // 원하는 날짜 형식 설정
+        return formatter
+    }()
 }
+
