@@ -38,15 +38,15 @@ struct CellView: View {
                         }){
                             VStack{
                                 HStack{
-                                    VStack{
+                                    VStack(alignment: .center){
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width: 25, height: 225)
+                                                .frame(width: 25, height: 25)
                                             Text("\(selectedMealsData[index].num)명")
                                                 .font(.system(size: 17))
-                                                .bold()
+                                                .fontWeight(.heavy)
                                                 .foregroundStyle(Constants.KODARIBlue)
                                         } else {
                                             Image(systemName: "clock.badge.checkmark.fill")
@@ -54,12 +54,13 @@ struct CellView: View {
                                                 .foregroundStyle(Constants.KODARIRed)
                                                 .frame(width: 25, height: 25)
                                             Text("기록필요")
-                                                .bold()
+                                                .fontWeight(.heavy)
                                                 .font(.system(size: 14))
                                                 .foregroundStyle(Constants.KODARIRed)
                                         }
                                     }
-                                    .padding(.horizontal, 20)
+                                    .padding(.leading, 20)
+                                    .padding(.trailing, 10)
                                     
                                     Divider()
                                         .padding(.vertical, 20)
