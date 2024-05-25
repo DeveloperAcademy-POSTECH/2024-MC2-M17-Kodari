@@ -23,6 +23,9 @@ struct DateView: View {
     @State private var triangleLocation: CGPoint = .zero
     @State private var circleLocation: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
     
+    // Hapti
+    let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+    
     var body: some View {
         NavigationStack{
             
@@ -180,15 +183,15 @@ struct DateView: View {
                             
                             GeometryReader { geo in
                                 Circle()
-                                //                                    .fill(Constants.CircleGray)
                                     .fill(recordData.recordCount == 3 ? Constants.KODARIBlue : Constants.KODARIRed)
-                                    .stroke(calendar.isDate(todayDate, equalTo: date, toGranularity: .day) ? Color.black : Color.clear) //원의 날짜가 오늘날짜와 같을 경우만 테두리 색 줌.
+                                    .stroke(calendar.isDate(todayDate, equalTo: date, toGranularity: .day) ? Color.black : Color.clear) //원의 날짜가 오늘날짜와 같을 경우만 테두리 색 줌
                                     .frame(width: 35, height: 35)
                                     .background(GeometryReader { geo -> Color in
                                         DispatchQueue.main.async { //우선순위를 가져가는 코드
                                             self.circleLocation[date] = geo.frame(in: .global).origin
                                             if abs(triangleLocation.x - circleLocation[date]!.x) < 25{
                                                 selectedDate = date
+                                                selectionFeedbackGenerator.selectionChanged() // 햅틱
                                                 print("select:\(selectedDate)\n------------------------------")
                                                 print("date:\(date)\n------------------------------")
                                             }
@@ -206,6 +209,7 @@ struct DateView: View {
                             withAnimation {
                                 selectedDate = date
                                 proxy.scrollTo(date, anchor: .center)
+                                selectionFeedbackGenerator.selectionChanged() // 햅틱
                             }
                         }
                     }
@@ -213,6 +217,7 @@ struct DateView: View {
                 .frame(height: 60) // LazyHStack을 사용하기 때문에 ScrollView의 높이를 지정해야 함
                 .padding(.trailing, 150)
                 .padding(.leading, 160)
+                
                 
             }
             
