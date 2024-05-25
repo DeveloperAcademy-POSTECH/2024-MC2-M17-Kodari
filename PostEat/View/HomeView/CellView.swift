@@ -41,26 +41,28 @@ struct CellView: View {
                                     VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "checkmark.circle.fill")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width:20, height: 20)
+                                                .frame(width: 25, height: 225)
                                             Text("\(selectedMealsData[index].num)명")
                                                 .font(.system(size: 17))
                                                 .bold()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                        } else{
+                                        } else {
                                             Image(systemName: "clock.badge.checkmark.fill")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width: 20, height: 20)
+                                                .frame(width: 25, height: 25)
                                             Text("기록필요")
                                                 .bold()
                                                 .font(.system(size: 14))
                                                 .foregroundStyle(Constants.KODARIRed)
                                         }
                                     }
-                                    .frame(width:83).padding(.leading, 5)
+                                    .padding(.horizontal, 20)
                                     
                                     Divider()
-                                        .padding(.vertical, 25)
+                                        .padding(.vertical, 20)
                                     
                                     VStack(alignment: .leading, content: {
                                         Text("\(eatingTime[index][0])")
@@ -84,23 +86,26 @@ struct CellView: View {
                                         }
                                     })
                                     .padding(.leading, 14)
+                                    
                                     Spacer()
                                     
                                     VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "square.and.pencil")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width: 24, height:24)
+                                                .frame(width: 25, height:25)
                                         } else {
                                             Image(systemName: "square.and.pencil")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width: 24, height: 24)
+                                                .frame(width: 25, height: 25)
                                         }
                                     }
                                     .padding()
                                 }
                             }
-                            .frame(height:  139)
+                            .frame(height:  137)
                             .background(.white)
                             .cornerRadius(20)
                             .padding(.horizontal) // Cell 수평 간격
