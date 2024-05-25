@@ -4,33 +4,37 @@ import SwiftData
 
 struct DateView: View {
     
-    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
+    // MARK: CSV & API
+    @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true // CSV 불러왔는지 True, False로 UserDefaults 저장
+    @State private var apiRequestTrue = true // API 요청 부울 변수
     @StateObject private var menuAPIModel = MenuAPIModel()
-    @State private var apiRequestTrue = true
     
+    // MARK: SwiftData
     @Environment(\.modelContext) var modelContext
     @State private var mealdata: [FoodData] = []
     @State private var recorddata: [recordCountData] = []
-    //    @State private var mealdataLoaded = false // 한번만 로드 /////
+    @Query private var mealsdata: [FoodData]
+    @Query var recordCountDatas: [recordCountData]
     
+    // MARK: 캘린더
     @State var selectedDate = Date() //현재 날짜와 시간 가져오기
     private let calendar = Calendar.current //현재를 달력에 저장
     
     @State private var triangleLocation: CGPoint = .zero
     @State private var circleLocation: [Date: CGPoint] = [:] // 각 Circle의 위치를 저장
     
-    @Query private var mealsdata: [FoodData]
-    @Query var recordCountDatas: [recordCountData]
-    
     var body: some View {
         NavigationStack{
             
             VStack(spacing: 0) {
                 monthView //날짜 뷰 (이름만 월뷰일뿐)
+                    .padding(.bottom)
                 
                 Divider()
                 
-                trackPosition(of: Image(systemName: "arrowtriangle.down.fill"), in: $triangleLocation).frame(height: 15)
+                trackPosition(of: Image(systemName: "arrowtriangle.down.fill"), in: $triangleLocation)
+                    .frame(height: 15)
+                    .padding(.bottom, 5)
                 
                 ZStack{
                     dayView //요일 뷰
@@ -41,13 +45,10 @@ struct DateView: View {
                 
                 VStack{
                     CellView(selectedDate: $selectedDate)
+                        
                 }
             }
-            
             .navigationBarItems(
-                //                NavigationLink(destination: ChildView(value: value, onValueChange: { newValue in
-                //                                    self.value = newValue
-                //                                }))
                 leading: NavigationLink(destination: CalendarView(month: selectedDate, onValueChange:  { newValue in
                     self.selectedDate = newValue
                 })) {
@@ -56,18 +57,17 @@ struct DateView: View {
                 trailing: NavigationLink(destination: SearchView()) {
                     Image(systemName: "magnifyingglass")
                 })
-            
         }
         .onAppear {
             if isFirstLaunch { // 사용자의 기기에서 첫 실행때만 동작
-                isFirstLaunch = false
                 saveCSVData()
                 saveRecordCountCSVData()
-                print("CSV 실행")
+                print("Run CSV File")
+                isFirstLaunch = false
             }
-            
             if apiRequestTrue{ // API 요청
                 menuAPIModel.getMenus(foodDatas:mealsdata, modelContext: modelContext)
+                print("RUN Request API ")
             }
             apiRequestTrue = false
         }
@@ -147,14 +147,11 @@ struct DateView: View {
     
     // MARK: - 월 표시 뷰
     private var monthView: some View { //날짜 뷰 (이름만 월뷰일뿐)
-        return HStack(spacing: 0) {
-            Spacer()
-            
+        return VStack(alignment: .center) {
             Text("\(yearTitle(from: selectedDate))년 \(monthTitle(from: selectedDate))월 \(dayTitle(from: selectedDate))일 (\(day(from: selectedDate)))")
                 .font(.title3)
                 .bold()
-            
-            Spacer()
+                
         }
     }
     

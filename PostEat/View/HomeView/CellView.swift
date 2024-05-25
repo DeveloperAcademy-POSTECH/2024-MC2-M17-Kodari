@@ -19,7 +19,7 @@ struct CellView: View {
 
     var body: some View {
         ZStack{
-            Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
+            Color(Constants.AppleGray)
             
             let RawselectedMealsData = (mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))})
             let selectedMealsData = RawselectedMealsData.sorted{ $0.uniqueid > $1.uniqueid}
@@ -39,18 +39,20 @@ struct CellView: View {
                                     VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "checkmark.circle.fill")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width:20, height: 20)
+                                                .frame(width:24, height: 24)
                                             Text("\(selectedMealsData[index].num)명")
                                                 .font(.system(size: 17))
                                                 .bold()
                                                 .foregroundStyle(Constants.KODARIBlue)
                                         } else{
                                             Image(systemName: "clock.badge.checkmark.fill")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width: 20, height: 20)
+                                                .frame(width: 24, height: 24)
                                             Text("기록필요")
-                                                .bold()
+                                                .fontWeight(.heavy)
                                                 .font(.system(size: 14))
                                                 .foregroundStyle(Constants.KODARIRed)
                                         }
@@ -87,10 +89,12 @@ struct CellView: View {
                                     VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "square.and.pencil")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
                                                 .frame(width: 24, height:24)
                                         } else {
                                             Image(systemName: "square.and.pencil")
+                                                .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
                                                 .frame(width: 24, height: 24)
                                         }
