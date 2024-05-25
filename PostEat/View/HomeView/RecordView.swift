@@ -85,9 +85,11 @@ struct RecordView: View {
                             TextField("숫자 입력", text: Binding(
                                 get: { String(textfieldNum) == "0" ? "" : String(textfieldNum) },
                                 set: { textfieldNum = Int($0) ?? 0 } ))
+                            
                             .keyboardType(.decimalPad)  //키패드 종류(숫자)
                             .multilineTextAlignment(.leading)
                             .padding(.leading, 10)
+                            
                         }
                         .padding(.leading, 10)
                         

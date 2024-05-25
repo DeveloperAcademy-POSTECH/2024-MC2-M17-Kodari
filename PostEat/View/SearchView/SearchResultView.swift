@@ -420,14 +420,16 @@ struct CustomCellView: View {
                     Text("메모")
                         .font(.system(size: 15))
                         .foregroundColor(Constants.POSTECHGray)
-                        .bold()
-                        .padding(2.5)
+                        .fontWeight(.heavy)
+                        .padding(5)
                     Spacer()
                 }
                 HStack {
-                    Text("\(memo)")
+                    Text (memo)
                         .font(.system(size: 15))
+                        .bold()
                         .foregroundColor(Constants.POSTECHGray)
+                        .padding(5)
                     
                     Spacer()
                 }
@@ -435,10 +437,11 @@ struct CustomCellView: View {
                 HStack{
                     Spacer()
                     Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
-                        .font(.system(size: 24))
+                        .resizable()
+                        .frame(width:24, height: 24)
                         .foregroundColor(Color.gray.opacity(0.3))
                 }
-                // .background(.red)
+                 //.background(.red)
             }
             .frame(maxWidth: .infinity)
             //.background(.yellow)
@@ -447,7 +450,6 @@ struct CustomCellView: View {
         .frame(maxWidth: .infinity)
         .frame(height: 137) // ✅ 프레임이 다른 플립뷰랑 같아지면 왜 에러지 ?
         .background(.white)
-        //.background(Color.white)
         .cornerRadius(25)
     }
     
@@ -609,9 +611,9 @@ struct CustomCellView: View {
     
     // MARK: Memo Icon
     func noteAndWeatherIcon(useMemo: String) -> some View {
-        ZStack {
+        HStack {
             Image(systemName: "list.bullet.circle.fill")
-                .font(.system(size: 20))
+                .resizable()
                 .foregroundColor(useMemo.count > 0 ? Constants.KODARIBlue : Constants.KODARIGray.opacity(0.15))
                 .frame(width: 24, height: 24) // Circle과 동일한 크기
                 .contentShape(Circle()) // 이미지의 컨텐츠 모양을 Circle로 설정

@@ -3,7 +3,6 @@ import SwiftUI
 import SwiftData
 
 struct CellView: View {
-    
     let columns = [GridItem(.flexible())]
     let eatingTime: [Array] = [["조식", "07:30 ~ 09:30"], ["중식", "11:30 ~ 13:30"], ["석식", "17:30 ~ 19:00"]]
     
@@ -21,7 +20,6 @@ struct CellView: View {
     var body: some View {
         ZStack{
             Color(Constants.AppleGray)
-                .edgesIgnoringSafeArea(.bottom)
             
             let RawselectedMealsData = (mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))})
             let selectedMealsData = RawselectedMealsData.sorted{ $0.uniqueid > $1.uniqueid}
@@ -38,32 +36,31 @@ struct CellView: View {
                         }){
                             VStack{
                                 HStack{
-                                    VStack(alignment: .center){
+                                    VStack{
                                         if selectedMealsData[index].num != 0 {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width: 25, height: 25)
+                                                .frame(width:24, height: 24)
                                             Text("\(selectedMealsData[index].num)명")
                                                 .font(.system(size: 17))
-                                                .fontWeight(.heavy)
+                                                .bold()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                        } else {
+                                        } else{
                                             Image(systemName: "clock.badge.checkmark.fill")
                                                 .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width: 25, height: 25)
+                                                .frame(width: 24, height: 24)
                                             Text("기록필요")
                                                 .fontWeight(.heavy)
                                                 .font(.system(size: 14))
                                                 .foregroundStyle(Constants.KODARIRed)
                                         }
                                     }
-                                    .padding(.leading, 20)
-                                    .padding(.trailing, 10)
+                                    .frame(width:83).padding(.leading, 5)
                                     
                                     Divider()
-                                        .padding(.vertical, 20)
+                                        .padding(.vertical, 25)
                                     
                                     VStack(alignment: .leading, content: {
                                         Text("\(eatingTime[index][0])")
@@ -87,7 +84,6 @@ struct CellView: View {
                                         }
                                     })
                                     .padding(.leading, 14)
-                                    
                                     Spacer()
                                     
                                     VStack{
@@ -95,22 +91,21 @@ struct CellView: View {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .foregroundStyle(Constants.KODARIBlue)
-                                                .frame(width: 25, height:25)
+                                                .frame(width: 24, height:24)
                                         } else {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width: 25, height: 25)
+                                                .frame(width: 24, height: 24)
                                         }
                                     }
                                     .padding()
                                 }
                             }
-                            .frame(height:  137)
+                            .frame(height:  139)
                             .background(.white)
                             .cornerRadius(20)
-                            .padding(.horizontal) // Cell 수평 간격
-                            .padding(.top, 5) // Cell 3개 사이 간격
+                            .padding(.horizontal)
                             .sheet(isPresented: $recordModalShowing) {
                                 if let selectedIndex = selectedIndex {
                                     RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex], selectedrecordData: selectedrecordData[0])
