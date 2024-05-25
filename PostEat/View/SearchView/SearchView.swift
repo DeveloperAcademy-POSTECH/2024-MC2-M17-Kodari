@@ -14,7 +14,7 @@ struct SearchView: View {
                     TextField("메뉴를 검색하세요.", text: $searchText)
                         .padding(8)
                         .padding(.horizontal,10)
-                        .background(Color(.systemGray6))
+                        .background(Constants.AppleGray)
                         .frame(width: 360)
                         .cornerRadius(10)
                         .overlay(

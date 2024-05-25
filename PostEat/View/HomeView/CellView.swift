@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftData
 
 struct CellView: View {
+    
     let columns = [GridItem(.flexible())]
     let eatingTime: [Array] = [["조식", "07:30 ~ 09:30"], ["중식", "11:30 ~ 13:30"], ["석식", "17:30 ~ 19:00"]]
     
@@ -19,7 +20,8 @@ struct CellView: View {
 
     var body: some View {
         ZStack{
-            Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
+            Color(Constants.AppleGray)
+                .edgesIgnoringSafeArea(.bottom)
             
             let RawselectedMealsData = (mealsdata.filter{$0.date == formatDate(.dateToString(selectedDate))})
             let selectedMealsData = RawselectedMealsData.sorted{ $0.uniqueid > $1.uniqueid}
@@ -101,7 +103,8 @@ struct CellView: View {
                             .frame(height:  139)
                             .background(.white)
                             .cornerRadius(20)
-                            .padding(.horizontal)
+                            .padding(.horizontal) // Cell 수평 간격
+                            .padding(.top, 5) // Cell 3개 사이 간격
                             .sheet(isPresented: $recordModalShowing) {
                                 if let selectedIndex = selectedIndex {
                                     RecordView(recordModalShowing: $recordModalShowing, selectedDate: $selectedDate, mealData: selectedMealsData[selectedIndex], selectedrecordData: selectedrecordData[0])

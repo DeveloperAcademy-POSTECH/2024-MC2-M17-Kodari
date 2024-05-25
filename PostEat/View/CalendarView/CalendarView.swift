@@ -24,93 +24,81 @@ struct CalendarView: View {
     var body: some View {
         let daysInMonth: Int = numberOfDays(in: month) //월이 가진 날짜 수
         let firstWeekday: Int = firstWeekdayOfMonth(in: month)-1 //해당 월의 첫 날짜가 어떤 요일로 int 값을 갖는지
-        ZStack{
-            Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
-            VStack{
-                ZStack{
-                    Color(red: 217 / 255, green: 217 / 255, blue: 217 / 255).ignoresSafeArea()
-                    RoundedRectangle(cornerSize: CGSize(width: 12, height: 12))
-                        .padding(.horizontal, 16)
-                        .foregroundStyle(Color.white)
-                        .frame(height:370)
+        
+        NavigationView {
+            ZStack{
+                Color(Constants.AppleGray)
+                    .edgesIgnoringSafeArea(.all)
+                
+                ScrollView{
+                VStack{
                     VStack {
                         HeaderView
-                        VStack {
-                            LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
-                                ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
-                                    if index < firstWeekday {
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .foregroundColor(Color.clear)
-                                    } else {
-                                        let date = getDate(for: index - firstWeekday)
-                                        let day = index - firstWeekday + 1
-                                        let dayRecordCountData = recordCountDatas.filter{$0.date == date}
-                                        
-                                        VStack {
-                                            ZStack {
-                                                if month == date {
-                                                    Circle()
-                                                        .fill(Constants.KODARIBlue.opacity(0.4))
-                                                }
-                                                Text(String(day))
+                    }
+                    .padding()
+                    
+                    VStack {
+                        LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
+                            ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
+                                if index < firstWeekday {
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .foregroundColor(Color.clear)
+                                } else {
+                                    let date = getDate(for: index - firstWeekday)
+                                    let day = index - firstWeekday + 1
+                                    let dayRecordCountData = recordCountDatas.filter{$0.date == date}
+                                    
+                                    VStack {
+                                        ZStack {
+                                            if month == date {
+                                                Circle()
+                                                    .fill(Constants.KODARIBlue.opacity(0.4))
                                             }
-                                            
-                                            if dayRecordCountData.count != 0{
-                                                if dayRecordCountData[0].recordCount == 3{
-                                                    Circle()
-                                                        .frame(width:5)
-                                                        .foregroundStyle(Constants.KODARIBlue)
-                                                } else{
-                                                    Circle()
-                                                        .frame(width:5)
-                                                        .foregroundStyle(Constants.KODARIRed)
-                                                }
+                                            Text(String(day))
+                                        }
+                                        
+                                        if dayRecordCountData.count != 0{
+                                            if dayRecordCountData[0].recordCount == 3{
+                                                Circle()
+                                                    .frame(width:5)
+                                                    .foregroundStyle(Constants.KODARIBlue)
+                                            } else{
+                                                Circle()
+                                                    .frame(width:5)
+                                                    .foregroundStyle(Constants.KODARIRed)
                                             }
                                         }
-                                            .onTapGesture {
-                                                month = date
-                                            }
+                                    }
+                                    .onTapGesture {
+                                        month = date
                                     }
                                 }
                             }
-                        }.padding(.top, 0)
-                            .padding(.horizontal, 10)
+                        }
                     }
-                    .padding()
-                    .gesture(
-                        DragGesture()
-                            .onChanged { gesture in
-                                self.offset = gesture.translation
-                            }
-                            .onEnded { gesture in
-                                if gesture.translation.width < -100 {
-                                    changeMonth(by: 1)
-                                } else if gesture.translation.width > 100 {
-                                    changeMonth(by: -1)
-                                }
-                                self.offset = CGSize()
-                            }
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationBarBackButtonHidden(true) // 기본 백 버튼 숨기기
-                    .navigationBarTitle("달력 보기", displayMode: .inline)
-                    .navigationBarItems(leading: Button(action:{
-                        onValueChange(month)
-                        self.presentationMode.wrappedValue.dismiss() }) {
-                            HStack{
-                                Image(systemName: "chevron.left")
-                                Text("Home")
-                            }
-                        })
+                        .padding(.horizontal, 10)
                 }
-                ScrollView{
+                .padding()
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            self.offset = gesture.translation
+                        }
+                        .onEnded { gesture in
+                            if gesture.translation.width < -100 {
+                                changeMonth(by: 1)
+                            } else if gesture.translation.width > 100 {
+                                changeMonth(by: -1)
+                            }
+                            self.offset = CGSize()
+                        })
+                    
                     CellView(selectedDate: $month)
                 }
             }
-            
         }
-        
-        
+        .navigationBarTitle("달력 보기", displayMode: .inline)
+        .toolbarRole(.editor)
     }
     
     //월, 연도, 요일 표기
@@ -125,21 +113,19 @@ struct CalendarView: View {
                         .bold()
                 }
                 Spacer()
-            } .padding()
-                .padding(.bottom, 0)
+            }
+            .padding()
+            
             HStack {
                 ForEach(Self.weekdaySymbols, id: \.self) {symbol in Text(symbol)
-                    //                        .frame(maxWidth: .infinity)
                         .foregroundColor(.gray)
                         .padding(.horizontal, 14.7)
                 }
             }
-            
-            .padding(.bottom, 0)
         }
-        .padding(.bottom, 0)
     }
 }
+
 
 extension CalendarView {
     static let dateFormatter: DateFormatter = {
