@@ -9,6 +9,7 @@ struct PostEatApp: App {
     var modelContainer: ModelContainer
         
         init() {
+            Thread.sleep(forTimeInterval: 2)
             do {
                 modelContainer = try ModelContainer(for: FoodData.self, recordCountData.self)
             } catch {
