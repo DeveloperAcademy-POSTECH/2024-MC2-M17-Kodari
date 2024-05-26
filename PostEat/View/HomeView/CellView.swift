@@ -50,7 +50,7 @@ struct CellView: View {
                                             Image(systemName: "clock.badge.checkmark.fill")
                                                 .resizable()
                                                 .foregroundStyle(Constants.KODARIRed)
-                                                .frame(width: 24, height: 24)
+                                                .frame(width: 27, height: 24)
                                             Text("기록필요")
                                                 .fontWeight(.heavy)
                                                 .font(.system(size: 14))
