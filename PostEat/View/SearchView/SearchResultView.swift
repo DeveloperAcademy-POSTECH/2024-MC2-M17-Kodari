@@ -18,8 +18,8 @@ struct SearchResultsView: View {
     @State var weekendMinNum = 0 // 주말 최소 인원
     @State var weekendAvgNum = 0 // 주말 평균 인원
     
-    @State var weekdayProgressValue: Float = 0.3
-    @State var weekendProgressValue: Float = 0.3
+    @State var weekdayProgressValue: Float = 0.0
+    @State var weekendProgressValue: Float = 0.0
     
     var body: some View {
         ZStack {
@@ -74,14 +74,28 @@ struct SearchResultsView: View {
     
     // MARK: 메뉴 검색 필터
     private var filteredFoodData: [FoodData] {
+        let searchLowercased = searchMenu.lowercased()
+        
+        // 필터링된 데이터를 date 기준으로 내림차순 정렬
         return mealsdata.filter { item in
-            let searchLowercased = searchMenu.lowercased()
             return item.menu1.lowercased().contains(searchLowercased) ||
             item.menu2.lowercased().contains(searchLowercased) ||
             item.menu3.lowercased().contains(searchLowercased) ||
             item.menu4.lowercased().contains(searchLowercased)
+        }.sorted { first, second in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd"
+            dateFormatter.locale = Locale(identifier: "ko_KR")
+            
+            if let firstDate = dateFormatter.date(from: first.date),
+               let secondDate = dateFormatter.date(from: second.date) {
+                return firstDate > secondDate // 내림차순 정렬
+            }
+            
+            return false
         }
     }
+
     
     // MARK: Set Up ProgressValue Method
     func setupProgressValue() {
@@ -147,6 +161,7 @@ struct SearchResultsView: View {
         print("평일 미입력 제외 Total: \(weekdayTotal)")
         let weekdayAverage = weekdayTotal / max(weekdayNonZeroArray.count, 1)
         weekdayAvgNum = weekdayAverage
+       
         print("평일 avg: \(weekdayAvgNum)")
         
         // 주말 통계
@@ -193,7 +208,7 @@ struct WeekdayProgressBar: View {
             Circle()
                 .trim(from: 0.3, to: CGFloat(self.weekdayprogress))
                 .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
-                .fill(Constants.KODARIBlue)
+                .fill(weekdayAvgNum == 0 ? Color.gray.opacity(0.3) :  Constants.KODARIBlue)
                 .rotationEffect(.degrees(54.5)) // 게이지 시작 지점 - Start Point
             
             VStack{
@@ -224,7 +239,7 @@ struct WeekendProgressBar: View {
             Circle()
                 .trim(from: 0.3, to: CGFloat(self.weekendprogress))
                 .stroke(style: StrokeStyle(lineWidth: 12.0, lineCap: .round, lineJoin: .round))
-                .fill(Constants.KODARIBlue)
+                .fill(weekendAvgNum == 0 ? Color.gray.opacity(0.3) :  Constants.KODARIBlue)
                 .rotationEffect(.degrees(54.5)) // 게이지 시작 지점 - Start Point
             
             VStack{
