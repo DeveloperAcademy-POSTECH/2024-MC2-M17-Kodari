@@ -81,7 +81,7 @@ struct DateView: View {
         }
     }
     
-    // MARK: - 월 표시 뷰
+    // MARK: - MonthView ( 월 표시 뷰 )
     private var monthView: some View { //날짜 뷰 (이름만 월뷰일뿐)
         return VStack(alignment: .center) {
             Text("\(DateUtils.yearTitle(from: selectedDate))년 \(DateUtils.monthTitle(from: selectedDate))월 \(DateUtils.dayTitle(from: selectedDate))일 (\(DateUtils.day(from: selectedDate)))")

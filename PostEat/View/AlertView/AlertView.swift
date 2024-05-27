@@ -45,15 +45,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                               hour: 19,
                               minute: 0,
                               identifier: "D_noti")
-        
-        
-        LocalNotificationHelper
-            .shared
-            .pushNotification(title: "POST-EAT",
-                              body: "페이커 바보~",
-                              hour: 15,
-                              minute: 12,
-                              identifier: "Test_noti")
+    
         return true
     }
 }
