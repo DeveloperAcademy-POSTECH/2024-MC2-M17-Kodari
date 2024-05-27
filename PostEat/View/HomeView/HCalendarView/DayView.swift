@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct DayView: View {
+    
     @Binding var selectedDate: Date
     @State private var circleLocation: [Date: CGPoint] = [:]
     @Binding var triangleLocation: CGPoint
@@ -38,8 +39,11 @@ struct DayView: View {
                                         DispatchQueue.main.async {
                                             self.circleLocation[date] = geo.frame(in: .global).origin
                                             if abs(triangleLocation.x - circleLocation[date]!.x) < 25 {
+                                                if selectedDate != date {
+                                                    selectionFeedbackGenerator.selectionChanged()
+                                                }
                                                 selectedDate = date
-                                                selectionFeedbackGenerator.selectionChanged()
+                                                
                                             }
                                         }
                                         return Color.clear
@@ -53,7 +57,7 @@ struct DayView: View {
                             withAnimation {
                                 selectedDate = date
                                 proxy.scrollTo(date, anchor: .center)
-                                selectionFeedbackGenerator.selectionChanged()
+                               
                             }
                         }
                     }
