@@ -10,6 +10,7 @@ struct DayView: View {
     let recordCountDatas: [recordCountData]
     
     let selectionFeedbackGenerator = UISelectionFeedbackGenerator()
+    //let impactFeedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
     
     var body: some View {
         let todayDate = Date() // 오늘 날짜 저장. (안바꿀거임)
@@ -41,9 +42,9 @@ struct DayView: View {
                                             if abs(triangleLocation.x - circleLocation[date]!.x) < 25 {
                                                 if selectedDate != date {
                                                     selectionFeedbackGenerator.selectionChanged()
+                                                    //impactFeedbackGenerator.impactOccurred()
                                                 }
                                                 selectedDate = date
-                                                
                                             }
                                         }
                                         return Color.clear
