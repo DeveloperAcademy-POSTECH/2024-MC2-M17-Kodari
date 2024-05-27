@@ -74,14 +74,28 @@ struct SearchResultsView: View {
     
     // MARK: 메뉴 검색 필터
     private var filteredFoodData: [FoodData] {
+        let searchLowercased = searchMenu.lowercased()
+        
+        // 필터링된 데이터를 date 기준으로 내림차순 정렬
         return mealsdata.filter { item in
-            let searchLowercased = searchMenu.lowercased()
             return item.menu1.lowercased().contains(searchLowercased) ||
             item.menu2.lowercased().contains(searchLowercased) ||
             item.menu3.lowercased().contains(searchLowercased) ||
             item.menu4.lowercased().contains(searchLowercased)
+        }.sorted { first, second in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy:MM:dd"
+            dateFormatter.locale = Locale(identifier: "ko_KR")
+            
+            if let firstDate = dateFormatter.date(from: first.date),
+               let secondDate = dateFormatter.date(from: second.date) {
+                return firstDate > secondDate // 내림차순 정렬
+            }
+            
+            return false
         }
     }
+
     
     // MARK: Set Up ProgressValue Method
     func setupProgressValue() {

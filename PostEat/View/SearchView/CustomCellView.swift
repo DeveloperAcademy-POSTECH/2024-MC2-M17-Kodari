@@ -177,31 +177,33 @@ struct CustomCellView: View {
             Text(menu1)
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 15)
-                        .weight(menu1 == searchMenu ? .bold : .regular)
+                        .weight(menu1.contains(searchMenu) ? .bold : .regular)
                 )
-                .foregroundColor(menu1 == searchMenu ? Constants.POSTECHRed : Color.black)
+                .foregroundColor(menu1.contains(searchMenu) ? Constants.POSTECHRed : Color.black)
                 .padding(2)
             
             Text(menu2)
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 15)
-                        .weight(menu2 == searchMenu ? .bold : .regular)
+                        .weight(menu2.contains(searchMenu) ? .bold : .regular)
                 )
-                .foregroundColor(menu2 == searchMenu ? Constants.POSTECHRed : Color.black)
+                .foregroundColor(menu2.contains(searchMenu) ? Constants.POSTECHRed : Color.black)
                 .padding(2)
+            
             Text(menu3)
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 15)
-                        .weight(menu3 == searchMenu ? .bold : .regular)
+                        .weight(menu3.contains(searchMenu) ? .bold : .regular)
                 )
-                .foregroundColor(menu3 == searchMenu ? Constants.POSTECHRed : Color.black)
+                .foregroundColor(menu3.contains(searchMenu) ? Constants.POSTECHRed : Color.black)
                 .padding(2)
+            
             Text(menu4)
                 .font(
                     Font.custom("Apple SD Gothic Neo", size: 15)
-                        .weight(menu4 == searchMenu ? .bold : .regular)
+                        .weight(menu4.contains(searchMenu) ? .bold : .regular)
                 )
-                .foregroundColor(menu4 == searchMenu ? Constants.POSTECHRed : Color.black)
+                .foregroundColor(menu4.contains(searchMenu) ? Constants.POSTECHRed : Color.black)
                 .padding(2)
         }
         
