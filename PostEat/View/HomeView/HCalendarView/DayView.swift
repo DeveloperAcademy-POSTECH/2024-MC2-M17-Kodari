@@ -63,7 +63,7 @@ struct DayView: View {
                         }
                     }
                 }
-                .frame(height: 60)
+                .frame(height: 100)
                 .padding(.trailing, 150)
                 .padding(.leading, 160)
             }
