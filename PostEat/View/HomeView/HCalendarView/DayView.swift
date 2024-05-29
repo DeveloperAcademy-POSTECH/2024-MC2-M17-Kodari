@@ -33,7 +33,7 @@ struct DayView: View {
                             
                             GeometryReader { geo in
                                 Circle()
-                                    .fill(date > Date() ? Constants.KODARIGray :(recordData.recordCount == 3 ? Constants.KODARIBlue : Constants.KODARIRed))
+                                    .fill(date > Date() ? Constants.KODARIGray :(recordData.recordCount == 2 ? Constants.KODARIBlue : Constants.KODARIRed))
                                     .stroke(calendar.isDate(todayDate, equalTo: date, toGranularity: .day) ? Color.black : Color.clear)
                                     .frame(width: 35, height: 35)
                                     .background(GeometryReader { geo -> Color in

@@ -47,8 +47,10 @@ struct RecordView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8){
                             mealData.num = textfieldNum
                             mealData.memo = textfieldMemo
-                            let recordCountFoodData = mealsdata.filter{$0.date == mealData.date && $0.num != 0}
+                            print("before selectedrcordData.recordCount: \(selectedrecordData.recordCount)")
                             selectedrecordData.recordCount = recordCountFoodData.count
+                            
+                            print("after selectedrcordData.recordCount: \(selectedrecordData.recordCount)")
                             savedViewShowing.toggle()
                             recordModalShowing.toggle()
                         }
@@ -136,6 +138,7 @@ struct RecordView: View {
             cancelMemo = mealData.memo
             textfieldNum = mealData.num
             textfieldMemo = mealData.memo
+            print("On Appear before selectedrcordData.recordCount: \(selectedrecordData.recordCount)")
         }
     }
 }
