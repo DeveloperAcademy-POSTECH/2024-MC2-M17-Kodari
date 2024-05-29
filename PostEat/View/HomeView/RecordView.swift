@@ -47,10 +47,8 @@ struct RecordView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8){
                             mealData.num = textfieldNum
                             mealData.memo = textfieldMemo
-                            print("before selectedrcordData.recordCount: \(selectedrecordData.recordCount)")
+                            let recordCountFoodData = mealsdata.filter{$0.date == mealData.date && $0.num != 0}
                             selectedrecordData.recordCount = recordCountFoodData.count
-                            
-                            print("after selectedrcordData.recordCount: \(selectedrecordData.recordCount)")
                             savedViewShowing.toggle()
                             recordModalShowing.toggle()
                         }
