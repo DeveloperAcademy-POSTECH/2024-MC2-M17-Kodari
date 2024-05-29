@@ -44,10 +44,10 @@ struct RecordView: View {
                     Spacer()
                     Button(action:{
                         savedViewShowing.toggle()
-                        let recordCountFoodData = mealsdata.filter{$0.date == mealData.date && $0.num != 0}
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8){
                             mealData.num = textfieldNum
                             mealData.memo = textfieldMemo
+                            let recordCountFoodData = mealsdata.filter{$0.date == mealData.date && $0.num != 0}
                             selectedrecordData.recordCount = recordCountFoodData.count
                             savedViewShowing.toggle()
                             recordModalShowing.toggle()
