@@ -1,16 +1,15 @@
 # 2024-MC2-M17-Kodari
 # 📱 [MC2/PostEat]
-[Logo/Cover Image]
-https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/9f814f8e-3c95-410e-9435-a7570f53b192
+</br>
+<img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/9f814f8e-3c95-410e-9435-a7570f53b192" width="1000px;" alt=""/>
 
+</br>
 [App statement]
+</br>
 User records meal headcounts and provides meal count statistics for specific diets based on those counts.
 
 ## 🎆 Screenshots
 Attach photos if you are available
-
-## 🖼️ Demo (optional)
-Attach videos if you are available
 
 ## 📌 Features
 Feature 1
