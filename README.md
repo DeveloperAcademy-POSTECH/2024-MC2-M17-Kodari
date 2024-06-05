@@ -36,7 +36,7 @@
     </tr>
     <tr>
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/352c42e8-5070-4522-854a-6c1eada620ae" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/d336c734-735d-4382-883d-23e376cc8e23" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/72ae4ffc-c6ba-4095-b028-9a7aee5ca778" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
     </tr>
   </tbody>
 </table>
@@ -46,15 +46,21 @@
     <tr>
       <td colspan="1" align="center"><b>메뉴검색 화면</b></td>
       <td colspan="1" align="center"><b>메뉴통계 화면</b></td>
+      <td colspan="1" align="center"><b>메모 확인</b></td>
     </tr>
     <tr>
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/d336c734-735d-4382-883d-23e376cc8e23" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/91233d57-61ac-4e7b-bcda-b105c3752097" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
-    </tr>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/b93769ab-0a16-4e78-ac1e-71ef4bd146c9" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
   </tbody>
 </table>
 
+</br>
+</br>
+
 ## 📱 시연영상
+ <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/8ddea941-2f12-4a91-9112-951d1cc1a17c" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
+
 
 </br>
 </br>
