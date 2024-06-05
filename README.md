@@ -4,9 +4,8 @@
 </br>
 
 # 포스트잇 PostEat
-포스텍 영양사의 식단 계획 업무에 도움을 제공하는 앱
-</br>
-User records meal headcounts and provides meal count statistics for specific diets based on those counts.
+> 포스텍 영양사의 식단 계획 업무에 도움을 제공하는 앱 </br>
+> User records meal headcounts and provides meal count statistics for specific diets based on those counts.
 
 포스텍의 학색식당 식단이 자동으로 업데이트 되고, 영양사님이 매 식사마다 식사 인원 수를 기록할 수 있습니다. </br>
 이후 특정 메뉴를 검색할 수 있고 검색 결과를 통해 해당 메뉴의 통계 데이터를 확인할 수 있습니다. </br>
@@ -15,12 +14,7 @@ User records meal headcounts and provides meal count statistics for specific die
 </br>
 </br>
 
-[App statement]
-</br>
-포스텍 영양사의 식단 계획 업무에 도움을 제공하는 앱
-</br>
-
-## 🎆 Screenshots
+## 🎆 스크린샷
 <table>
   <tbody>
     <tr>
@@ -40,17 +34,20 @@ User records meal headcounts and provides meal count statistics for specific die
   </tbody>
 </table>
 
-## 
+## 📱 시연영상
 
 ## 📌 Features
 
-Feature 2
-Feature 3
-##✨ Skills & Tech Stack
-ex) , SwiftUI
-
-위와 같이 배지를 사용하여 더 풍성한 Readme를 만들 수 있습니다. 참조
 </br>
+</br>
+
+## ✨ Skills & Tech Stack
+- SwiftUI
+- SwiftData
+- Combine
+  
+</br>
+
 
 ## 👩‍👩‍👧‍👧 Team
 <img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/0e025d20-c6de-4bd2-8cf3-76fade1e4b2e" width="1000px;" alt=""/>
