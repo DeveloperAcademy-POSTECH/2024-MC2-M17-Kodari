@@ -6,13 +6,33 @@
 </br>
 [App statement]
 </br>
+포스텍 영양사의 식단 계획 업무에 도움을 제공하는 앱
+</br>
 User records meal headcounts and provides meal count statistics for specific diets based on those counts.
 
 ## 🎆 Screenshots
-Attach photos if you are available
+<table>
+  <tbody>
+    <tr>
+      <td colspan="1" align="center"><b>메인화면</b></td>
+      <td colspan="1" align="center"><b>식 수 기록화면</b></td>
+      <td colspan="1" align="center"><b>캘린더 화면</b></td>
+      <td colspan="1" align="center"><b>메뉴검색 화면</b></td>
+      <td colspan="1" align="center"><b>메뉴통계 화면</b></td>
+    </tr>
+    <tr>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/c147af3a-85ca-4472-b55c-8b6adb332c21" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/bd476dcc-dcf3-4fc6-bd8f-d08ec11f09d7" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/352c42e8-5070-4522-854a-6c1eada620ae" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/d336c734-735d-4382-883d-23e376cc8e23" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/91233d57-61ac-4e7b-bcda-b105c3752097" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## 📌 Features
-Feature 1
+
 Feature 2
 Feature 3
 ##✨ Skills & Tech Stack
