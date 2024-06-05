@@ -1,21 +1,31 @@
-# 2024-MC2-M17-Kodari
-# 📱 [MC2/PostEat]
-</br>
 <img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/9f814f8e-3c95-410e-9435-a7570f53b192" width="1000px;" alt=""/>
 
 </br>
+</br>
+
+# 포스트잇 PostEat
+포스텍 영양사의 식단 계획 업무에 도움을 제공하는 앱
+</br>
+User records meal headcounts and provides meal count statistics for specific diets based on those counts.
+
+포스텍의 학색식당 식단이 자동으로 업데이트 되고, 영양사님이 매 식사마다 식사 인원 수를 기록할 수 있습니다. </br>
+이후 특정 메뉴를 검색할 수 있고 검색 결과를 통해 해당 메뉴의 통계 데이터를 확인할 수 있습니다. </br>
+메뉴 당 식사 인원 수, 날짜, 특이 사항 등을 참고하며 식사 인원 수를 예측할 수 있습니다.
+
+</br>
+</br>
+
 [App statement]
 </br>
 포스텍 영양사의 식단 계획 업무에 도움을 제공하는 앱
 </br>
-User records meal headcounts and provides meal count statistics for specific diets based on those counts.
 
 ## 🎆 Screenshots
 <table>
   <tbody>
     <tr>
       <td colspan="1" align="center"><b>메인화면</b></td>
-      <td colspan="1" align="center"><b>식 수 기록화면</b></td>
+      <td colspan="1" align="center"><b>식 수 기록화면</b></td>
       <td colspan="1" align="center"><b>캘린더 화면</b></td>
       <td colspan="1" align="center"><b>메뉴검색 화면</b></td>
       <td colspan="1" align="center"><b>메뉴통계 화면</b></td>
@@ -30,6 +40,7 @@ User records meal headcounts and provides meal count statistics for specific die
   </tbody>
 </table>
 
+## 
 
 ## 📌 Features
 
@@ -39,8 +50,12 @@ Feature 3
 ex) , SwiftUI
 
 위와 같이 배지를 사용하여 더 풍성한 Readme를 만들 수 있습니다. 참조
+</br>
 
-## 🫂 Authors
+## 👩‍👩‍👧‍👧 Team
+<img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/0e025d20-c6de-4bd2-8cf3-76fade1e4b2e" width="1000px;" alt=""/>
+</br>
+</br>
 <table>
   <tbody>
     <tr>
