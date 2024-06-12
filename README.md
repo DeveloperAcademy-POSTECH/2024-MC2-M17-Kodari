@@ -64,10 +64,10 @@
 </br>
 
 ## ✨ Skills & Tech Stack
-- SwiftUI
-- SwiftData
-- Combine
-  
+- <img src="https://img.shields.io/badge/Swift-FF0000?style=flat-square&logo=Swift&logoColor=white">
+- <img src="https://img.shields.io/badge/SwiftUI-0080ff?style=flat-square&logo=SwiftUI&logoColor=white">
+- <img src="https://img.shields.io/badge/SwiftData-f7e600?style=flat-square&logo=SwiftData&logoColor=white">
+- <img src="https://img.shields.io/badge/Combine-464964?style=flat-square&logo=Combine&logoColor=white">
 </br>
 
 
