@@ -59,7 +59,9 @@
 </br>
 
 ## 📱 시연영상
- <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/8ddea941-2f12-4a91-9112-951d1cc1a17c" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
+
+![1-ezgif com-video-to-gif-converter](https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/890253e0-6107-4d5c-996a-fe52d5680d80)
+
 
 
 </br>
