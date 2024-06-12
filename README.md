@@ -59,11 +59,7 @@
 </br>
 
 ## 📱 시연영상
-
-![1-ezgif com-video-to-gif-converter](https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/890253e0-6107-4d5c-996a-fe52d5680d80)
-
-
-
+<img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/890253e0-6107-4d5c-996a-fe52d5680d80" style="width:300px"></img>
 </br>
 </br>
 
