@@ -22,8 +22,8 @@
       <td colspan="1" align="center"><b>식 수 기록화면</b></td>
     </tr>
     <tr>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/c147af3a-85ca-4472-b55c-8b6adb332c21" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/bd476dcc-dcf3-4fc6-bd8f-d08ec11f09d7" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/c147af3a-85ca-4472-b55c-8b6adb332c21" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/bd476dcc-dcf3-4fc6-bd8f-d08ec11f09d7" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
     </tr>
   </tbody>
 </table>
@@ -35,8 +35,8 @@
       <td colspan="1" align="center"><b>캘린더에서 수정화면</b></td>
     </tr>
     <tr>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/352c42e8-5070-4522-854a-6c1eada620ae" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/72ae4ffc-c6ba-4095-b028-9a7aee5ca778" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/352c42e8-5070-4522-854a-6c1eada620ae" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/72ae4ffc-c6ba-4095-b028-9a7aee5ca778" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
     </tr>
   </tbody>
 </table>
@@ -49,9 +49,9 @@
       <td colspan="1" align="center"><b>메모 확인</b></td>
     </tr>
     <tr>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/d336c734-735d-4382-883d-23e376cc8e23" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/91233d57-61ac-4e7b-bcda-b105c3752097" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
-      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/b93769ab-0a16-4e78-ac1e-71ef4bd146c9" width="300px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/d336c734-735d-4382-883d-23e376cc8e23" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/91233d57-61ac-4e7b-bcda-b105c3752097" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/b93769ab-0a16-4e78-ac1e-71ef4bd146c9" width="200px;" alt=""/><br /><sub><b></b></sub></a></td>
   </tbody>
 </table>
 
@@ -59,9 +59,26 @@
 </br>
 
 ## 📱 시연영상
-<img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/890253e0-6107-4d5c-996a-fe52d5680d80" style="width:300px"></img>
+<table>
+  <tbody>
+    <tr>
+      <td colspan="1" align="center">메인화면 입력</b></td>
+      <td colspan="1" align="center"><b>캘린더화면 입력</b></td>
+      <td colspan="1" align="center"><b>메뉴 검색</b></td>
+      <td colspan="1" align="center"><b>입력 로컬알림</b></td>
+    </tr>
+    <tr>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/585075b0-ead8-4720-9bb4-bc0dfcdcdee9" style="width:250px"></img>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/ff6c7cd5-8d36-48d6-ad94-6f6972b15c8f" style="width:250px"></img>
+      <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/2a761215-16e6-4d7a-a13b-204b1091c859" style="width:250px"></img>
+       <td align="center"><a href=""><img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/fbdcb74b-20ae-490f-a027-28f503a6c92c" style="width:250px"></img>
+    </tr>
+  </tbody>
+</table>
 </br>
 </br>
+
+
 
 ## ✨ Skills & Tech Stack
 - <img src="https://img.shields.io/badge/Swift-FF0000?style=flat-square&logo=Swift&logoColor=white">
