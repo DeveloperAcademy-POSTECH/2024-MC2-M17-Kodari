@@ -89,7 +89,7 @@
 
 
 ## 👩‍👩‍👧‍👧 Team
-<img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/0e025d20-c6de-4bd2-8cf3-76fade1e4b2e" width="1000px;" alt=""/>
+<img src="https://github.com/DeveloperAcademy-POSTECH/2024-MC2-M17-Kodari/assets/108053426/0e025d20-c6de-4bd2-8cf3-76fade1e4b2e" width="600px;" alt=""/>
 </br>
 </br>
 <table>
